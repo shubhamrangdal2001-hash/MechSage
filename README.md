@@ -307,7 +307,7 @@ MechSage/
 | <img src="https://img.shields.io/badge/Sudhanshu%20Biswas-Chief%20Agent%20Architect-2EE6D6?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Ayush%20Patil-Reliability%20%26%20Data%20Alchemist-203A43?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Shubham%20Rangdal-Platform%20%26%20Ops%20Commander-2C5364?style=for-the-badge&labelColor=0F2027"/> |
 | *Orchestrates the agent swarm and owns the product vision* | *Turns raw sensor streams into early-failure foresight* | *Keeps the fleet live, cheap, and fully observable* |
 
-*A small engineering squad sharing one codebase — Futurense AI Clinic · Capstone Project 04.*
+*A small engineering squad sharing one codebase — IIT GN  AI Clinic · Capstone Project 04.*
 
 </div>
 
@@ -320,6 +320,5 @@ MechSage/
 
 <img src="https://capsule-render.vercel.app/api?type=waving&color=0:2C5364,50:203A43,100:0F2027&height=130&section=footer" width="100%"/>
 
-<sub>Built with ☕ + 🤖 for the Futurense AI Clinic · Ironside Manufacturing is a fictional persona for this engagement.</sub>
-
+<sub>Built with ☕ + 🤖 for the IIT GN AI  Clinic · Ironside Manufacturing is a fictional persona for this engagement.</sub>
 </div>
