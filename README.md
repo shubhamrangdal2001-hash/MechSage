@@ -46,7 +46,7 @@
 <!-- STAR CTA -->
 <h4>⭐ If Mech Sage looks cool, drop a star — it fuels the squad! ⭐</h4>
 
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="380"/>
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="150"/>
 
 </div>
 
@@ -206,7 +206,7 @@ Stage 3 · Design            ░░░░░░░░░░░░░░░░░
 > **✅ Done looks like:** a short discovery brief, a persona set, and a prioritized map of the work — all backed by numbers from the data.
 
 <div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="320"/>
+<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="150"/>
 </div>
 
 <!-- ===================== STAGE 2 ===================== -->
@@ -300,7 +300,7 @@ MechSage/
 
 <div align="center">
 
-<img src="https://user-images.githubusercontent.com/74038190/238353480-219bcc70-f5dc-466b-9a60-29653d8e8433.gif" width="100"/>
+<img src="https://user-images.githubusercontent.com/74038190/238353480-219bcc70-f5dc-466b-9a60-29653d8e8433.gif" width="50"/>
 
 | 🧑‍💻 Sudhanshu Biswas | 🧑‍💻 Ayush Patil | 🧑‍💻 Shubham Rangdal |
 |:--:|:--:|:--:|
