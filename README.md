@@ -21,8 +21,8 @@
 
 <!-- LIVE BADGES -->
 <p>
-  <img src="https://img.shields.io/badge/Status-Sprint%200%20%C2%B7%20Discover%20%26%20Define-2EE6D6?style=for-the-badge&labelColor=0F2027"/>
-  <img src="https://img.shields.io/badge/Stage-1%20%26%202%20of%208-203A43?style=for-the-badge&labelColor=0F2027"/>
+  <img src="https://img.shields.io/badge/Status-Sprint%201%20%C2%B7%20In%20Process-FFB000?style=for-the-badge&labelColor=0F2027"/>
+  <img src="https://img.shields.io/badge/Stage-3%20of%208-203A43?style=for-the-badge&labelColor=0F2027"/>
   <img src="https://img.shields.io/badge/Client-Ironside%20Manufacturing-2C5364?style=for-the-badge&labelColor=0F2027"/>
 </p>
 
@@ -123,7 +123,7 @@ A system that holds under load, stays inside a cost budget, and carries the trac
 ```mermaid
 flowchart LR
     A([1 · Discover & Probe]):::done --> B([2 · Define]):::done
-    B --> C([3 · Design]):::todo
+    B --> C([3 · Design]):::active
     C --> D([4 · Risk]):::todo
     D --> E([5 · Data]):::todo
     E --> F([6 · Build]):::todo
@@ -131,18 +131,18 @@ flowchart LR
     G --> H([8 · Operate]):::todo
 
     classDef done fill:#2EE6D6,stroke:#0F2027,color:#0F2027,stroke-width:2px;
+    classDef active fill:#FFB000,stroke:#0F2027,color:#0F2027,stroke-width:2px;
     classDef todo fill:#203A43,stroke:#2C5364,color:#ffffff,stroke-width:1px;
 ```
 
-**Sprint 0 progress**
+**Sprint 1 progress**
 
 ```text
-Stage 1 · Discover & Probe  ████████████████████  100%  ✅
-Stage 2 · Define            ████████████████████  100%  ✅
-Stage 3 · Design            ░░░░░░░░░░░░░░░░░░░░    0%  ⏳
+Sprint 0 (Stage 1 & 2)      ████████████████████  100%  ✅
+Sprint 1 (Stage 3 Design)   ████░░░░░░░░░░░░░░░░   20%  ⏳
 ```
 
-> 🟢 **This README covers Stage 1 (Discover & Probe) and Stage 2 (Define) only.** The remaining stages ship in upcoming sprints.
+> 🟢 **Sprint 0 is complete.** We are currently in **Sprint 1**, working on Stage 3 (Design).
 
 <div align="center">
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%"/>
