@@ -304,7 +304,8 @@ MechSage/
 
 | 🧑‍💻 Sudhanshu Biswas | 🧑‍💻 Ayush Patil | 🧑‍💻 Shubham Rangdal |
 |:--:|:--:|:--:|
-| <img src="https://img.shields.io/badge/Member-Sudhanshu%20Biswas-2EE6D6?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Member-Ayush%20Patil-203A43?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Member-Shubham%20Rangdal-2C5364?style=for-the-badge&labelColor=0F2027"/> |
+| <img src="https://img.shields.io/badge/Sudhanshu%20Biswas-Chief%20Agent%20Architect-2EE6D6?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Ayush%20Patil-Reliability%20%26%20Data%20Alchemist-203A43?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Shubham%20Rangdal-Platform%20%26%20Ops%20Commander-2C5364?style=for-the-badge&labelColor=0F2027"/> |
+| *Orchestrates the agent swarm and owns the product vision* | *Turns raw sensor streams into early-failure foresight* | *Keeps the fleet live, cheap, and fully observable* |
 
 *A small engineering squad sharing one codebase — Futurense AI Clinic · Capstone Project 04.*
 
