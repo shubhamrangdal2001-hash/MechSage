@@ -63,6 +63,16 @@ The system must catch the failures that matter, operate at fleet scale, avoid dr
 
 ---
 
+```mermaid
+flowchart LR
+    P1["🧑‍🔧 Reliability Engineer"] -->|catch early, trust the alert| MS(("🧠 Mech Sage"))
+    P2["🔨 Maintenance Technician"] -->|actionable work order| MS
+    P3["📊 Operations Lead"] -->|uptime within budget| MS
+    P4["⚙️ ML / Platform Engineer"] -->|observable & cheap| MS
+```
+
+---
+
 ## 4. Jobs To Be Done
 
 | User | Job statement |
@@ -88,7 +98,44 @@ The system must catch the failures that matter, operate at fleet scale, avoid dr
 
 ---
 
-## 6. User Flow (high level)
+```mermaid
+flowchart TB
+    subgraph IN["✅ In scope (v1)"]
+        I1[Fleet monitoring]
+        I2[Early degradation detection]
+        I3[RUL + explanation]
+        I4[Work-order drafting]
+        I5[Schedule drafting]
+        I6[Human approval flow]
+    end
+    subgraph OUT["❌ Out of scope (v1)"]
+        O1[Auto-execution without approval]
+        O2[Physical machine control]
+        O3[ERP / inventory integration]
+        O4[Native mobile app]
+        O5[Crew roster optimization]
+    end
+```
+
+---
+
+## 6. User Flow
+
+### 6.1 Simple view
+
+The whole product in one line: **watch → catch → explain → approve → fix → learn.**
+
+```mermaid
+flowchart LR
+    A["👀 Watch the machines"] --> B["⚠️ Catch a problem early"]
+    B --> C["🧠 Explain it + predict failure"]
+    C --> D["📝 Suggest a fix + time slot"]
+    D --> E["✅ Human approves"]
+    E --> F["🔧 Technician repairs"]
+    F --> A
+```
+
+### 6.2 Detailed view
 
 ```mermaid
 flowchart TD
@@ -178,6 +225,20 @@ Every metric carries a **baseline** and a **target**. The numbers below are **ro
 
 ---
 
+**Metrics at a glance**
+
+```mermaid
+flowchart TD
+    NS["⭐ NORTH-STAR<br/>Early-detection lead time ≥ 25 cycles"]
+    NS --> G1["🛡️ GUARDRAIL<br/>False-alarm rate ≤ 10%"]
+    NS --> G2["🛡️ GUARDRAIL<br/>Cost per asset ≤ $0.01"]
+    NS --> S1["Supporting<br/>RUL RMSE ≤ 18 cycles"]
+    NS --> S2["Supporting<br/>Explanation quality ≥ 4.0 / 5"]
+    NS --> S3["Supporting<br/>Work-order usefulness ≥ 80%"]
+```
+
+---
+
 ## 10. Non-Functional Requirements
 
 | Category | Requirement |
@@ -191,7 +252,138 @@ Every metric carries a **baseline** and a **target**. The numbers below are **ro
 
 ---
 
-## 11. Risks (summary)
+## 11. High-Level Design (HLD)
+
+> **Note.** A PRD defines *what* and *why*; the full technical design is the Stage 3 deliverable. The architecture below is a **forward-looking preview** to show the shape of the solution and prove the requirements are buildable. Details (schemas, prompts, agent contracts) are finalized in Design.
+
+Mech Sage is a **multi-agent system** coordinated by an orchestrator, with a clear separation between cheap continuous monitoring and heavier on-demand diagnosis. Every consequential output passes through a human.
+
+```mermaid
+flowchart TD
+    subgraph SRC[Data sources]
+        SENS[Asset sensor streams]
+        DOCS[Manuals & maintenance history]
+    end
+
+    SENS --> ING[Ingestion & feature pipeline]
+    ING --> MON["Monitoring Agent<br/>(cheap model / rules)"]
+    MON -->|anomaly| ORCH["Orchestrator<br/>(LangGraph)"]
+    ORCH --> DIAG["Diagnosis Agent<br/>RUL model + LLM"]
+    DOCS --> VDB[("Vector store<br/>Chroma")]
+    VDB -. RAG .-> DIAG
+    DIAG --> PLAN["Planner Agent<br/>work order + schedule"]
+    ORCH --> GW["LLM Gateway<br/>(LiteLLM)"]
+    GW -. routes model calls .-> DIAG
+    GW -. routes model calls .-> PLAN
+    PLAN --> API["FastAPI service + minimal UI"]
+    API --> HUMAN[Human approval]
+    HUMAN --> STORE[(Outcome / feedback store)]
+    STORE -. feedback .-> MON
+    OBS[Observability & cost guardrails] -. traces & budgets .-> ORCH
+```
+
+**Components**
+
+| Component | Responsibility |
+|---|---|
+| Ingestion & feature pipeline | Clean, window, and feature-engineer raw sensor streams. |
+| Monitoring Agent | Cheap, always-on anomaly scoring across the fleet; raises a signal only when needed. |
+| Orchestrator (LangGraph) | Coordinates agents, enforces the confidence gate, and routes to the human path. |
+| Diagnosis Agent | Estimates RUL and explains the likely failure mode (ML model + LLM, grounded by RAG). |
+| Planner Agent | Drafts the work order and proposed schedule slot. |
+| LLM Gateway (LiteLLM) | Single entry point for all model calls; enforces model routing and cost limits. |
+| Vector store (Chroma) | Stores manuals/procedures for retrieval-augmented explanations. |
+| API + UI (FastAPI) | Exposes results and the approval workflow to users. |
+| Observability & guardrails | Tracing, quality/latency/cost metrics, hard budget alarms. |
+| Outcome / feedback store | Records every decision outcome for tuning and evaluation. |
+
+---
+
+## 12. Technology Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Language | **Python 3.13** | Standard for ML + agent tooling. |
+| Agent orchestration | **LangGraph** (CrewAI / AutoGen considered) | Explicit, inspectable agent graph with state and gating. |
+| LLM gateway | **LiteLLM** | One interface to many models; central cost & routing control. |
+| Dev / cheap models | **DeepSeek, Qwen, Llama, Gemini Flash** (free tiers) | Cheap routine monitoring; escalate to stronger models only on signal. |
+| RUL / ML model | Gradient-boosted / sequence model (e.g., **LightGBM**, LSTM) | Proven on run-to-failure data such as C-MAPSS. |
+| Vector store | **Chroma** | Lightweight RAG over manuals and procedures. |
+| Retrieval evaluation | **RAGAS** | Measures grounding/explanation quality. |
+| Prompt / pipeline optimization | **DSPy** | Systematic prompt and pipeline tuning. |
+| Service & UI | **FastAPI** + minimal web front end | Simple API plus a thin approval interface. |
+| Observability | Tracing + cost/latency dashboards | Required by the non-functional requirements. |
+| Deployment | Free cloud tier | Keeps unit cost within budget. |
+
+---
+
+## 13. Data Flow
+
+How a single reading travels from sensor to action and back into learning:
+
+```mermaid
+flowchart LR
+    A[Sensor readings] --> B[Ingest + clean + window]
+    B --> C[(Feature store)]
+    C --> D[Monitoring: anomaly score]
+    D -->|normal| C
+    D -->|anomaly| E[RUL model: predict cycles left]
+    E --> F[LLM: explain cause + draft work order]
+    G[(Manuals / KB)] -. RAG .-> F
+    F --> H[Approval UI]
+    H -->|approved / rejected| I[(Outcome log)]
+    I --> J[Retraining & tuning dataset]
+    J -. improves .-> E
+```
+
+**Stages**
+
+1. **Ingest** raw sensor readings; clean and window them into features.
+2. **Score** each asset for anomalies continuously (cheap path).
+3. On anomaly, **predict** remaining useful life and **explain** the cause, grounded in manuals via RAG.
+4. **Present** the draft to the approval UI.
+5. **Log** the outcome (approved, rejected, correct, false alarm).
+6. **Feed** outcomes back into the tuning dataset to improve detection and RUL over time.
+
+*Data classification: sensor telemetry and maintenance records are treated as confidential operational data; no personal data is expected in v1.*
+
+---
+
+## 14. Security Model
+
+| Control area | Requirement |
+|---|---|
+| **Human-in-the-loop** | The system never actuates a machine; all consequential actions require human approval and degrade to a human path when unsure. |
+| **Authentication** | All API and UI access is authenticated; no anonymous access to alerts or work orders. |
+| **Authorization (RBAC)** | Role-based access by persona (Reliability Engineer, Technician, Operations Lead, Platform Engineer); least privilege by default. |
+| **Secrets management** | No secrets in code or repo; API keys and model credentials held in environment/secret manager and injected at runtime. |
+| **Data access** | Read-only access to sensor sources; scoped, least-privilege connections to data stores. |
+| **Data protection** | Encryption in transit (TLS) and at rest for stored telemetry, outcomes, and KB content. |
+| **LLM safety** | Inputs validated; explanations grounded in retrieved sources; the model refuses/abstains when evidence is weak to avoid hallucinated diagnoses. |
+| **Prompt-injection defense** | Treat manuals/KB and tool outputs as untrusted content; constrain tool use and sanitize retrieved text before it reaches the planner. |
+| **Cost guardrails as a control** | Hard per-asset budget with alarms; runaway usage is throttled — cost abuse is treated as a safety event. |
+| **Auditability** | Every alert, recommendation, approval, and tool call is logged and traceable for review. |
+| **Supply chain** | Model versions pinned and routed through the gateway; dependencies tracked and updated deliberately. |
+
+---
+
+**Security at a glance**
+
+```mermaid
+flowchart TB
+    U["👤 Users"] -->|authenticated + RBAC| API["API / UI layer"]
+    API --> ORCH["Orchestrator + agents"]
+    HITL["✅ Human-in-the-loop approval"] -. gates all actions .-> ORCH
+    ORCH --> GW["LLM Gateway<br/>cost + model guardrails"]
+    KB[("Manuals / KB<br/>untrusted → sanitized")] -. RAG .-> ORCH
+    DATA[("Telemetry & outcomes<br/>encrypted, least-privilege")] --> ORCH
+    SEC["🔐 Secrets manager"] -. injects keys .-> GW
+    AUDIT["📜 Audit log + tracing"] -. records everything .-> ORCH
+```
+
+---
+
+## 15. Risks (summary)
 
 Full detail lives in the Stage 4 Risk Register. Top risks and the direction of mitigation:
 
@@ -205,15 +397,15 @@ Full detail lives in the Stage 4 Risk Register. Top risks and the direction of m
 
 ---
 
-## 12. Assumptions and Open Questions
+## 16. Assumptions and Open Questions
 
-### 12.1 Assumptions (to validate)
+### 16.1 Assumptions (to validate)
 
 - 🔖 Sensor data arrives at a regular, known cadence per asset.
 - 🔖 A public run-to-failure dataset (e.g., NASA C-MAPSS) is representative enough to prototype against.
 - 🔖 A human approver is available within the maintenance workflow.
 
-### 12.2 Open questions for the client
+### 16.2 Open questions for the client
 
 - What are the fleet volumes and peak streaming patterns?
 - What is the system allowed to do, and what must **never** be automated?
@@ -223,7 +415,7 @@ Full detail lives in the Stage 4 Risk Register. Top risks and the direction of m
 
 ---
 
-## 13. Acceptance Criteria — "Done looks like"
+## 17. Acceptance Criteria — "Done looks like"
 
 A PRD a stakeholder could approve and a team could build from on its own, with:
 
@@ -235,7 +427,7 @@ A PRD a stakeholder could approve and a team could build from on its own, with:
 
 ---
 
-## 14. Appendix — References
+## 18. Appendix — References
 
 - Futurense AI Clinic · Capstone Project Brief · Project 04 (Stages 1–2).
 - Candidate datasets: NASA C-MAPSS (Turbofan), NASA N-CMAPSS, AI4I 2020 Predictive Maintenance.
