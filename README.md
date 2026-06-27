@@ -1,325 +1,100 @@
-<!-- ============================================================= -->
-<!-- =====================  MECH SAGE README  ==================== -->
-<!-- ============================================================= -->
+# Mech Sage — Stage 5: Data Decision & Dataset Strategy
 
-<a name="top"></a>
+> **Stage:** 5 (Data) · builds on the Stage 3 design and PRD v1.0
+> **Project:** Mech Sage — agentic predictive-maintenance copilot for Ironside Manufacturing
+> **Owner:** Ayush Patil (Reliability & Data) · reviewed by Sudhanshu & Shubham
+> **Status:** Draft for review
 
-<!-- ===================== ANIMATED HEADER ===================== -->
-<div align="center">
+---
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:0F2027,40:203A43,100:2C5364&height=240&section=header&text=Mech%20Sage&fontSize=90&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Predictive-Maintenance%20Operations%20Copilot&descAlignY=58&descSize=22" width="100%"/>
+## 0. What this folder contains
 
-<!-- TYPING TAGLINE -->
-<a href="https://github.com/shubhamrangdal2001-hash/MechSage">
-  <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=600&size=24&duration=2800&pause=700&color=2EE6D6&center=true&vCenter=true&width=860&lines=Watch+every+asset.+Catch+failure+early.;Explain+in+plain+language.+Draft+the+work+order.;Fleet-scale.+Inside+a+budget.;An+agentic+copilot+for+industrial+reliability." alt="Typing SVG" />
-</a>
-
-<br/><br/>
-
-<!-- GLOWING NEON DIVIDER -->
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%"/>
-
-<!-- LIVE BADGES -->
-<p>
-  <img src="https://img.shields.io/badge/Status-Sprint%201%20%C2%B7%20In%20Process-FFB000?style=for-the-badge&labelColor=0F2027"/>
-  <img src="https://img.shields.io/badge/Stage-3%20of%208-203A43?style=for-the-badge&labelColor=0F2027"/>
-  <img src="https://img.shields.io/badge/Client-Ironside%20Manufacturing-2C5364?style=for-the-badge&labelColor=0F2027"/>
-</p>
-
-<p>
-  <img src="https://img.shields.io/github/stars/shubhamrangdal2001-hash/MechSage?style=social"/>
-  <img src="https://img.shields.io/github/forks/shubhamrangdal2001-hash/MechSage?style=social"/>
-  <img src="https://img.shields.io/github/last-commit/shubhamrangdal2001-hash/MechSage/dev?style=flat-square&color=2EE6D6&labelColor=0F2027"/>
-  <img src="https://komarev.com/ghpvc/?username=mech-sage&label=Project%20Views&color=2EE6D6&style=flat-square"/>
-</p>
-
-<p>
-  <img src="https://img.shields.io/badge/Python-3.13-3776AB?style=flat-square&logo=python&logoColor=white"/>
-  <img src="https://img.shields.io/badge/LangGraph-Agents-FF6F61?style=flat-square&logo=langchain&logoColor=white"/>
-  <img src="https://img.shields.io/badge/LiteLLM-Gateway-4B8BBE?style=flat-square"/>
-  <img src="https://img.shields.io/badge/RAGAS-Eval-8A2BE2?style=flat-square"/>
-  <img src="https://img.shields.io/badge/DSPy-Optimize-00897B?style=flat-square"/>
-  <img src="https://img.shields.io/badge/FastAPI-Serve-009688?style=flat-square&logo=fastapi&logoColor=white"/>
-  <img src="https://img.shields.io/badge/Chroma-VectorDB-FFB000?style=flat-square"/>
-</p>
-
-<!-- STAR CTA -->
-<h4>⭐ If Mech Sage looks cool, drop a star — it fuels the squad! ⭐</h4>
-
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="150"/>
-
-</div>
-
-<!-- ===================== TABLE OF CONTENTS ===================== -->
-## 🧭 Navigate
-
-<div align="center">
-
-[![About](https://img.shields.io/badge/🔍-About-2EE6D6?style=for-the-badge&labelColor=0F2027)](#-what-is-mech-sage)
-[![Lenses](https://img.shields.io/badge/🔭-Three%20Lenses-203A43?style=for-the-badge&labelColor=0F2027)](#-the-three-lenses)
-[![Roadmap](https://img.shields.io/badge/🗺️-Roadmap-2C5364?style=for-the-badge&labelColor=0F2027)](#️-lifecycle-roadmap)
-[![Stage 1](https://img.shields.io/badge/1️⃣-Discover-2EE6D6?style=for-the-badge&labelColor=0F2027)](#-stage-1--discover--probe)
-[![Stage 2](https://img.shields.io/badge/2️⃣-Define-203A43?style=for-the-badge&labelColor=0F2027)](#-stage-2--define)
-[![Team](https://img.shields.io/badge/👥-Team-2C5364?style=for-the-badge&labelColor=0F2027)](#-the-squad)
-
-</div>
-
-<!-- ===================== ABOUT ===================== -->
-## ⚙️ What is Mech Sage?
-
-<img align="right" src="https://user-images.githubusercontent.com/74038190/216122041-518ac897-8d92-4c6b-9b3f-ca01dcaf38ee.png" width="120"/>
-
-> Ironside Manufacturing runs a fleet of expensive, hard-working machines. When one fails without warning, the line stops — and an unplanned outage costs far more than a planned repair.
-
-**Mech Sage** is an **agentic operations copilot** for predictive maintenance. It does not hand the team another dashboard of red and green lights. Instead, it:
-
-- 👀 **Watches the whole fleet** of assets, continuously.
-- 🩺 **Catches degradation early** — days before a threshold trips.
-- 🗣️ **Explains in plain language** what is going wrong and how sure it is.
-- ⏳ **Estimates Remaining Useful Life (RUL)** with a reason you can trust.
-- 📝 **Drafts the work order and the schedule** for a human to approve.
-- 🔕 **Avoids alarm fatigue** — catches the failures that matter without crying wolf.
-- 💸 **Stays inside a cost & latency budget** at fleet scale.
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/212284087-bbe7e430-757e-4901-90bf-4cd2ce3e1852.gif" width="150"/>
-</div>
-
-<!-- ===================== THREE LENSES ===================== -->
-## 🔭 The Three Lenses
-
-<table>
-<tr>
-<td width="33%" valign="top" align="center">
-
-<img src="https://user-images.githubusercontent.com/74038190/212257465-7ce8d493-cac5-494e-982a-5a9deb852c4b.gif" width="80"/>
-
-### 🧭 Product
-The people we serve, the jobs they need done, the scope we commit to, and the metrics that prove the system is worth running.
-
-</td>
-<td width="33%" valign="top" align="center">
-
-<img src="https://user-images.githubusercontent.com/74038190/212257468-1e9a91f1-b626-4baa-b15d-5c385dfa7ed2.gif" width="80"/>
-
-### 🏗️ Solution Architecture
-The agents and how they are arranged, the orchestration patterns we adopt and reject, and how the parts connect, recover, and stay in their roles.
-
-</td>
-<td width="33%" valign="top" align="center">
-
-<img src="https://user-images.githubusercontent.com/74038190/212257472-08e52665-c503-4bd9-aa20-f5a4dae769b5.gif" width="80"/>
-
-### 🔧 Engineering
-A system that holds under load, stays inside a cost budget, and carries the tracing, testing, and deployment a real operator insists on.
-
-</td>
-</tr>
-</table>
-
-<!-- ===================== ROADMAP ===================== -->
-## 🗺️ Lifecycle Roadmap
-
-```mermaid
-flowchart LR
-    A([1 · Discover & Probe]):::done --> B([2 · Define]):::done
-    B --> C([3 · Design]):::active
-    C --> D([4 · Risk]):::todo
-    D --> E([5 · Data]):::todo
-    E --> F([6 · Build]):::todo
-    F --> G([7 · Verify]):::todo
-    G --> H([8 · Operate]):::todo
-
-    classDef done fill:#2EE6D6,stroke:#0F2027,color:#0F2027,stroke-width:2px;
-    classDef active fill:#FFB000,stroke:#0F2027,color:#0F2027,stroke-width:2px;
-    classDef todo fill:#203A43,stroke:#2C5364,color:#ffffff,stroke-width:1px;
-```
-
-**Sprint 1 progress**
-
-```text
-Sprint 0 (Stage 1 & 2)      ████████████████████  100%  ✅
-Sprint 1 (Stage 3 Design)   ████░░░░░░░░░░░░░░░░   20%  ⏳
-```
-
-> 🟢 **Sprint 0 is complete.** We are currently in **Sprint 1**, working on Stage 3 (Design).
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%"/>
-</div>
-
-<!-- ===================== STAGE 1 ===================== -->
-## 🔍 Stage 1 · Discover & Probe
-
-<img src="https://user-images.githubusercontent.com/74038190/216656637-b71a14ee-f7c9-4e0b-a1a4-9a4f01b6c5fc.gif" width="30"/> *Before any architecture, understand the work. A system that does not match how the work actually arrives will fail in its first week. This stage is research, not building.*
-
-<details open>
-<summary><b>📊 1.1 — Profile the real data</b></summary>
-
-- Quantify the distribution of assets, runs, sequence lengths, and sensor channels.
-- Map operating regimes / conditions and how failures appear: **gradual vs sudden**.
-- Identify missing values, noise, and the **small slice that drives most of the volume**.
-- Output: numbers, not vibes — every claim backed by the dataset.
-
-</details>
-
-<details open>
-<summary><b>🧑‍🔧 1.2 — Persona set (3–5 personas)</b></summary>
-
-| Persona | Goal | Frustration |
-|---|---|---|
-| **Reliability Engineer** *(primary user)* | Catch degradation early, trust the alert | Drowning in dashboards & false alarms |
-| **Maintenance Technician** | Get a clear, actionable work order | Vague "check the machine" tickets |
-| **Operations Lead** | Maximize uptime within budget | No view of cost vs risk tradeoffs |
-| **ML / Platform Engineer** | Keep the system observable & cheap | Black-box pipelines, runaway token cost |
-
-</details>
-
-<details open>
-<summary><b>🎯 1.3 — Jobs To Be Done (one sentence each)</b></summary>
-
-- **Reliability Engineer:** *"Tell me which asset is heading for failure, why, and how sure you are — before it stops the line."*
-- **Technician:** *"Hand me a work order I can act on without a follow-up call."*
-- **Operations Lead:** *"Show me the cost-vs-risk picture so I can approve the schedule."*
-
-</details>
-
-<details open>
-<summary><b>❓ 1.4 — Probing questions for the client</b></summary>
-
-- What are fleet **volumes** and peak streaming patterns?
-- What is the system **allowed to do**, and what must **never** be automated?
-- What is an acceptable **false-alarm rate** before the team stops trusting it?
-- What is the **budget ceiling** per asset monitored?
-- *Where we cannot ask, we state the assumption and mark it `🔖 ASSUMPTION`.*
-
-</details>
-
-<details open>
-<summary><b>🛠️ 1.5 — Teardown: alert → action (2 products)</b></summary>
-
-- Study two real industrial / monitoring products that turn an alert into an action.
-- Bring back **one pattern worth borrowing** and **one anti-pattern** to avoid.
-
-</details>
-
-> **✅ Done looks like:** a short discovery brief, a persona set, and a prioritized map of the work — all backed by numbers from the data.
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/212284158-e840e285-664b-44d7-b79b-e264b5e54825.gif" width="150"/>
-</div>
-
-<!-- ===================== STAGE 2 ===================== -->
-## 📜 Stage 2 · Define
-
-<img src="https://user-images.githubusercontent.com/74038190/216656637-b71a14ee-f7c9-4e0b-a1a4-9a4f01b6c5fc.gif" width="30"/> *Turn the discovery into a contract. The PRD is the document a stakeholder could sign and an engineer could build against — without a follow-up meeting.*
-
-### 📋 PRD skeleton
-
-```
-1. Problem statement
-2. Target users & Jobs To Be Done
-3. Scope  ✔   /   Non-scope  ✗
-4. Assumptions & open questions
-5. Success metrics (baseline + target)
-6. Non-functional requirements (latency, cost, safety)
-```
-
-### 🎯 Success Metrics
-
-| Target Metric | What it measures | Type |
-|---|---|:--:|
-| ⏱️ **Early-detection lead time** | How far ahead of failure a credible alert is raised | ⭐ north-star |
-| 🔕 **False-alarm rate** | How often it cries wolf — trust depends on this | 🛡️ guardrail |
-| 🧠 **RUL explanation quality** | Whether the RUL estimate & its reason are sound | ✅ supporting |
-| 📝 **Work-order usefulness** | Whether a technician can act on the draft | ✅ supporting |
-| 💸 **Cost per asset monitored** | The unit economics that decide whether this ships | 🛡️ guardrail |
-
-> 📏 **Rule:** every metric carries a **baseline + target**. A target without a baseline cannot be judged.
-
-### 🚧 Non-Functional Requirements
-
-- **Latency budget** — per-asset analysis completes within the agreed window.
-- **Cost ceiling** — hard per-asset budget with alarms; cheap models for routine monitoring.
-- **Safety bar** — human approval required; the system **abstains when unsure** and degrades to a human path.
-
-> **✅ Done looks like:** a PRD a stakeholder could approve and a team could build from on its own.
-
-<div align="center">
-<img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%"/>
-</div>
-
-<!-- ===================== DEMO TERMINAL ===================== -->
-## 🖥️ What it will feel like
-
-```console
-$ mech-sage watch --fleet ironside
-✨ Monitoring 218 assets ...
-⚠️  ASSET-077  degradation detected   · confidence 0.91  · RUL ~ 6.2 days
-🗣️  cause: rising HPC outlet temp + vibration drift (sensor s_11, s_14)
-📝  draft work-order #WO-2291 created  → awaiting human approval
-📅  suggested slot: Sat 02:00–04:00 (low-load window)
-💸  run cost: $0.0043 / asset   · budget OK ✅
-```
-
-<!-- ===================== TECH STACK ===================== -->
-## 🧰 Planned Toolbox
-
-<div align="center">
-
-| Layer | Tool |
+| File | Purpose |
 |---|---|
-| 🤖 Agent orchestration | LangGraph / CrewAI / AutoGen |
-| 🚪 LLM gateway | LiteLLM |
-| 🧪 Dev models | DeepSeek · Qwen · Llama · Gemini Flash (free tiers) |
-| 🗂️ Vector store | Chroma |
-| 📐 Retrieval eval | RAGAS |
-| 🎛️ Prompt/pipeline opt | DSPy |
-| 🌐 Service & UI | FastAPI + light front end |
-| ☁️ Deployment | Free cloud tier |
+| `README.md` (this file) | **Why** we chose the datasets we did, and the reasoning behind every call |
+| `datacard_cmapss.md` | Data card — NASA C-MAPSS (FD001–FD004) **[PRIMARY]** |
+| `datacard_ncmapss.md` | Data card — N-CMAPSS (DS01–DS08) **[STRETCH]** |
+| `datacard_ai4i2020.md` | Data card — AI4I 2020 Predictive Maintenance **[PROTOTYPING]** |
+| `pros_and_cons.md` | Side-by-side pros/cons + the final decision matrix |
 
-</div>
+---
 
-<!-- ===================== REPO STRUCTURE ===================== -->
-## 📁 Repository Structure (planned)
+## 1. What we actually need from a dataset
 
-```
-MechSage/
-├── docs/
-│   ├── 01_discovery_brief.md      # Stage 1 output
-│   ├── 02_prd.md                  # Stage 2 output
-│   └── personas.md
-├── data/                          # dataset cards & EDA (later sprint)
-├── src/                           # agentic system (later sprint)
-├── eval/                          # golden set, RAGAS (later sprint)
-└── README.md
-```
+Mech Sage predicts **how much life a machine has left (RUL)** and explains **why**, then drafts a work order. So the dataset has to support that exact loop. Our hard requirements:
 
-<!-- ===================== TEAM ===================== -->
-## 👥 The Squad
+1. **Run-to-failure trajectories** — we need machines that degrade over time until they fail, not just a snapshot. RUL is meaningless without the full life history.
+2. **Multivariate sensor time-series** — multiple sensors per machine over time, so the anomaly + RUL model has real signal to learn from.
+3. **A clear, derivable RUL label** — we must be able to compute "cycles remaining until failure" for supervised training.
+4. **Manageable size & compute** — this is a capstone on free tiers; the data must train on a laptop / free cloud, not a GPU cluster.
+5. **Well-documented & citable** — a recognised PHM benchmark so our results are comparable and credible.
+6. **A realistic story for an industrial client** — it should plausibly stand in for Ironside's rotating equipment.
 
-<div align="center">
+---
 
-<img src="https://user-images.githubusercontent.com/74038190/238353480-219bcc70-f5dc-466b-9a60-29653d8e8433.gif" width="50"/>
+## 2. The decision (TL;DR)
 
-| 🧑‍💻 Sudhanshu Biswas | 🧑‍💻 Ayush Patil | 🧑‍💻 Shubham Rangdal |
-|:--:|:--:|:--:|
-| <img src="https://img.shields.io/badge/Sudhanshu%20Biswas-Chief%20Agent%20Architect-2EE6D6?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Ayush%20Patil-Reliability%20%26%20Data%20Alchemist-203A43?style=for-the-badge&labelColor=0F2027"/> | <img src="https://img.shields.io/badge/Shubham%20Rangdal-Platform%20%26%20Ops%20Commander-2C5364?style=for-the-badge&labelColor=0F2027"/> |
-| *Orchestrates the agent swarm and owns the product vision* | *Turns raw sensor streams into early-failure foresight* | *Keeps the fleet live, cheap, and fully observable* |
+> **Primary dataset: NASA C-MAPSS (FD001–FD004).**
+> **Stretch/realism dataset: N-CMAPSS.**
+> **Prototyping/smoke-test dataset: AI4I 2020.**
 
-*A small engineering squad sharing one codebase — Futurense AI Clinic · Capstone Project 04.*
+We build and benchmark on **C-MAPSS** because it is the canonical RUL run-to-failure benchmark and hits every requirement above. We keep **N-CMAPSS** as a stretch goal for realism if time/compute allow, and use **AI4I 2020** early to smoke-test the *agent loop* (detect → diagnose → work order) before the real RUL model is ready.
 
-</div>
+---
 
-<!-- ===================== BACK TO TOP ===================== -->
-<div align="center">
+## 3. Why C-MAPSS is primary
 
-<br/>
+- ✅ **Purpose-built for RUL.** It is *the* benchmark for remaining-useful-life prediction — exactly our north-star (early-detection lead time).
+- ✅ **True run-to-failure.** Every engine unit runs from healthy to failure, so the RUL label is directly derivable (`max_cycle − current_cycle`).
+- ✅ **Rich but tabular-friendly.** 21 sensors + 3 operational settings per cycle — enough signal, but small enough to window and model on a laptop.
+- ✅ **Four difficulty tiers (FD001–FD004).** We can start on the easy single-condition/single-fault set (FD001) and scale to multi-condition/multi-fault (FD004) — perfect for an incremental capstone.
+- ✅ **Battle-tested & documented.** Used in the PHM08 challenge and hundreds of papers, so we have baselines (RUL RMSE, scoring function) to compare against.
+- ✅ **Right size.** Tens of MB, plain text — no data-engineering overhead steals time from the agent work.
 
-[![Back to top](https://img.shields.io/badge/⬆️%20Back%20to%20top-0F2027?style=for-the-badge)](#top)
+## 4. Why N-CMAPSS is the stretch dataset (not primary)
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:2C5364,50:203A43,100:0F2027&height=130&section=footer" width="100%"/>
+- ➕ **Far more realistic** — full flight envelopes, real degradation modelling, more sensors.
+- ➖ **Heavy** — multi-GB HDF5 files; training is slow on free tiers and would eat the sprint.
+- ➖ **Overkill for a v1 demo** — the extra realism doesn't change the agent architecture; it just raises the compute bill.
+- **Verdict:** ideal "if we have time" upgrade to show the design generalises; not where we start.
 
-<sub>Built with ☕ + 🤖 for the Futurense AI Clinic · Ironside Manufacturing is a fictional persona for this engagement.</sub>
+## 5. Why AI4I 2020 is for prototyping only
 
-</div>
+- ➕ **Tiny & instant** — 10k rows, plain CSV, trains in seconds.
+- ➕ **Great for wiring the agent loop early** — we can exercise detect → diagnose → draft-work-order before the real RUL model exists.
+- ➖ **Not run-to-failure** — it's a *classification* dataset (will it fail / failure type), not RUL trajectories.
+- ➖ **Synthetic & shallow** — no time-series degradation to learn lead time from.
+- **Verdict:** a scaffolding/smoke-test dataset, never the headline benchmark.
+
+---
+
+## 6. How the datasets map to the build
+
+| Need | Dataset we use | Why |
+|---|---|---|
+| Train the RUL/anomaly model | **C-MAPSS** | Real run-to-failure trajectories + RUL labels |
+| Prove the design generalises (stretch) | **N-CMAPSS** | Realistic flight data, more fault modes |
+| Smoke-test the agent loop early | **AI4I 2020** | Tiny, instant, end-to-end in minutes |
+| Report headline metrics (Stage 7) | **C-MAPSS** | Comparable to published baselines |
+
+---
+
+## 7. Stage 5 data tasks (per roadmap)
+
+- [ ] Download C-MAPSS FD001–FD004 (and AI4I 2020 for prototyping)
+- [ ] Clean + window into features; engineer the RUL label (with a clip cap, e.g. RUL capped at 125)
+- [ ] Time-ordered train/val/test split (guard against leakage — see Stage 4 R6)
+- [ ] Baseline EDA: sensor trends vs RUL, which sensors actually signal degradation
+- [ ] Write dataset cards (this folder) + record measured stats to replace PRD §9 `TBD` baselines
+
+---
+
+## 8. Key risks carried from Stage 4
+
+- **R6 Data leakage** — strict time-ordered splits; windows must never cross the failure boundary.
+- **R1 Missed failure** — tune for recall; this is measured on the C-MAPSS held-out test set in Stage 7.
+- **Single-dataset acceptance** — we knowingly accept that the demo trains on turbofan data, not Ironside's real fleet (documented accepted risk).
+
+---
+
+*Feeds Stage 6 (Build — model training) and Stage 7 (Verify — metrics on held-out data).*
