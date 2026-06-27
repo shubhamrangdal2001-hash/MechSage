@@ -243,8 +243,8 @@ flowchart TD
 
 | Category | Requirement |
 |---|---|
-| **Latency** | Per-asset analysis completes within the agreed budget (target window to be set in Stage 3). |
-| **Cost** | Hard per-asset budget enforced with alarms; cheap models used for routine monitoring, stronger models only on signal. |
+| **Latency** | Per-asset analysis: < 5s for routine screening (cheap path), < 30s for diagnostics (escalated path), < 60s for work-order drafting. End-to-end latency from anomaly detection to approved work-order draft is < 120 seconds (2 minutes). |
+| **Cost** | Per-asset monitored cost ceiling of ≤ $0.01 per screening run and < $1.50 per month (total fleet cost < $327/month for 218 assets). Max cost per escalation to strong models is < $0.05. Hard alarms trigger at 80% of budget. |
 | **Scale** | Architecture must hold across the full fleet, with concurrent per-asset processing. |
 | **Safety** | Human approval required for all actions; system abstains when unsure and degrades to a human path. |
 | **Observability** | Every decision and tool call is traceable; cost, quality, and latency are reported. |

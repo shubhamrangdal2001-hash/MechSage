@@ -1,252 +1,433 @@
-# 📜 Product Requirements Document (PRD) v1
+# Mech Sage — Product Requirements Document (PRD)
 
-## Mech Sage — Predictive-Maintenance Operations Copilot
+| Field | Value |
+|---|---|
+| **Project** | Mech Sage — Predictive-Maintenance Operations Copilot |
+| **Client** | Ironside Manufacturing (fictional persona) |
+| **Document** | PRD v1.0 |
+| **Stage** | Stage 2 · Define (Sprint 0) |
+| **Status** | Draft for stakeholder approval |
+| **Owners** | Sudhanshu Biswas · Ayush Patil · Shubham Rangdal |
+| **Last updated** | 2026-06-21 |
 
-**Client:** Ironside Manufacturing (fictional persona)
-**Squad:** Sudhanshu Biswas · Ayush Patil · Shubham Rangdal
-**Sprint:** 0 — Discover & Define
-**Status:** Draft v1
-**Last updated:** 2026-06-19
-
----
-
-## Table of Contents
-
-- [1. Problem Statement](#1-problem-statement)
-- [2. Target Users & Jobs To Be Done](#2-target-users--jobs-to-be-done)
-- [3. Scope & Non-Scope](#3-scope--non-scope)
-- [4. Assumptions & Open Questions](#4-assumptions--open-questions)
-- [5. Success Metrics](#5-success-metrics)
-- [6. Non-Functional Requirements](#6-non-functional-requirements)
+> **Purpose of this document.** This PRD turns the Stage 1 discovery into a contract. It defines *what* we are building, *for whom*, *why*, and *how success is measured* — in enough detail that a stakeholder could approve it and an engineer could build from it without a follow-up meeting. It deliberately does **not** specify the detailed technical design (agent topology, schemas, gateway), which is the Stage 3 deliverable.
 
 ---
 
 ## 1. Problem Statement
 
-### The Situation
+Ironside Manufacturing operates a fleet of expensive, hard-working machines. When an asset fails without warning, the production line stops, and an unplanned outage costs far more than a planned repair.
 
-Ironside Manufacturing operates a fleet of expensive, hard-working industrial machines. Each machine streams sensor data — temperatures, pressures, speeds, vibration, and wear indicators — continuously during operation.
+Each machine streams sensor data — temperatures, pressures, speeds, vibration, and wear. Today a small reliability team watches dashboards and reacts only when a value trips a threshold, which is usually too late. The signal that a machine is heading for failure is typically present in the data days earlier, but it is buried and goes unnoticed.
 
-### The Pain
+Leadership does not want another dashboard of red and green lights. They want a copilot that:
 
-Today, a small reliability team watches dashboards and reacts when a sensor trips a static threshold. By the time a threshold fires, the machine is often **hours away from failure**, not days. The result:
+- watches the whole fleet continuously,
+- catches degradation early,
+- explains in plain language what is going wrong and how confident it is,
+- estimates remaining useful life (RUL), and
+- drafts the work order and the maintenance schedule for a human to approve.
 
-| Impact | Current State |
+The system must catch the failures that matter, operate at fleet scale, avoid drowning the team in false alarms, and stay within a defined cost and latency budget.
+
+---
+
+## 2. Goals and Non-Goals
+
+### 2.1 Goals
+
+- Detect asset degradation **before** failure, with enough lead time to act.
+- Produce **trustworthy, explained** RUL estimates a reliability engineer can rely on.
+- Generate **actionable** work orders and schedules that a technician can execute, gated by human approval.
+- Operate at **fleet scale** within a hard cost and latency budget.
+- Maintain **trust** by keeping false alarms low and abstaining when uncertain.
+
+### 2.2 Non-Goals (out of scope for v1)
+
+- Automatically executing maintenance actions without human approval.
+- Direct control of, or write-back to, physical machines or PLCs.
+- ERP, procurement, or spare-parts inventory integration.
+- Mobile application; v1 ships an API plus a minimal web interface.
+- Optimization of the maintenance crew roster or labor scheduling beyond proposing time slots.
+
+---
+
+## 3. Target Users and Personas
+
+| Persona | Role | Primary Goal | Key Frustration |
+|---|---|---|---|
+| **Reliability Engineer** (primary) | Monitors fleet health, triages alerts | Catch degradation early and trust the alert | Drowning in dashboards and false alarms |
+| **Maintenance Technician** | Executes repairs | Receive a clear, actionable work order | Vague "check the machine" tickets |
+| **Operations Lead** | Owns uptime and cost | Maximize uptime within budget | No view of the cost-vs-risk tradeoff |
+| **ML / Platform Engineer** | Maintains the system | Keep it observable and cheap | Black-box pipelines, runaway token cost |
+
+---
+
+```mermaid
+flowchart LR
+    P1["🧑‍🔧 Reliability Engineer"] -->|catch early, trust the alert| MS(("🧠 Mech Sage"))
+    P2["🔨 Maintenance Technician"] -->|actionable work order| MS
+    P3["📊 Operations Lead"] -->|uptime within budget| MS
+    P4["⚙️ ML / Platform Engineer"] -->|observable & cheap| MS
+```
+
+---
+
+## 4. Jobs To Be Done
+
+| User | Job statement |
 |---|---|
-| **Unplanned downtime** | Line stops without warning; emergency repairs cost 3–5× more than planned ones |
-| **Late detection** | Threshold-based alerts fire ~12 hours before failure on average |
-| **Alarm fatigue** | ~25% of alerts are false positives; team starts ignoring them |
-| **No explanation** | Dashboards show red/green lights but don't say *what* is going wrong or *why* |
-| **Manual work orders** | Technicians receive vague "check the machine" tickets with no actionable detail |
-| **No cost visibility** | Operations leads have no view of cost-vs-risk tradeoffs for scheduling repairs |
-
-### The Ask
-
-Ironside's leadership does **not** want another dashboard of red and green lights. They want:
-
-> An **agentic operations copilot** that watches the whole fleet, catches degradation early, explains in plain language what is going wrong and how sure it is, estimates remaining useful life, and drafts the work order and the maintenance schedule for a human to approve — without drowning the team in false alarms, and within a cost budget at fleet scale.
+| Reliability Engineer | "Tell me which asset is heading for failure, why, and how sure you are — before it stops the line." |
+| Maintenance Technician | "Hand me a work order I can act on without a follow-up call." |
+| Operations Lead | "Show me the cost-vs-risk picture so I can approve the schedule with confidence." |
+| ML / Platform Engineer | "Let me trace any decision and see what each monitored asset costs." |
 
 ---
 
-## 2. Target Users & Jobs To Be Done
+## 5. Scope
 
-### 2.1 Persona Set
-
-| Persona | Role | Goal | Frustration |
-|---|---|---|---|
-| **Priya** | Reliability Engineer *(primary user)* | Catch degradation early and trust every alert she receives | Drowning in dashboards and false alarms; spends 60% of her day triaging noise |
-| **Ravi** | Maintenance Technician | Get a clear, actionable work order he can execute without a follow-up call | Vague "check the machine" tickets that require 30 min of investigation before he can even start |
-| **Meera** | Operations Lead | Maximize uptime within budget; approve schedules with confidence | No visibility into cost-vs-risk tradeoffs; approves blindly or delays and hopes for the best |
-| **Arjun** | ML / Platform Engineer | Keep the system observable, cheap, and easy to debug | Black-box pipelines with no tracing; runaway token costs discovered only at month-end |
-
-### 2.2 Jobs To Be Done (one sentence each)
-
-| Persona | Job To Be Done |
+| In scope (v1) | Out of scope (v1) |
 |---|---|
-| **Priya** (Reliability Eng.) | *"Tell me which asset is heading for failure, why, and how sure you are — before it stops the line."* |
-| **Ravi** (Technician) | *"Hand me a work order I can act on without a follow-up call."* |
-| **Meera** (Ops Lead) | *"Show me the cost-vs-risk picture so I can approve the schedule."* |
-| **Arjun** (ML/Platform Eng.) | *"Give me traces, costs, and a kill switch — so I can sleep at night."* |
+| Continuous fleet monitoring | Auto-execution without approval |
+| Early anomaly / degradation detection | Physical machine control |
+| RUL estimation with explanation | ERP / inventory integration |
+| Work-order drafting | Native mobile app |
+| Maintenance schedule drafting | Crew roster optimization |
+| Human approval workflow | Multi-tenant SaaS hardening |
+| Cost and latency instrumentation | — |
 
 ---
 
-## 3. Scope & Non-Scope
-
-### ✅ In Scope (v1)
-
-| # | Capability | Description |
-|---|---|---|
-| S1 | **Fleet-wide sensor monitoring** | Ingest and process telemetry from all assets in the fleet continuously |
-| S2 | **Early degradation detection** | Identify anomalous sensor drift days before a threshold-based system would fire |
-| S3 | **Remaining Useful Life (RUL) estimation** | Predict how many cycles/days an asset has before failure, with a confidence score |
-| S4 | **Plain-language explanation** | Explain *what* is going wrong, *which* sensors are driving the alert, and *how confident* the system is |
-| S5 | **Work-order drafting** | Auto-generate a structured, actionable work order a technician can execute |
-| S6 | **Maintenance scheduling** | Suggest a repair window based on RUL estimate and production schedule |
-| S7 | **Human-in-the-loop approval** | Every action (work order, schedule change) requires explicit human approval before execution |
-| S8 | **Cost & latency observability** | Track and display per-asset inference cost, latency, and token usage |
-| S9 | **Alarm suppression / ranking** | Rank alerts by severity and suppress low-value noise to prevent alarm fatigue |
-
-### ❌ Non-Scope (v1)
-
-| # | Out of Scope | Why |
-|---|---|---|
-| N1 | **Autonomous action execution** | Safety-critical domain; human must approve every action |
-| N2 | **Physical sensor installation / calibration** | We consume pre-existing sensor streams; hardware is out of scope |
-| N3 | **ERP / CMMS integration** | Work orders are drafted for human copy-paste; direct system integration is a future sprint |
-| N4 | **Real-time sub-second streaming** | Cycle-level (1 Hz equivalent) processing is sufficient; sub-second is not required |
-| N5 | **Multi-domain asset types** | v1 focuses on turbofan-class rotating machinery; other asset types are future work |
-| N6 | **Retraining pipeline** | Model fine-tuning and retraining is Sprint 3+ scope |
-| N7 | **Mobile app** | Web-based interface only for v1 |
+```mermaid
+flowchart TB
+    subgraph IN["✅ In scope (v1)"]
+        I1[Fleet monitoring]
+        I2[Early degradation detection]
+        I3[RUL + explanation]
+        I4[Work-order drafting]
+        I5[Schedule drafting]
+        I6[Human approval flow]
+    end
+    subgraph OUT["❌ Out of scope (v1)"]
+        O1[Auto-execution without approval]
+        O2[Physical machine control]
+        O3[ERP / inventory integration]
+        O4[Native mobile app]
+        O5[Crew roster optimization]
+    end
+```
 
 ---
 
-## 4. Assumptions & Open Questions
+## 6. User Flow
 
-### 🔖 Assumptions
+### 6.1 Simple view
 
-| # | Assumption | Impact if Wrong |
-|---|---|---|
-| A1 | Sensors are pre-calibrated; extreme outliers outside physical limits are sensor noise, not real events | Would miss real extreme-condition failures |
-| A2 | Fleet size is ~100–250 assets for v1 (based on C-MAPSS scale) | Architecture may not scale if fleet is 10,000+ |
-| A3 | Degradation is **gradual** (exponential drift over 30–50 cycles), not sudden step-function failures | Sudden failures would require a fundamentally different detection approach |
-| A4 | Technicians can read English-language work orders | Would need multi-language support otherwise |
-| A5 | Sensor data arrives reliably; no prolonged connectivity outages | Would need offline buffering and catch-up logic |
-| A6 | Budget ceiling of ~$1.50 per asset per month for inference costs is acceptable to the client | Would need even cheaper models or less frequent monitoring |
-| A7 | Human approval turnaround is < 4 hours for non-critical alerts, < 30 min for critical | Longer turnaround could mean the RUL window expires before action |
+The whole product in one line: **watch → catch → explain → approve → fix → learn.**
 
-### ❓ Open Questions
+```mermaid
+flowchart LR
+    A["👀 Watch the machines"] --> B["⚠️ Catch a problem early"]
+    B --> C["🧠 Explain it + predict failure"]
+    C --> D["📝 Suggest a fix + time slot"]
+    D --> E["✅ Human approves"]
+    E --> F["🔧 Technician repairs"]
+    F --> A
+```
 
-| # | Question | Who Decides | Status |
-|---|---|---|---|
-| Q1 | What is the exact fleet size and peak streaming pattern (assets × sensors × frequency)? | Client / Ops Lead | 🔖 Assumed: 218 assets, 21 sensors, 1 Hz |
-| Q2 | What actions must **never** be automated, even with high confidence? | Client | 🔖 Assumed: All physical actions need HITL |
-| Q3 | What is the acceptable **false-alarm rate** before the team stops trusting the system? | Reliability Eng. | 🔖 Assumed: < 5% target |
-| Q4 | Is there an existing CMMS or ticketing system work orders should feed into? | Client / IT | 🔖 Assumed: No — draft for human copy-paste |
-| Q5 | What is the **hard budget ceiling** per asset monitored per month? | Ops Lead / Finance | 🔖 Assumed: $1.50/asset/month |
-| Q6 | Are there regulatory or compliance requirements for audit trails on maintenance decisions? | Client / Legal | 🔖 Assumed: No formal requirements for v1 |
+### 6.2 Detailed view
+
+```mermaid
+flowchart TD
+    S[Sensor stream per asset] --> M[Continuous monitoring]
+    M --> D{Degradation<br/>detected?}
+    D -->|No| M
+    D -->|Yes| R[Estimate RUL +<br/>explain likely cause]
+    R --> C{Confidence above<br/>threshold?}
+    C -->|No| ESC[Escalate to Reliability Engineer<br/>with evidence, no action]
+    C -->|Yes| RANK[Rank alert by severity<br/>suppress low-value alerts]
+    RANK --> RE[Reliability Engineer triages alert]
+    RE -->|dismiss / mark false alarm| FB
+    RE -->|valid| W[Draft work order +<br/>proposed schedule slot]
+    W --> OL[Operations Lead reviews<br/>cost-vs-risk]
+    OL -->|reject| ESC
+    OL -->|approve| ISSUE[Issue work order]
+    ISSUE --> TECH[Maintenance Technician<br/>executes repair]
+    TECH --> FB[Capture outcome:<br/>was the call correct?]
+    ESC --> FB
+    FB --> M
+```
+
+**Step-by-step**
+
+1. **Monitor.** The system continuously watches each asset's sensor stream. If nothing is wrong, it stays in the monitoring loop (no alert, no cost spike).
+2. **Detect.** When degradation appears, it flags the asset and moves it to analysis.
+3. **Diagnose.** It estimates RUL and explains the likely failure mode in plain language.
+4. **Confidence gate.** If confidence is below threshold, it **abstains** — escalating to the Reliability Engineer with evidence and taking no automated action.
+5. **Rank.** Confident alerts are ranked by severity; low-value alerts are suppressed to avoid alarm fatigue.
+6. **Triage.** The Reliability Engineer reviews the alert and either dismisses it (logged as a false alarm) or confirms it.
+7. **Draft.** For confirmed alerts, the system drafts a work order and a proposed schedule slot.
+8. **Approve.** The Operations Lead reviews the cost-vs-risk picture and approves or rejects.
+9. **Execute.** On approval, the work order is issued and the Maintenance Technician carries out the repair.
+10. **Learn.** Every outcome (correct catch, false alarm, miss) is captured and feeds back into monitoring and tuning.
+
+*The system always degrades to a human path when uncertain; it never acts on a machine without approval.*
 
 ---
 
-## 5. Success Metrics
+## 7. Functional Requirements
 
-> 📏 **Rule:** Every metric carries a **baseline + target**. A target without a baseline cannot be judged.
+| ID | Requirement | Priority |
+|---|---|---|
+| FR-1 | Ingest and monitor sensor streams for every asset in the fleet. | Must |
+| FR-2 | Detect degradation early and rank alerts by severity. | Must |
+| FR-3 | Estimate remaining useful life (RUL) for an at-risk asset. | Must |
+| FR-4 | Explain the likely failure mode in plain language with a confidence level. | Must |
+| FR-5 | Draft a work order a technician can act on. | Must |
+| FR-6 | Draft a maintenance schedule / time slot for the work. | Must |
+| FR-7 | Route every consequential output through human approval. | Must |
+| FR-8 | Abstain and escalate when confidence is below threshold. | Must |
+| FR-9 | Suppress low-value alerts to control alarm fatigue. | Should |
+| FR-10 | Surface a cost-vs-risk view for the Operations Lead. | Should |
 
-### 5.1 North-Star Metric
+---
 
-| Metric | What it measures | Baseline (current state) | Target (Mech Sage v1) |
-|---|---|---|---|
-| ⏱️ **Early-detection lead time** | How far ahead of failure the system raises a credible alert | **~12 hours** (threshold-based) | **5–7 days** (sensor-drift detection) |
+## 8. Operational Definitions
 
-### 5.2 Guardrail Metrics (must never cross, even when north-star improves)
+Precise definitions so every later metric is unambiguous:
 
-| Metric | What it measures | Baseline | Target | Hard Ceiling |
+| Term | Definition |
+|---|---|
+| **Credible alert** | An alert with confidence above the agreed threshold, backed by named contributing sensors. |
+| **Failure** | The point at which an asset can no longer meet its operating spec (per dataset RUL = 0). |
+| **Early detection** | A credible alert raised at least the target lead time before failure. |
+| **False alarm** | A credible alert for an asset that does not fail within the relevant horizon. |
+| **Successful asset** | An asset for which the system produced a correct, actioned recommendation within budget. |
+
+---
+
+## 9. Success Metrics
+
+Every metric carries a **baseline** and a **target**. The numbers below are **rough starting values** for the NASA C-MAPSS setting (RUL measured in operating *cycles*, where one flight cycle ≈ one unit). Treat them as starting goals to confirm and tighten against measured data in Sprint 0–1, not as final commitments.
+
+| Metric | Definition | Baseline (rough) | Target (rough) | Type |
 |---|---|---|---|---|
-| 🔕 **False-alarm rate** | % of alerts that are false positives | ~25% | < 5% | **Never exceed 10%** |
-| 💸 **Cost per asset monitored** | Total API + infra cost per asset per month | $50+ (manual labor) | < $1.50 | **Never exceed $3.00** |
+| **Early-detection lead time** | Avg. cycles before failure a credible alert is raised | ~5 cycles (late, threshold-based) | **≥ 25 cycles** ahead | ⭐ North-star |
+| **RUL prediction error (RMSE)** | Avg. error of the RUL estimate, in cycles | ~35 cycles (naive last-value) | **≤ 18 cycles** | Supporting |
+| **False-alarm rate** | Share of credible alerts not followed by a real failure | ~35% (today) | **≤ 10%** | 🛡️ Guardrail |
+| **RUL explanation quality** | Human/judge rating of estimate + reasoning soundness | ~2.5 / 5 | **≥ 4.0 / 5** | Supporting |
+| **Work-order usefulness** | Share of drafts a technician accepts without rework | ~50% (manual tickets) | **≥ 80%** | Supporting |
+| **Cost per asset monitored** | Compute / LLM cost per asset per monitoring window | ~\$0.05 / asset | **≤ \$0.01 / asset** | 🛡️ Guardrail |
 
-### 5.3 Supporting Metrics
+> **How to read these numbers.** They are illustrative targets to anchor the build, grounded in the C-MAPSS run-to-failure setting. For example, "≥ 25 cycles" of lead time means a credible alert roughly 25 operating cycles before predicted failure — enough runway to schedule a planned repair. Replace each value with a measured baseline once the dataset and status-quo are profiled.
 
-| Metric | What it measures | Baseline | Target |
-|---|---|---|---|
-| 🧠 **RUL explanation quality** | User approval rating of RUL reasoning (Likert 1–5) | N/A (no RUL today) | ≥ 4.0 / 5.0 (> 90% rated "useful") |
-| 📝 **Work-order usefulness** | % of drafted work orders approved without major edits | N/A (manual drafting) | > 85% direct approval rate |
-| 🎯 **Critical failure recall** | % of actual critical failures correctly flagged | Unknown | > 95% (bias toward recall) |
-| ⏳ **Per-asset analysis latency** | Time to process one asset's full sensor window | N/A | < 30 seconds |
-
-### 5.4 Operational Definitions
-
-| Term | Definition |
-|---|---|
-| **Credible alert** | An alert with confidence ≥ 0.80 that is backed by at least 2 correlated sensor signals |
-| **False alarm** | An alert where the asset did not fail or show measurable degradation within 2× the predicted RUL window |
-| **Direct approval** | A work order that a technician marks "approved as-is" without substantive edits |
-| **Critical failure** | A failure that would halt the production line or pose a safety risk |
+> **North-star + guardrails.** Early-detection lead time is the headline metric. The false-alarm rate (≤ 10%) and cost-per-asset (≤ \$0.01) guardrails must never be crossed, even if the headline metric improves.
 
 ---
 
-## 6. Non-Functional Requirements
+**Metrics at a glance**
 
-### 6.1 Latency Budget
-
-| Operation | Budget |
-|---|---|
-| Per-asset sensor analysis (cheap path) | < 5 seconds |
-| Per-asset full diagnostic (escalated path) | < 30 seconds |
-| Work-order generation | < 60 seconds |
-| End-to-end: sensor anomaly → draft work order | < 2 minutes |
-
-### 6.2 Cost Ceiling
-
-| Dimension | Ceiling |
-|---|---|
-| Per-asset inference cost (monthly) | **< $1.50** |
-| Total fleet cost (218 assets, monthly) | **< $327** |
-| Per-escalation cost (strong model call) | < $0.05 |
-| Cost alert threshold | Alarm at **80%** of monthly ceiling |
-
-**Cost strategy:**
-- **Cheap path (routine):** Small/free models (DeepSeek, Qwen, Llama, Gemini Flash free tier) for daily sensor screening
-- **Expensive path (escalated):** Stronger model only when anomaly confidence ≥ 0.70 and needs detailed diagnosis
-- **Semantic caching:** Cache repeated sensor-pattern explanations to avoid redundant API calls
-
-### 6.3 Safety Bar
-
-| Principle | Implementation |
-|---|---|
-| **Human-in-the-loop** | Every work order, schedule change, and escalation requires explicit human approval |
-| **Abstain when unsure** | If confidence < 0.60, system flags as "Manual Audit Required" instead of generating an alert |
-| **Grounded reasoning** | All explanations must reference specific sensor readings and, where possible, maintenance manual passages |
-| **No hallucinated diagnoses** | If the system cannot ground a cause in data, it must say "cause uncertain — recommend manual inspection" |
-| **Kill switch** | Global `DISABLE_AGENTS=true` flag instantly suspends all agent activity and falls back to threshold-only mode |
-| **Graceful degradation** | If LLM API error rate > 5% or latency > 60s, auto-fallback to rule-based alerts with human notification |
-
-### 6.4 Availability & Reliability
-
-| Dimension | Target |
-|---|---|
-| System uptime | 99% (allows ~7 hours downtime/month for a non-safety-critical advisory system) |
-| Data freshness | Sensor data processed within 10 minutes of arrival |
-| Fallback mode | Rule-based threshold alerts continue even if LLM/agent layer is down |
+```mermaid
+flowchart TD
+    NS["⭐ NORTH-STAR<br/>Early-detection lead time ≥ 25 cycles"]
+    NS --> G1["🛡️ GUARDRAIL<br/>False-alarm rate ≤ 10%"]
+    NS --> G2["🛡️ GUARDRAIL<br/>Cost per asset ≤ $0.01"]
+    NS --> S1["Supporting<br/>RUL RMSE ≤ 18 cycles"]
+    NS --> S2["Supporting<br/>Explanation quality ≥ 4.0 / 5"]
+    NS --> S3["Supporting<br/>Work-order usefulness ≥ 80%"]
+```
 
 ---
 
-## Appendix A: Primary Dataset Justification
+## 10. Non-Functional Requirements
 
-### Selected: NASA C-MAPSS (Turbofan Engine Degradation Simulation)
-
-| Dimension | Detail |
+| Category | Requirement |
 |---|---|
-| **Source** | NASA Prognostics Center of Excellence (PCoE) via Kaggle |
-| **License** | Public domain (NASA) |
-| **Scale** | 4 sub-datasets (FD001–FD004); 100–260 engines per set |
-| **Sensors** | 21 sensor channels + 3 operational settings per cycle |
-| **Labels** | Run-to-failure with known RUL at every cycle |
-| **Degradation** | Gradual (exponential drift, last 30–50 cycles) |
-| **Missing values** | 0% (simulated) |
-
-**Why C-MAPSS?**
-- It is the **benchmark** run-to-failure dataset cited in the project brief
-- Directly supports the **north-star metric** (early-detection lead time) and **RUL estimation**
-- 21 sensor channels match the "sensor stream → early warning" workflow
-- 4 sub-datasets provide a difficulty ladder (single condition → multiple conditions × multiple faults)
-
-**Secondary (stretch):** AI4I 2020 Predictive Maintenance (UCI) — adds 5 labeled failure modes for the **work-order usefulness** metric (failure type → more specific work order)
+| **Latency** | Per-asset analysis: < 5s for routine screening (cheap path), < 30s for diagnostics (escalated path), < 60s for work-order drafting. End-to-end latency from anomaly detection to approved work-order draft is < 120 seconds (2 minutes). |
+| **Cost** | Per-asset monitored cost ceiling of ≤ $0.01 per screening run and < $1.50 per month (total fleet cost < $327/month for 218 assets). Max cost per escalation to strong models is < $0.05. Hard alarms trigger at 80% of budget. |
+| **Scale** | Architecture must hold across the full fleet, with concurrent per-asset processing. |
+| **Safety** | Human approval required for all actions; system abstains when unsure and degrades to a human path. |
+| **Observability** | Every decision and tool call is traceable; cost, quality, and latency are reported. |
+| **Security** | No secrets in code; least-privilege access to data sources. |
 
 ---
 
-## Appendix B: Glossary
+## 11. High-Level Design (HLD)
 
-| Term | Definition |
+> **Note.** A PRD defines *what* and *why*; the full technical design is the Stage 3 deliverable. The architecture below is a **forward-looking preview** to show the shape of the solution and prove the requirements are buildable. Details (schemas, prompts, agent contracts) are finalized in Design.
+
+Mech Sage is a **multi-agent system** coordinated by an orchestrator, with a clear separation between cheap continuous monitoring and heavier on-demand diagnosis. Every consequential output passes through a human.
+
+```mermaid
+flowchart TD
+    subgraph SRC[Data sources]
+        SENS[Asset sensor streams]
+        DOCS[Manuals & maintenance history]
+    end
+
+    SENS --> ING[Ingestion & feature pipeline]
+    ING --> MON["Monitoring Agent<br/>(cheap model / rules)"]
+    MON -->|anomaly| ORCH["Orchestrator<br/>(LangGraph)"]
+    ORCH --> DIAG["Diagnosis Agent<br/>RUL model + LLM"]
+    DOCS --> VDB[("Vector store<br/>Chroma")]
+    VDB -. RAG .-> DIAG
+    DIAG --> PLAN["Planner Agent<br/>work order + schedule"]
+    ORCH --> GW["LLM Gateway<br/>(LiteLLM)"]
+    GW -. routes model calls .-> DIAG
+    GW -. routes model calls .-> PLAN
+    PLAN --> API["FastAPI service + minimal UI"]
+    API --> HUMAN[Human approval]
+    HUMAN --> STORE[(Outcome / feedback store)]
+    STORE -. feedback .-> MON
+    OBS[Observability & cost guardrails] -. traces & budgets .-> ORCH
+```
+
+**Components**
+
+| Component | Responsibility |
 |---|---|
-| **RUL** | Remaining Useful Life — estimated cycles/days until failure |
-| **HITL** | Human-In-The-Loop — a human must approve before action |
-| **CMMS** | Computerized Maintenance Management System |
-| **C-MAPSS** | Commercial Modular Aero-Propulsion System Simulation (NASA) |
-| **Alarm fatigue** | When too many false/low-value alerts cause operators to ignore all alerts |
-| **Guardrail metric** | A metric that must never be crossed, even if the north-star improves |
-| **Cheap path** | Routine monitoring using small/free models |
-| **Expensive path** | Escalated diagnosis using stronger, costlier models |
+| Ingestion & feature pipeline | Clean, window, and feature-engineer raw sensor streams. |
+| Monitoring Agent | Cheap, always-on anomaly scoring across the fleet; raises a signal only when needed. |
+| Orchestrator (LangGraph) | Coordinates agents, enforces the confidence gate, and routes to the human path. |
+| Diagnosis Agent | Estimates RUL and explains the likely failure mode (ML model + LLM, grounded by RAG). |
+| Planner Agent | Drafts the work order and proposed schedule slot. |
+| LLM Gateway (LiteLLM) | Single entry point for all model calls; enforces model routing and cost limits. |
+| Vector store (Chroma) | Stores manuals/procedures for retrieval-augmented explanations. |
+| API + UI (FastAPI) | Exposes results and the approval workflow to users. |
+| Observability & guardrails | Tracing, quality/latency/cost metrics, hard budget alarms. |
+| Outcome / feedback store | Records every decision outcome for tuning and evaluation. |
 
 ---
 
-*This PRD is a living document. It will be updated as the team progresses through Sprint 1 (Design) and beyond.*
+## 12. Technology Stack
+
+| Layer | Choice | Why |
+|---|---|---|
+| Language | **Python 3.13** | Standard for ML + agent tooling. |
+| Agent orchestration | **LangGraph** (CrewAI / AutoGen considered) | Explicit, inspectable agent graph with state and gating. |
+| LLM gateway | **LiteLLM** | One interface to many models; central cost & routing control. |
+| Dev / cheap models | **DeepSeek, Qwen, Llama, Gemini Flash** (free tiers) | Cheap routine monitoring; escalate to stronger models only on signal. |
+| RUL / ML model | Gradient-boosted / sequence model (e.g., **LightGBM**, LSTM) | Proven on run-to-failure data such as C-MAPSS. |
+| Vector store | **Chroma** | Lightweight RAG over manuals and procedures. |
+| Retrieval evaluation | **RAGAS** | Measures grounding/explanation quality. |
+| Prompt / pipeline optimization | **DSPy** | Systematic prompt and pipeline tuning. |
+| Service & UI | **FastAPI** + minimal web front end | Simple API plus a thin approval interface. |
+| Observability | Tracing + cost/latency dashboards | Required by the non-functional requirements. |
+| Deployment | Free cloud tier | Keeps unit cost within budget. |
+
+---
+
+## 13. Data Flow
+
+How a single reading travels from sensor to action and back into learning:
+
+```mermaid
+flowchart LR
+    A[Sensor readings] --> B[Ingest + clean + window]
+    B --> C[(Feature store)]
+    C --> D[Monitoring: anomaly score]
+    D -->|normal| C
+    D -->|anomaly| E[RUL model: predict cycles left]
+    E --> F[LLM: explain cause + draft work order]
+    G[(Manuals / KB)] -. RAG .-> F
+    F --> H[Approval UI]
+    H -->|approved / rejected| I[(Outcome log)]
+    I --> J[Retraining & tuning dataset]
+    J -. improves .-> E
+```
+
+**Stages**
+
+1. **Ingest** raw sensor readings; clean and window them into features.
+2. **Score** each asset for anomalies continuously (cheap path).
+3. On anomaly, **predict** remaining useful life and **explain** the cause, grounded in manuals via RAG.
+4. **Present** the draft to the approval UI.
+5. **Log** the outcome (approved, rejected, correct, false alarm).
+6. **Feed** outcomes back into the tuning dataset to improve detection and RUL over time.
+
+*Data classification: sensor telemetry and maintenance records are treated as confidential operational data; no personal data is expected in v1.*
+
+---
+
+## 14. Security Model
+
+| Control area | Requirement |
+|---|---|
+| **Human-in-the-loop** | The system never actuates a machine; all consequential actions require human approval and degrade to a human path when unsure. |
+| **Authentication** | All API and UI access is authenticated; no anonymous access to alerts or work orders. |
+| **Authorization (RBAC)** | Role-based access by persona (Reliability Engineer, Technician, Operations Lead, Platform Engineer); least privilege by default. |
+| **Secrets management** | No secrets in code or repo; API keys and model credentials held in environment/secret manager and injected at runtime. |
+| **Data access** | Read-only access to sensor sources; scoped, least-privilege connections to data stores. |
+| **Data protection** | Encryption in transit (TLS) and at rest for stored telemetry, outcomes, and KB content. |
+| **LLM safety** | Inputs validated; explanations grounded in retrieved sources; the model refuses/abstains when evidence is weak to avoid hallucinated diagnoses. |
+| **Prompt-injection defense** | Treat manuals/KB and tool outputs as untrusted content; constrain tool use and sanitize retrieved text before it reaches the planner. |
+| **Cost guardrails as a control** | Hard per-asset budget with alarms; runaway usage is throttled — cost abuse is treated as a safety event. |
+| **Auditability** | Every alert, recommendation, approval, and tool call is logged and traceable for review. |
+| **Supply chain** | Model versions pinned and routed through the gateway; dependencies tracked and updated deliberately. |
+
+---
+
+**Security at a glance**
+
+```mermaid
+flowchart TB
+    U["👤 Users"] -->|authenticated + RBAC| API["API / UI layer"]
+    API --> ORCH["Orchestrator + agents"]
+    HITL["✅ Human-in-the-loop approval"] -. gates all actions .-> ORCH
+    ORCH --> GW["LLM Gateway<br/>cost + model guardrails"]
+    KB[("Manuals / KB<br/>untrusted → sanitized")] -. RAG .-> ORCH
+    DATA[("Telemetry & outcomes<br/>encrypted, least-privilege")] --> ORCH
+    SEC["🔐 Secrets manager"] -. injects keys .-> GW
+    AUDIT["📜 Audit log + tracing"] -. records everything .-> ORCH
+```
+
+---
+
+## 15. Risks (summary)
+
+Full detail lives in the Stage 4 Risk Register. Top risks and the direction of mitigation:
+
+| Risk | Why it matters | Mitigation direction |
+|---|---|---|
+| Missed critical failure | A false negative on a critical fault is the worst outcome | Bias toward recall on critical modes, conservative thresholds, escalation |
+| Alarm fatigue | Too many false alarms erode trust | Precision tuning, severity ranking, alert suppression |
+| Unsafe maintenance action | A bad work order wastes time or causes harm | Human approval, grounded procedures, action guards |
+| Hallucinated diagnosis | An invented cause misleads the team | Grounding in manuals + model output, refusal when unsure |
+| Scale / cost blow-up | Watching a fleet can be expensive | Cheap models for routine work, escalate only on signal, hard budgets |
+
+---
+
+## 16. Assumptions and Open Questions
+
+### 16.1 Assumptions (to validate)
+
+- 🔖 Sensor data arrives at a regular, known cadence per asset.
+- 🔖 A public run-to-failure dataset (e.g., NASA C-MAPSS) is representative enough to prototype against.
+- 🔖 A human approver is available within the maintenance workflow.
+
+### 16.2 Open questions for the client
+
+- What are the fleet volumes and peak streaming patterns?
+- What is the system allowed to do, and what must **never** be automated?
+- What false-alarm rate is acceptable before the team stops trusting the system?
+- What is the budget ceiling per asset monitored?
+- What lead time is operationally useful (hours, shifts, days)?
+
+---
+
+## 17. Acceptance Criteria — "Done looks like"
+
+A PRD a stakeholder could approve and a team could build from on its own, with:
+
+- a clear problem statement, personas, and jobs to be done;
+- explicit scope and non-scope;
+- a north-star metric, supporting metrics, and at least two guardrail metrics, each with a baseline and a target;
+- stated non-functional requirements (latency, cost, safety); and
+- assumptions and open questions captured and marked.
+
+---
+
+## 18. Appendix — References
+
+- Futurense AI Clinic · Capstone Project Brief · Project 04 (Stages 1–2).
+- Candidate datasets: NASA C-MAPSS (Turbofan), NASA N-CMAPSS, AI4I 2020 Predictive Maintenance.
