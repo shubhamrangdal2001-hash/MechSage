@@ -1,0 +1,6 @@
+# DVC pointer (placeholder). After `dvc add data/raw/NCMAPSS`, DVC rewrites this with the real md5.
+outs:
+- md5: 00000000000000000000000000000000
+  size: 0
+  path: raw/NCMAPSS
+  desc: NASA N-CMAPSS (Kaggle bishals098/nasa-cmapss-2-engine-degradation); optional stretch; do not commit raw files
