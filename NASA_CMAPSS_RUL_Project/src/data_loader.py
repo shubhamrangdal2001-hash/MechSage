@@ -77,6 +77,11 @@ def load_cmapss_data(dataset_id: str = "FD001", max_rul_clip: int = 125, anomaly
     test_df = pd.read_csv(test_file, sep=r"\s+", header=None, names=COLUMN_NAMES)
     truth_rul = pd.read_csv(rul_file, sep=r"\s+", header=None, names=["final_rul"])
     
+    # Sort immediately by unit_number and time_in_cycles
+    train_df = train_df.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
+    test_df = test_df.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
+    
+    
     # Calculate RUL for train set
     max_cycles_train = train_df.groupby("unit_number")["time_in_cycles"].max().reset_index()
     max_cycles_train.columns = ["unit_number", "max_cycle"]
