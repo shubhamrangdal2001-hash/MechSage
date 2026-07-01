@@ -53,26 +53,36 @@ def add_degradation_trends(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
-def add_cycle_features(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Add normalized cycle position features:
-      - cycle_norm: fraction of life elapsed relative to max observed cycle per unit
-    """
-    df = df.copy()
-    max_cycle = df.groupby("unit_number")["time_in_cycles"].transform("max")
-    df["cycle_norm"] = df["time_in_cycles"] / max_cycle
-    return df
-
-
 def engineer_features(df: pd.DataFrame, window_sizes=(5, 10, 20)) -> pd.DataFrame:
     """
     Master feature engineering function. Applies rolling stats, degradation deltas,
-    and cycle normalization in one call.
+    and expanding mean features in a strictly causal manner.
     """
+    df = df.copy()
+    # Sort first to prevent any rolling window misalignment
+    df = df.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
+    
+    # Assert monotonic cycles per unit
+    cycle_is_monotonic = (
+        df.groupby("unit_number")["time_in_cycles"]
+        .apply(lambda values: values.is_monotonic_increasing)
+        .all()
+    )
+    assert cycle_is_monotonic, "Cycles are not monotonic per engine unit"
+
     df = add_rolling_features(df, window_sizes=window_sizes)
     df = add_degradation_trends(df)
-    df = add_cycle_features(df)
+    
+    # Add expanding mean for informative sensors (causal aggregates)
+    sensor_cols = [c for c in INFORMATIVE_SENSORS if c in df.columns]
+    for sensor in sensor_cols:
+        df[f"{sensor}_expanding_mean"] = (
+            df.groupby("unit_number")[sensor]
+            .transform(lambda series: series.expanding(min_periods=1).mean())
+        )
+        
     return df
+
 
 
 def build_sequence_windows(df: pd.DataFrame, feature_cols: list, sequence_length: int = 30):
