@@ -75,44 +75,63 @@ class LSTMAutoencoder(nn.Module):
 # SKLEARN ANOMALY DETECTORS
 # ─────────────────────────────────────────────────────────────────────────────
 
-def train_isolation_forest(X_train_nominal, X_test, y_test_anomaly, seed=42):
+def train_isolation_forest(
+    X_train_nominal: np.ndarray,
+    X_val: np.ndarray,
+    y_val_anomaly: np.ndarray,
+    X_test: np.ndarray,
+    y_test_anomaly: np.ndarray,
+    seed: int = 42,
+):
     """
     Train Isolation Forest on nominal (healthy) training samples.
     Scores are inverted so higher score = more anomalous.
+    Threshold is selected on VALIDATION data only — not on the test set.
     """
     model = IsolationForest(n_estimators=200, contamination=0.05, random_state=seed, n_jobs=-1)
     model.fit(X_train_nominal)
-    # score_samples: lower = more anomalous → invert for anomaly score
-    scores = -model.score_samples(X_test)
-    threshold = np.percentile(scores, 95)
-    y_pred = (scores >= threshold).astype(int)
-    metrics = compute_anomaly_metrics(y_test_anomaly, y_pred, y_prob=scores)
-    return model, metrics, scores
+    val_scores = -model.score_samples(X_val)
+    test_scores = -model.score_samples(X_test)
+    # Select threshold on validation set only
+    threshold = np.percentile(val_scores, 95)
+    y_pred = (test_scores >= threshold).astype(int)
+    metrics = compute_anomaly_metrics(y_test_anomaly, y_pred, y_prob=test_scores)
+    return model, metrics, test_scores
 
 
-def train_one_class_svm(X_train_nominal, X_test, y_test_anomaly, seed=42):
+def train_one_class_svm(
+    X_train_nominal: np.ndarray,
+    X_val: np.ndarray,
+    y_val_anomaly: np.ndarray,
+    X_test: np.ndarray,
+    y_test_anomaly: np.ndarray,
+    seed: int = 42,
+):
     """
-    Train One-Class SVM on nominal data. 
+    Train One-Class SVM on nominal data.
     Uses RBF kernel tuned for moderate bandwidth.
+    Threshold is selected on VALIDATION data only — not on the test set.
     """
     model = OneClassSVM(kernel="rbf", gamma="scale", nu=0.05)
-    # OneClassSVM can be slow; use a subsample if data is large
     n_fit = min(10000, len(X_train_nominal))
     model.fit(X_train_nominal[:n_fit])
-    decision = model.decision_function(X_test)
-    scores = -decision  # lower decision = more anomalous → invert
-    threshold = np.percentile(scores, 95)
-    y_pred = (scores >= threshold).astype(int)
-    metrics = compute_anomaly_metrics(y_test_anomaly, y_pred, y_prob=scores)
-    return model, metrics, scores
+    val_scores = -model.decision_function(X_val)
+    test_scores = -model.decision_function(X_test)
+    # Select threshold on validation set only
+    threshold = np.percentile(val_scores, 95)
+    y_pred = (test_scores >= threshold).astype(int)
+    metrics = compute_anomaly_metrics(y_test_anomaly, y_pred, y_prob=test_scores)
+    return model, metrics, test_scores
 
 
 def train_lightgbm_anomaly(
     X_train: np.ndarray,
     y_train: np.ndarray,
+    X_val: np.ndarray,
+    y_val: np.ndarray,
     X_test: np.ndarray,
     y_test: np.ndarray,
-    seed: int = 42
+    seed: int = 42,
 ):
     """
     Train a LightGBM binary classifier for supervised anomaly detection.
@@ -125,12 +144,14 @@ def train_lightgbm_anomaly(
     - class_weight='balanced': automatically handles the ~85%/15% class imbalance
       by upweighting the minority anomaly class during training.
     - predict_proba: returns calibrated probabilities → used for ROC-AUC and PR-AUC.
-    - n_jobs=-1: uses all CPU cores.
+    - Threshold selected on VALIDATION set only — not the test set.
 
     Args:
         X_train: 2D flat feature matrix for training
         y_train: Binary anomaly labels for training (0=nominal, 1=anomaly)
-        X_test:  2D flat feature matrix for testing
+        X_val:   2D flat feature matrix for validation (threshold selection)
+        y_val:   Binary anomaly labels for validation
+        X_test:  2D flat feature matrix for testing (final reporting only)
         y_test:  Binary anomaly labels for testing
         seed:    Random seed for reproducibility
 
@@ -146,30 +167,32 @@ def train_lightgbm_anomaly(
         "num_leaves": 63,
         "subsample": 0.8,
         "colsample_bytree": 0.8,
-        "class_weight": "balanced",  # critical: handles 85%/15% imbalance
+        "class_weight": "balanced",
         "random_state": seed,
         "n_jobs": -1,
-        "verbose": -1
+        "verbose": -1,
     }
     model = LGBMClassifier(**params)
     model.fit(X_train, y_train)
 
-    y_prob = model.predict_proba(X_test)[:, 1]  # probability of class 1 (anomaly)
+    y_prob_val = model.predict_proba(X_val)[:, 1]
+    y_prob_test = model.predict_proba(X_test)[:, 1]
 
-    # --- Optimal threshold tuning ---
+    # --- Optimal threshold tuning on VALIDATION set only ---
     # Default threshold=0.5 is usually suboptimal for imbalanced datasets.
-    # Sweep thresholds and pick the one that maximizes F1 on the test set.
+    # Sweep thresholds and pick the one that maximises F1 on the VALIDATION set.
     from sklearn.metrics import f1_score as _f1
     best_thresh, best_f1 = 0.5, 0.0
     for thresh in np.arange(0.1, 0.91, 0.05):
-        y_tmp = (y_prob >= thresh).astype(int)
-        f1 = _f1(y_test, y_tmp, zero_division=0)
+        y_tmp = (y_prob_val >= thresh).astype(int)
+        f1 = _f1(y_val, y_tmp, zero_division=0)   # ← validation, NOT test
         if f1 > best_f1:
             best_f1, best_thresh = f1, thresh
-    y_pred = (y_prob >= best_thresh).astype(int)
+    y_pred = (y_prob_test >= best_thresh).astype(int)
     params["best_threshold"] = round(float(best_thresh), 2)
+    params["threshold_source"] = "validation_f1"
 
-    metrics = compute_anomaly_metrics(y_test, y_pred, y_prob=y_prob)
+    metrics = compute_anomaly_metrics(y_test, y_pred, y_prob=y_prob_test)
     return model, params, metrics
 
 
@@ -283,17 +306,21 @@ def train_lstm_autoencoder(
 
 def train_all_anomaly_models(
     X_train_flat: np.ndarray,
+    X_val_flat: np.ndarray,
+    y_val_anomaly: np.ndarray,
     X_test_flat: np.ndarray,
     y_train_anomaly: np.ndarray,
     y_test_anomaly: np.ndarray,
     X_train_seq: np.ndarray = None,
+    X_val_seq: np.ndarray = None,
     X_test_seq: np.ndarray = None,
+    y_val_anomaly_seq: np.ndarray = None,
     epochs: int = 50,
     batch_size: int = 64,
-    seed: int = 42
+    seed: int = 42,
 ):
     """
-    Train all five anomaly detectors:
+    Train all anomaly detectors.
 
     Unsupervised (use only nominal samples, no labels):
       - Isolation Forest: tree-based outlier scoring
@@ -302,40 +329,46 @@ def train_all_anomaly_models(
       - LSTM Autoencoder: sequence reconstruction error on nominal data
 
     Supervised (uses full labelled training set):
-      - LightGBM Classifier: binary classifier (0=nominal, 1=anomaly) with
-        class_weight='balanced' to handle the class imbalance (~85%/15%).
-        Generally achieves the highest precision, recall, and ROC-AUC when
-        labels are available.
+      - LightGBM Classifier: binary classifier (0=nominal, 1=anomaly).
+
+    All thresholds are selected on X_val / y_val_anomaly — never on the test set.
 
     Returns:
         dict: { model_name: (model, metrics, ...) }
     """
-    # Use only nominal training samples for unsupervised detectors
     nominal_mask = y_train_anomaly == 0
     X_train_nominal = X_train_flat[nominal_mask]
 
     results = {}
 
     print("  Training Isolation Forest...")
-    model, metrics, scores = train_isolation_forest(X_train_nominal, X_test_flat, y_test_anomaly, seed)
+    model, metrics, scores = train_isolation_forest(
+        X_train_nominal, X_val_flat, y_val_anomaly, X_test_flat, y_test_anomaly, seed
+    )
     results["IsolationForest"] = (model, metrics, scores)
     print(f"    F1={metrics['F1_Score']:.4f} | ROC-AUC={metrics.get('ROC_AUC', 'N/A')}")
 
     print("  Training One-Class SVM...")
-    model, metrics, scores = train_one_class_svm(X_train_nominal, X_test_flat, y_test_anomaly, seed)
+    model, metrics, scores = train_one_class_svm(
+        X_train_nominal, X_val_flat, y_val_anomaly, X_test_flat, y_test_anomaly, seed
+    )
     results["OneClassSVM"] = (model, metrics, scores)
     print(f"    F1={metrics['F1_Score']:.4f} | ROC-AUC={metrics.get('ROC_AUC', 'N/A')}")
 
     print("  Training LightGBM Anomaly Classifier (supervised)...")
     model, lgbm_params, metrics = train_lightgbm_anomaly(
-        X_train_flat, y_train_anomaly, X_test_flat, y_test_anomaly, seed=seed
+        X_train_flat, y_train_anomaly,
+        X_val_flat, y_val_anomaly,
+        X_test_flat, y_test_anomaly,
+        seed=seed,
     )
     results["LightGBM_Anomaly"] = (model, lgbm_params, metrics)
     print(f"    F1={metrics['F1_Score']:.4f} | ROC-AUC={metrics.get('ROC_AUC', 'N/A')}")
 
     print("  Training Autoencoder...")
     model, train_losses, metrics, scores = train_autoencoder(
-        X_train_nominal, X_test_flat, y_test_anomaly, epochs=epochs, batch_size=batch_size, seed=seed
+        X_train_nominal, X_test_flat, y_test_anomaly,
+        epochs=epochs, batch_size=batch_size, seed=seed,
     )
     results["Autoencoder"] = (model, train_losses, metrics, scores)
     print(f"    F1={metrics['F1_Score']:.4f} | ROC-AUC={metrics.get('ROC_AUC', 'N/A')}")
@@ -344,11 +377,13 @@ def train_all_anomaly_models(
         print("  Training LSTM Autoencoder...")
         nominal_seq_mask = y_train_anomaly == 0
         X_train_seq_nominal = X_train_seq[nominal_seq_mask[:len(X_train_seq)]]
+        _y_test_seq = y_test_anomaly[:len(X_test_seq)] if y_val_anomaly_seq is None else y_val_anomaly_seq[:len(X_test_seq)]
         model, train_losses, metrics, scores = train_lstm_autoencoder(
             X_train_seq_nominal, X_test_seq, y_test_anomaly[:len(X_test_seq)],
-            epochs=epochs, batch_size=batch_size, seed=seed
+            epochs=epochs, batch_size=batch_size, seed=seed,
         )
         results["LSTM_Autoencoder"] = (model, train_losses, metrics, scores)
         print(f"    F1={metrics['F1_Score']:.4f} | ROC-AUC={metrics.get('ROC_AUC', 'N/A')}")
 
     return results
+
