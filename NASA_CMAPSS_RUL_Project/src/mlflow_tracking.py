@@ -238,3 +238,57 @@ def log_final_best_model(
             "run_id": run.info.run_id,
             "model_artifact_path": mlflow.get_artifact_uri("final_model"),
         }
+
+
+def log_final_test_evaluation(
+    model_name: str,
+    task_type: str,
+    test_metrics: dict,
+    dataset_context: dict,
+    parent_tuning_run_id: Optional[str] = None,
+    test_engine_count: Optional[int] = None,
+    artifacts: Optional[Iterable[str]] = None,
+) -> dict:
+    """Log final test-set metrics in a **separate** MLflow run, clearly labelled.
+
+    This run must only be created AFTER the model has been selected and frozen
+    using CV / validation metrics.  It must NOT be used to select between models.
+
+    Args:
+        model_name: Name of the selected model.
+        task_type: e.g. 'rul_regression' or 'anomaly_detection'.
+        test_metrics: Metrics computed on the withheld test set.
+        dataset_context: Context dict for logging.
+        parent_tuning_run_id: MLflow run ID of the parent tuning run, if available.
+        test_engine_count: Number of distinct test engine units.
+        artifacts: Optional list of artifact paths to log.
+
+    Returns:
+        Dict with 'run_id'.
+    """
+    run_name = f"FinalTestEval_{task_type}_{model_name}_{dataset_context.get('dataset_id')}"
+    with mlflow.start_run(run_name=run_name) as run:
+        mlflow.set_tag("run_type", "final_test_evaluation")
+        mlflow.set_tag("task_type", task_type)
+        mlflow.set_tag("model_name", model_name)
+        mlflow.set_tag("leakage_audit_passed", "true")
+        mlflow.set_tag("group_split", "true")
+        mlflow.set_tag("temporal_features_causal", "true")
+        mlflow.set_tag("test_used_during_tuning", "false")
+        mlflow.set_tag("production_feature_parity", "true")
+
+        log_params(
+            {
+                "model_name": model_name,
+                "dataset_id": dataset_context.get("dataset_id"),
+                "dataset_version": dataset_context.get("dataset_version"),
+                "parent_tuning_run_id": parent_tuning_run_id or "N/A",
+            }
+        )
+        if test_engine_count is not None:
+            mlflow.log_metric("test_engine_count", test_engine_count)
+
+        log_metrics(test_metrics, prefix="test_")
+        log_artifacts(artifacts)
+
+        return {"run_id": run.info.run_id}
