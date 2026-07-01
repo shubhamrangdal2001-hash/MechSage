@@ -1,0 +1,940 @@
+2026-06-29 11:46:26,942 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 11:46:27,021 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 11:46:28,472 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 110 numeric columns
+2026-06-29 11:46:28,472 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 104 numeric columns
+2026-06-29 11:46:28,472 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 106 numeric columns
+2026-06-29 11:46:28,473 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 11:46:28,475 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 11:46:42,910 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-06-29 11:46:48,648 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 11:47:01,923 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 11:47:01,923 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:47:01,926 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 11:47:01,926 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=8.4514
+2026-06-29 11:47:01,926 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 11:47:01,926 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:47:01,926 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 11:47:01,926 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 11:47:01,926 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 11:47:48,640 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 11:47:48,747 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 11:47:49,921 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 110 numeric columns
+2026-06-29 11:47:49,921 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 104 numeric columns
+2026-06-29 11:47:49,921 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 106 numeric columns
+2026-06-29 11:47:49,921 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 11:47:49,922 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 11:48:00,499 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-06-29 11:48:06,094 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 11:48:20,539 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 11:48:20,539 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:48:20,542 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 11:48:20,542 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=8.4514
+2026-06-29 11:48:20,542 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 11:48:20,542 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:48:20,542 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 11:48:20,542 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 11:48:20,542 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 11:49:35,301 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 11:49:35,462 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 11:49:39,341 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 106 numeric columns
+2026-06-29 11:49:39,342 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 110 numeric columns
+2026-06-29 11:49:39,342 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 116 numeric columns
+2026-06-29 11:49:39,342 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 11:49:39,342 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 11:49:55,015 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 11:50:37,925 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 11:50:38,023 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:50:38,427 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 11:50:38,429 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=29.3290
+2026-06-29 11:50:38,429 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.6692
+2026-06-29 11:50:38,429 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 11:50:38,429 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 11:50:38,429 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 11:50:38,430 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:11:08,288 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:11:08,500 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:11:19,145 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:11:19,167 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:14:25,275 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:14:25,555 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:14:41,342 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:14:41,357 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:14:47,368 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:14:47,375 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:14:53,099 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:14:53,110 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 945, in run_pipeline
+    setup_mlflow(args.experiment_name or f"MechSage_{args.dataset}", tracking_uri=args.tracking_uri)
+    ~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 32, in setup_mlflow
+    mlflow.set_experiment(experiment_name)
+    ~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\fluent.py", line 203, in set_experiment
+    client = TrackingServiceClient(_resolve_tracking_uri())
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 98, in __init__
+    self.store
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\client.py", line 102, in store
+    return utils._get_store(self.tracking_uri)
+           ~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 270, in _get_store
+    return _tracking_store_registry.get_store(store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 45, in get_store
+    return self._get_store_with_resolved_uri(resolved_store_uri, artifact_uri)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\registry.py", line 56, in _get_store_with_resolved_uri
+    return builder(store_uri=resolved_store_uri, artifact_uri=artifact_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\tracking\_tracking_service\utils.py", line 184, in _get_file_store
+    return FileStore(store_uri, store_uri)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\store\tracking\file_store.py", line 225, in __init__
+    raise MlflowException(
+    ...<9 lines>...
+    )
+mlflow.exceptions.MlflowException: The filesystem tracking backend (e.g., './mlruns') is in maintenance mode and will not receive further updates. Please migrate to a database backend (e.g., 'sqlite:///mlflow.db') to access the latest MLflow features. The `mlflow migrate-filestore` tool migrates your existing data losslessly. See https://mlflow.org/docs/latest/self-hosting/migrate-from-file-store for migration guidance. If the filesystem backend is required for your workflow, set `MLFLOW_ALLOW_FILE_STORE=true` to opt out of this exception.
+2026-06-29 12:16:18,851 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:16:19,312 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:16:21,349 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:16:21,349 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:16:21,349 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 111 numeric columns
+2026-06-29 12:16:21,350 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:16:21,350 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:16:42,036 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:16:42,201 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:16:43,455 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:16:43,455 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 104 numeric columns
+2026-06-29 12:16:43,455 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:16:43,455 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:16:43,455 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:17:39,870 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:17:40,511 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-06-29 12:17:54,467 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:17:54,636 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:18:33,818 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:18:33,818 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:18:33,837 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:18:33,837 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=8.4514
+2026-06-29 12:18:33,837 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 12:18:33,837 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:18:33,837 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 12:18:33,838 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:18:33,838 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:18:45,821 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:19:40,821 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:19:41,091 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:19:42,806 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:19:42,806 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:19:42,806 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 111 numeric columns
+2026-06-29 12:19:42,806 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:19:42,821 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:19:44,298 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:19:44,570 | INFO | mechsage.pipeline | Preparing data for dataset FD002
+2026-06-29 12:19:49,225 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 89 numeric columns
+2026-06-29 12:19:49,229 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 86 numeric columns
+2026-06-29 12:19:49,229 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 90 numeric columns
+2026-06-29 12:19:49,230 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD002.json
+2026-06-29 12:19:49,233 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:20:09,556 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:20:26,588 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:21:51,538 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:22:46,693 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:23:21,638 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:23:28,122 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 12:23:42,891 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:23:42,891 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:23:42,941 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:23:42,941 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=28.8577
+2026-06-29 12:23:42,941 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 12:23:42,942 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:23:42,942 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 12:23:42,942 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:23:42,942 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:24:21,407 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:24:48,734 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:24:48,904 | INFO | mechsage.pipeline | Preparing data for dataset FD002
+2026-06-29 12:24:50,183 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:24:50,403 | INFO | mechsage.pipeline | Preparing data for dataset FD003
+2026-06-29 12:24:50,541 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 89 numeric columns
+2026-06-29 12:24:50,541 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 86 numeric columns
+2026-06-29 12:24:50,541 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 90 numeric columns
+2026-06-29 12:24:50,542 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD002.json
+2026-06-29 12:24:50,542 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:24:53,183 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 98 numeric columns
+2026-06-29 12:24:53,183 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-06-29 12:24:53,183 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 94 numeric columns
+2026-06-29 12:24:53,183 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD003.json
+2026-06-29 12:24:53,184 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:25:04,632 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:25:11,254 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:26:02,184 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:27:12,619 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:28:02,948 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:28:14,879 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 12:28:33,741 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:28:33,741 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD002.csv
+2026-06-29 12:28:33,795 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:28:33,795 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=37.0285
+2026-06-29 12:28:33,795 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.5294
+2026-06-29 12:28:33,795 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD002.csv
+2026-06-29 12:28:33,795 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD002.md
+2026-06-29 12:28:33,796 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:28:33,796 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:29:01,889 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:29:01,949 | INFO | mechsage.pipeline | Preparing data for dataset FD003
+2026-06-29 12:29:03,483 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 98 numeric columns
+2026-06-29 12:29:03,483 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-06-29 12:29:03,484 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 94 numeric columns
+2026-06-29 12:29:03,484 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD003.json
+2026-06-29 12:29:03,484 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:29:16,944 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:29:30,479 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:31:32,632 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:32:53,555 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:33:02,401 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 12:33:19,132 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:33:19,132 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD003.csv
+2026-06-29 12:33:19,220 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:33:19,220 | INFO | mechsage.main | Best RUL model: CatBoost_grid | test RMSE=13.0344
+2026-06-29 12:33:19,220 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.1333
+2026-06-29 12:33:19,220 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD003.csv
+2026-06-29 12:33:19,221 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD003.md
+2026-06-29 12:33:19,221 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:33:19,221 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:34:30,591 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:34:31,129 | INFO | mechsage.pipeline | Preparing data for dataset FD004
+2026-06-29 12:34:33,438 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 89 numeric columns
+2026-06-29 12:34:33,438 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 90 numeric columns
+2026-06-29 12:34:33,438 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 87 numeric columns
+2026-06-29 12:34:33,438 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD004.json
+2026-06-29 12:34:33,438 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:34:47,066 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:34:54,611 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:37:11,970 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:37:17,338 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 12:37:37,620 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:37:37,621 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD004.csv
+2026-06-29 12:37:37,648 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:37:37,648 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=19.4112
+2026-06-29 12:37:37,648 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.3490
+2026-06-29 12:37:37,648 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD004.csv
+2026-06-29 12:37:37,648 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD004.md
+2026-06-29 12:37:37,649 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:37:37,649 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:38:13,427 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:38:13,514 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:38:14,865 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:38:14,865 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 104 numeric columns
+2026-06-29 12:38:14,865 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:38:14,865 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:38:14,865 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:38:39,462 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-06-29 12:38:48,203 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:39:01,367 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:39:01,367 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:39:01,375 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:39:01,376 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=8.4514
+2026-06-29 12:39:01,376 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 12:39:01,376 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:39:01,376 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 12:39:01,376 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:39:01,376 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:40:25,032 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:40:25,398 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:40:27,188 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:40:27,189 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:40:27,189 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 111 numeric columns
+2026-06-29 12:40:27,189 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:40:27,189 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:40:43,920 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:40:53,386 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:44:10,180 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:44:10,851 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-06-29 12:44:14,391 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 106 numeric columns
+2026-06-29 12:44:14,393 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 110 numeric columns
+2026-06-29 12:44:14,394 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 111 numeric columns
+2026-06-29 12:44:14,394 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-06-29 12:44:14,394 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:44:33,774 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-06-29 12:44:40,535 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-06-29 12:44:59,630 | INFO | mechsage.pipeline | Pipeline complete.
+2026-06-29 12:44:59,630 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:44:59,668 | INFO | mechsage.main | Pipeline complete.
+2026-06-29 12:44:59,668 | INFO | mechsage.main | Best RUL model: RandomForest_optuna | test RMSE=28.8577
+2026-06-29 12:44:59,668 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-06-29 12:44:59,668 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-06-29 12:44:59,668 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-06-29 12:44:59,668 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-06-29 12:44:59,669 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-06-29 12:45:41,488 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:46:27,788 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:49:06,190 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:49:38,361 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:49:38,779 | INFO | mechsage.pipeline | Preparing data for dataset FD002
+2026-06-29 12:49:41,153 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 89 numeric columns
+2026-06-29 12:49:41,154 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 86 numeric columns
+2026-06-29 12:49:41,154 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 90 numeric columns
+2026-06-29 12:49:41,154 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD002.json
+2026-06-29 12:49:41,154 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:50:28,837 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:50:43,363 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:51:34,265 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:51:47,082 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:51:47,503 | INFO | mechsage.pipeline | Preparing data for dataset FD003
+2026-06-29 12:51:49,326 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 98 numeric columns
+2026-06-29 12:51:49,326 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-06-29 12:51:49,326 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 94 numeric columns
+2026-06-29 12:51:49,326 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD003.json
+2026-06-29 12:51:49,327 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:52:18,933 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:52:34,988 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 12:53:41,014 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-06-29 12:54:04,190 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-06-29 12:54:04,385 | INFO | mechsage.pipeline | Preparing data for dataset FD004
+2026-06-29 12:54:06,692 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 89 numeric columns
+2026-06-29 12:54:06,693 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 90 numeric columns
+2026-06-29 12:54:06,693 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 87 numeric columns
+2026-06-29 12:54:06,693 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD004.json
+2026-06-29 12:54:06,693 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-06-29 12:55:22,138 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-06-29 12:57:30,693 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: grid, random, optuna
+2026-06-29 13:47:07,827 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 975, in run_pipeline
+    tuning_rows = run_all_tuning(
+        data["X_train"],
+    ...<13 lines>...
+        profile=args.profile,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 452, in run_all_tuning
+    _run_cv_search(
+    ~~~~~~~~~~~~~~^
+        "grid",
+        ^^^^^^^
+    ...<14 lines>...
+        cv,
+        ^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 323, in _run_cv_search
+    return _finalize_parent_run(
+        best_model,
+    ...<8 lines>...
+        artifacts,
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\hyperparameter_tuning.py", line 222, in _finalize_parent_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
