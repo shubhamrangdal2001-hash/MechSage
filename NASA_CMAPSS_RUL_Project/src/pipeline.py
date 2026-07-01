@@ -157,11 +157,27 @@ def prepare_data(args) -> dict:
     train_part, val_part, train_units, val_units = _split_train_validation_by_unit(
         train_df, args.validation_size, args.seed
     )
-    train_part, val_part, test_df, scaler, feature_cols = _normalize_splits(train_part, val_part, test_df)
+    
+    # Sort and reset indexes to ensure alignment
+    train_part = train_part.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
+    val_part = val_part.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
+    test_df = test_df.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
 
+    feature_cols = get_feature_columns(train_part)
+
+    # Unscaled flat features for scikit-learn models (which will use scaling inside a Pipeline)
     X_train, y_train_rul, y_train_anomaly = get_flat_features(train_part, feature_cols)
     X_val, y_val_rul, y_val_anomaly = get_flat_features(val_part, feature_cols)
     X_test, y_test_rul, y_test_anomaly = get_flat_features(test_df, feature_cols)
+
+    train_groups = train_part["unit_number"]
+    val_groups = val_part["unit_number"]
+    test_groups = test_df["unit_number"]
+
+    # Alignments & Assertions
+    assert len(X_train) == len(y_train_rul) == len(train_groups)
+    assert len(X_val) == len(y_val_rul) == len(val_groups)
+    assert len(X_test) == len(y_test_rul) == len(test_groups)
 
     split_details = {
         "train_rows": len(train_part),
@@ -176,6 +192,17 @@ def prepare_data(args) -> dict:
         "max_train_units": train_limit or "all",
         "max_test_units": test_limit or "all",
     }
+    
+    # Fit scaler strictly on training split for PyTorch sequence building & metadata logging
+    scaler = MinMaxScaler()
+    train_part_scaled = train_part.copy()
+    val_part_scaled = val_part.copy()
+    test_df_scaled = test_df.copy()
+
+    train_part_scaled[feature_cols] = scaler.fit_transform(train_part[feature_cols])
+    val_part_scaled[feature_cols] = scaler.transform(val_part[feature_cols])
+    test_df_scaled[feature_cols] = scaler.transform(test_df[feature_cols])
+
     preprocessing = {
         "steps": [
             "select_informative_sensors",
@@ -189,7 +216,7 @@ def prepare_data(args) -> dict:
         "anomaly_threshold": args.anomaly_threshold,
     }
     feature_engineering = {
-        "steps": ["rolling_mean", "rolling_std", "sensor_delta", "cycle_norm"],
+        "steps": ["rolling_mean", "rolling_std", "sensor_delta", "expanding_mean"],
         "rolling_windows": list(args.rolling_windows),
         "feature_count": len(feature_cols),
     }
@@ -204,15 +231,33 @@ def prepare_data(args) -> dict:
         "dataset_files": get_dataset_file_paths(args.dataset),
     }
 
+    # ----- Mutual exclusion assertions -----
+    _train_units_set = set(train_part["unit_number"].unique())
+    _val_units_set = set(val_part["unit_number"].unique())
+    _test_units_set = set(test_df["unit_number"].unique())
+    assert _train_units_set.isdisjoint(_val_units_set), "Train/val engine units overlap!"
+    # Note: The official C-MAPSS test set is completely disjoint by design;
+    # train/test may share unit numbers but they represent different engine populations.
+
+    # ----- Save split manifest -----
+    manifest_rows = []
+    for unit in sorted(_train_units_set):
+        manifest_rows.append({"unit_number": unit, "split": "train", "dataset_id": args.dataset, "random_seed": args.seed})
+    for unit in sorted(_val_units_set):
+        manifest_rows.append({"unit_number": unit, "split": "validation", "dataset_id": args.dataset, "random_seed": args.seed})
+    for unit in sorted(_test_units_set):
+        manifest_rows.append({"unit_number": unit, "split": "test", "dataset_id": args.dataset, "random_seed": args.seed})
+
     from src.feature_engineering import build_sequence_windows
     seq_len = 30
-    X_train_seq, y_train_rul_seq, y_train_anomaly_seq = build_sequence_windows(train_part, feature_cols, seq_len)
-    X_val_seq, y_val_rul_seq, y_val_anomaly_seq = build_sequence_windows(val_part, feature_cols, seq_len)
-    X_test_seq, y_test_rul_seq, y_test_anomaly_seq = build_sequence_windows(test_df, feature_cols, seq_len)
+    X_train_seq, y_train_rul_seq, y_train_anomaly_seq = build_sequence_windows(train_part_scaled, feature_cols, seq_len)
+    X_val_seq, y_val_rul_seq, y_val_anomaly_seq = build_sequence_windows(val_part_scaled, feature_cols, seq_len)
+    X_test_seq, y_test_rul_seq, y_test_anomaly_seq = build_sequence_windows(test_df_scaled, feature_cols, seq_len)
 
     return {
         "context": context,
         "feature_cols": feature_cols,
+        "split_manifest": pd.DataFrame(manifest_rows),
         "train_df": train_part,
         "val_df": val_part,
         "test_df": test_df,
@@ -225,6 +270,9 @@ def prepare_data(args) -> dict:
         "X_test": X_test,
         "y_test_rul": y_test_rul,
         "y_test_anomaly": y_test_anomaly,
+        "train_groups": train_groups,
+        "val_groups": val_groups,
+        "test_groups": test_groups,
         "X_train_seq": X_train_seq,
         "y_train_rul_seq": y_train_rul_seq,
         "y_train_anomaly_seq": y_train_anomaly_seq,
@@ -952,6 +1000,11 @@ def run_pipeline(args) -> dict:
     validation_report_path = write_validation_reports(data, dirs["reports"], args.dataset)
     LOGGER.info("Data validation report: %s", validation_report_path)
 
+    # Save split manifest for reproducibility
+    manifest_path = os.path.join(dirs["artifacts"], f"split_manifest_{args.dataset}.csv")
+    data["split_manifest"].to_csv(manifest_path, index=False)
+    LOGGER.info("Split manifest saved: %s", manifest_path)
+
     # Set epochs based on profile
     if args.profile == "quick":
         dl_epochs = 1
@@ -975,17 +1028,16 @@ def run_pipeline(args) -> dict:
         tuning_rows = run_all_tuning(
             data["X_train"],
             data["y_train_rul"],
+            data["train_groups"],   # GroupKFold groups — NO test data
             data["X_val"],
             data["y_val_rul"],
-            data["X_test"],
-            data["y_test_rul"],
             dataset_context=context,
             artifacts_dir=dirs["artifacts"],
             feature_names=data["feature_cols"],
             model_names=args.tuning_models,
             methods=args.tuning_methods,
             n_trials=args.n_trials,
-            cv=args.cv,
+            n_splits=args.cv,
             seed=args.seed,
             profile=args.profile,
         )
