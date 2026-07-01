@@ -29,6 +29,39 @@ data:
     standard: null
     full: null
 
+# ── Group-based data splitting ───────────────────────────────────────────────
+data_split:
+  strategy: engine_unit_holdout
+  group_column: unit_number
+  validation_fraction: 0.20
+  random_state: 42
+
+# ── Group-based cross-validation ─────────────────────────────────────────────
+cross_validation:
+  strategy: group_kfold
+  n_splits: 3
+  nested_cv_enabled: false
+  group_column: unit_number
+
+# ── Feature engineering ───────────────────────────────────────────────────────
+feature_engineering:
+  causal_only: true
+  forbidden_features:
+    - cycle_norm
+    - max_cycle
+    - final_cycle
+    - normalized_cycle
+    - life_fraction
+    - percentage_life_used
+  rolling_windows: [5, 10, 20]
+  use_current_observation: true
+  use_expanding_mean: true
+
+# ── Evaluation ────────────────────────────────────────────────────────────────
+evaluation:
+  test_evaluation_once: true
+  allow_test_metrics_during_tuning: false
+
 features:
   rolling_windows: [5, 10, 20]
   informative_sensors:
@@ -71,3 +104,4 @@ models:
 logging:
   level: INFO
   file_name: pipeline.log
+
