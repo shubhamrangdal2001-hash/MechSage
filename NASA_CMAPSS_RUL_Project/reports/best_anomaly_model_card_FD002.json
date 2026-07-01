@@ -1,0 +1,13 @@
+{
+  "model_name": "LightGBM_Anomaly",
+  "version": "LightGBM_Anomaly-26efe536f436-2026-06-29T06:58:33+00:00",
+  "training_timestamp_utc": "2026-06-29T06:58:33+00:00",
+  "dataset_version": "26efe536f436",
+  "git_commit": "a1d73f30da273d1a718b7c3e473fa128050dd0a2",
+  "mlflow_run_id": "e602f4dfe891416dad555d747b86d3d9",
+  "task": "anomaly",
+  "main_metric": "F1_Score",
+  "test_score": 0.5294117647058824,
+  "local_model_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_anomaly_model_FD002.joblib",
+  "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203621584362175723/e602f4dfe891416dad555d747b86d3d9/artifacts/final_model"
+}
