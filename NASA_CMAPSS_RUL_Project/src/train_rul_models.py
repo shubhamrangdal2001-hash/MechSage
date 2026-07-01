@@ -99,16 +99,25 @@ class TransformerRegressor(nn.Module):
 # SKLEARN ML MODEL TRAINING
 # ─────────────────────────────────────────────────────────────────────────────
 
-def train_sklearn_rul_models(X_train, y_train, X_test, y_test, seed=42, models=None):
+def train_sklearn_rul_models(
+    X_train, y_train,
+    X_val, y_val,
+    X_test, y_test,
+    seed=42,
+    models=None,
+):
     """
     Train scikit-learn / tree-based RUL regression models.
 
     Args:
-        models: Optional list of model names to train. If None, trains all.
-                Valid names: LinearRegression, RandomForest, XGBoost, LightGBM, CatBoost
+        X_train / y_train: Training features and targets.
+        X_val / y_val:     Validation features and targets (used for selection metrics).
+        X_test / y_test:   Test features and targets (reported only, NOT used for selection).
+        models:            Optional list of model names to train. If None, trains all.
+                           Valid names: LinearRegression, RandomForest, XGBoost, LightGBM, CatBoost
 
     Returns:
-        dict: { model_name: (trained_model, params_dict, metrics_dict, y_pred) }
+        dict: { model_name: (trained_model, params_dict, val_metrics_dict, test_metrics_dict, y_pred_test) }
     """
     set_seed(seed)
     all_models = {
@@ -130,12 +139,15 @@ def train_sklearn_rul_models(X_train, y_train, X_test, y_test, seed=42, models=N
     for name, model in selected.items():
         print(f"  Training {name}...")
         model.fit(X_train, y_train)
-        y_pred = model.predict(X_test)
-        metrics = compute_rul_metrics(y_test, y_pred)
+        y_pred_val = model.predict(X_val)
+        y_pred_test = model.predict(X_test)
+        val_metrics = compute_rul_metrics(y_val, y_pred_val)     # ← used for selection
+        test_metrics = compute_rul_metrics(y_test, y_pred_test)  # ← reported only
         params = model.get_params() if hasattr(model, "get_params") else {}
-        results[name] = (model, params, metrics, y_pred)
-        print(f"    RMSE={metrics['RMSE']:.2f} | MAE={metrics['MAE']:.2f} | R²={metrics['R2']:.4f}")
+        results[name] = (model, params, val_metrics, test_metrics, y_pred_test)
+        print(f"    Val RMSE={val_metrics['RMSE']:.2f} | Test RMSE={test_metrics['RMSE']:.2f} | R²={test_metrics['R2']:.4f}")
     return results
+
 
 
 # ─────────────────────────────────────────────────────────────────────────────
