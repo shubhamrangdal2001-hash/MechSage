@@ -1,0 +1,27 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.pytest_tmp/
+
+# Local environments
+.venv/
+venv/
+env/
+
+# Raw/local datasets and packaged binaries
+data/
+*.zip
+
+# ML experiment outputs
+NASA_CMAPSS_RUL_Project/artifacts/
+NASA_CMAPSS_RUL_Project/models/
+NASA_CMAPSS_RUL_Project/mlruns/
+NASA_CMAPSS_RUL_Project/catboost_info/
+NASA_CMAPSS_RUL_Project/data/
+NASA_CMAPSS_RUL_Project/notebooks/
+NASA_CMAPSS_RUL_Project/*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
