@@ -1,0 +1,13 @@
+{
+  "model_name": "CatBoost_grid",
+  "version": "CatBoost_grid-bb1be79f3434-2026-06-29T07:03:14+00:00",
+  "training_timestamp_utc": "2026-06-29T07:03:14+00:00",
+  "dataset_version": "bb1be79f3434",
+  "git_commit": "a1d73f30da273d1a718b7c3e473fa128050dd0a2",
+  "mlflow_run_id": "24f0072243e64400aa220a5d6ead0cf2",
+  "task": "rul",
+  "main_metric": "RMSE",
+  "test_score": 13.034369010491215,
+  "local_model_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_rul_model_FD003.joblib",
+  "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/24f0072243e64400aa220a5d6ead0cf2/artifacts/final_model"
+}
