@@ -847,13 +847,15 @@ def _rows_for_csv(rows: list) -> pd.DataFrame:
 
 
 def _best_rul_row(rows: list) -> Optional[dict]:
+    """Select best RUL model by VALIDATION score — never test score."""
     candidates = [row for row in rows if row.get("Task") == "RUL Regression"]
-    return min(candidates, key=lambda row: row["Test score"]) if candidates else None
+    return min(candidates, key=lambda row: row["Validation score"]) if candidates else None
 
 
 def _best_anomaly_row(rows: list) -> Optional[dict]:
+    """Select best anomaly model by VALIDATION score — never test score."""
     candidates = [row for row in rows if row.get("Task") == "Anomaly Detection"]
-    return max(candidates, key=lambda row: row["Test score"]) if candidates else None
+    return max(candidates, key=lambda row: row["Validation score"]) if candidates else None
 
 
 def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_context: dict):
