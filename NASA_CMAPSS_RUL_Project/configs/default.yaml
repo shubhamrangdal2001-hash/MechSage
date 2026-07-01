@@ -1,0 +1,73 @@
+project:
+  name: MechSage NASA C-MAPSS Pipeline
+  experiment_prefix: MechSage
+
+paths:
+  data_dir: data
+  artifacts_dir: artifacts
+  models_dir: models
+  reports_dir: reports
+  logs_dir: logs
+  mlruns_dir: mlruns
+
+runtime:
+  seed: 42
+  profile: quick
+  validation_size: 0.2
+  tracking_uri: null
+
+data:
+  dataset: FD001
+  rul_clip: 125
+  anomaly_threshold: 30
+  max_train_units:
+    quick: 10
+    standard: null
+    full: null
+  max_test_units:
+    quick: 8
+    standard: null
+    full: null
+
+features:
+  rolling_windows: [5, 10, 20]
+  informative_sensors:
+    - sensor_2
+    - sensor_3
+    - sensor_4
+    - sensor_7
+    - sensor_8
+    - sensor_9
+    - sensor_11
+    - sensor_12
+    - sensor_13
+    - sensor_14
+    - sensor_15
+    - sensor_17
+    - sensor_20
+    - sensor_21
+  operational_settings:
+    - op_setting_1
+    - op_setting_2
+    - op_setting_3
+
+training:
+  cv: 3
+  n_trials: 5
+  tuning_methods: [grid, random, optuna]
+  tuning_models: [RandomForest]
+
+models:
+  quick:
+    rul: [LinearRegression, RandomForest]
+    anomaly: [IsolationForest, LightGBM_Anomaly]
+  standard:
+    rul: [LinearRegression, RandomForest, LightGBM]
+    anomaly: [IsolationForest, LightGBM_Anomaly]
+  full:
+    rul: [LinearRegression, RandomForest, LightGBM, XGBoost, CatBoost]
+    anomaly: [IsolationForest, LightGBM_Anomaly, OneClassSVM]
+
+logging:
+  level: INFO
+  file_name: pipeline.log
