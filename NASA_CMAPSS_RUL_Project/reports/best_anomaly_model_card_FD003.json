@@ -1,0 +1,13 @@
+{
+  "model_name": "IsolationForest",
+  "version": "IsolationForest-bb1be79f3434-2026-06-29T07:03:18+00:00",
+  "training_timestamp_utc": "2026-06-29T07:03:18+00:00",
+  "dataset_version": "bb1be79f3434",
+  "git_commit": "a1d73f30da273d1a718b7c3e473fa128050dd0a2",
+  "mlflow_run_id": "d1e2a3050d03478a8c7cbfe5d26efe33",
+  "task": "anomaly",
+  "main_metric": "F1_Score",
+  "test_score": 0.13333333333333333,
+  "local_model_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_anomaly_model_FD003.joblib",
+  "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/d1e2a3050d03478a8c7cbfe5d26efe33/artifacts/final_model"
+}
