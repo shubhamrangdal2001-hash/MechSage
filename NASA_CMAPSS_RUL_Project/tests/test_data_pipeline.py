@@ -105,17 +105,22 @@ def test_group_kfold_has_no_engine_overlap():
 
 def test_validate_group_folds_raises_on_overlap():
     """validate_group_folds must raise ValueError if groups overlap (contrived case)."""
-    import pytest
-    from sklearn.model_selection import KFold
+    import pandas as pd
 
     X = np.zeros((10, 3))
     y = np.zeros(10)
-    # Groups where the same unit is repeated across all rows → KFold will split them
     groups = pd.Series([1, 1, 1, 1, 1, 2, 2, 2, 2, 2])
-    bad_splitter = KFold(n_splits=2)
+
+    # Build a mock splitter that deliberately returns overlapping index splits
+    # (both halves contain indices from both groups → guaranteed overlap)
+    class OverlappingSplitter:
+        def split(self, X, y, groups):
+            # train = all, val = all → every group appears in both
+            all_idx = list(range(len(X)))
+            yield all_idx, all_idx
 
     with pytest.raises(ValueError, match="Group leakage"):
-        validate_group_folds(bad_splitter, X, y, groups)
+        validate_group_folds(OverlappingSplitter(), X, y, groups)
 
 
 # ---------------------------------------------------------------------------
