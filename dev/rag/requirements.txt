@@ -1,0 +1,6 @@
+# RAG Pipeline Dependencies for MechSage
+# Install with: pip install -r requirements.txt
+
+chromadb>=0.4.0
+sentence-transformers>=2.2.0
+rank-bm25>=0.2.2
