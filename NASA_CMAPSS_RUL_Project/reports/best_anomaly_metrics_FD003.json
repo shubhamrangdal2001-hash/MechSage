@@ -1,20 +1,20 @@
 {
-  "Accuracy": 0.9892650701899257,
-  "Precision": 0.09090909090909091,
-  "Recall": 0.25,
-  "F1_Score": 0.13333333333333333,
-  "ROC_AUC": 0.9908864954432477,
-  "PR_AUC": 0.1853874883286648,
-  "False_Positive_Rate": 0.008285004142502071,
-  "False_Negative_Rate": 0.75,
+  "Accuracy": 0.9966969446738233,
+  "Precision": 0.0,
+  "Recall": 0.0,
+  "F1_Score": 0.0,
+  "ROC_AUC": 0.9946147473073736,
+  "PR_AUC": 0.265018315018315,
+  "False_Positive_Rate": 0.0,
+  "False_Negative_Rate": 1.0,
   "Confusion_Matrix": [
     [
-      1197,
-      10
+      1207,
+      0
     ],
     [
-      3,
-      1
+      4,
+      0
     ]
   ]
 }

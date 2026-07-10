@@ -4,7 +4,7 @@
     {
       "dataset_name": "train",
       "row_count": 1428,
-      "column_count": 121,
+      "column_count": 134,
       "missing_values": {
         "unit_number": 0,
         "time_in_cycles": 0,
@@ -126,7 +126,20 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 0,
+        "sensor_3_expanding_mean": 0,
+        "sensor_4_expanding_mean": 0,
+        "sensor_7_expanding_mean": 0,
+        "sensor_8_expanding_mean": 0,
+        "sensor_9_expanding_mean": 0,
+        "sensor_11_expanding_mean": 0,
+        "sensor_12_expanding_mean": 0,
+        "sensor_13_expanding_mean": 0,
+        "sensor_14_expanding_mean": 0,
+        "sensor_15_expanding_mean": 0,
+        "sensor_17_expanding_mean": 0,
+        "sensor_20_expanding_mean": 0,
+        "sensor_21_expanding_mean": 0
       },
       "duplicate_rows": 0,
       "dtype_map": {
@@ -149,7 +162,7 @@
         "sensor_13": "float64",
         "sensor_14": "float64",
         "sensor_15": "float64",
-        "sensor_17": "float64",
+        "sensor_17": "int64",
         "sensor_20": "float64",
         "sensor_21": "float64",
         "sensor_2_roll_mean_5": "float64",
@@ -250,7 +263,20 @@
         "sensor_17_delta": "float64",
         "sensor_20_delta": "float64",
         "sensor_21_delta": "float64",
-        "cycle_norm": "float64"
+        "sensor_2_expanding_mean": "float64",
+        "sensor_3_expanding_mean": "float64",
+        "sensor_4_expanding_mean": "float64",
+        "sensor_7_expanding_mean": "float64",
+        "sensor_8_expanding_mean": "float64",
+        "sensor_9_expanding_mean": "float64",
+        "sensor_11_expanding_mean": "float64",
+        "sensor_12_expanding_mean": "float64",
+        "sensor_13_expanding_mean": "float64",
+        "sensor_14_expanding_mean": "float64",
+        "sensor_15_expanding_mean": "float64",
+        "sensor_17_expanding_mean": "float64",
+        "sensor_20_expanding_mean": "float64",
+        "sensor_21_expanding_mean": "float64"
       },
       "outlier_counts": {
         "unit_number": 0,
@@ -373,17 +399,30 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 93,
+        "sensor_3_expanding_mean": 81,
+        "sensor_4_expanding_mean": 73,
+        "sensor_7_expanding_mean": 88,
+        "sensor_8_expanding_mean": 84,
+        "sensor_9_expanding_mean": 70,
+        "sensor_11_expanding_mean": 67,
+        "sensor_12_expanding_mean": 88,
+        "sensor_13_expanding_mean": 98,
+        "sensor_14_expanding_mean": 25,
+        "sensor_15_expanding_mean": 138,
+        "sensor_17_expanding_mean": 77,
+        "sensor_20_expanding_mean": 94,
+        "sensor_21_expanding_mean": 94
       },
       "errors": [],
       "warnings": [
-        "IQR outliers detected in 89 numeric columns"
+        "IQR outliers detected in 103 numeric columns"
       ]
     },
     {
       "dataset_name": "validation",
       "row_count": 468,
-      "column_count": 121,
+      "column_count": 134,
       "missing_values": {
         "unit_number": 0,
         "time_in_cycles": 0,
@@ -505,7 +544,20 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 0,
+        "sensor_3_expanding_mean": 0,
+        "sensor_4_expanding_mean": 0,
+        "sensor_7_expanding_mean": 0,
+        "sensor_8_expanding_mean": 0,
+        "sensor_9_expanding_mean": 0,
+        "sensor_11_expanding_mean": 0,
+        "sensor_12_expanding_mean": 0,
+        "sensor_13_expanding_mean": 0,
+        "sensor_14_expanding_mean": 0,
+        "sensor_15_expanding_mean": 0,
+        "sensor_17_expanding_mean": 0,
+        "sensor_20_expanding_mean": 0,
+        "sensor_21_expanding_mean": 0
       },
       "duplicate_rows": 0,
       "dtype_map": {
@@ -528,7 +580,7 @@
         "sensor_13": "float64",
         "sensor_14": "float64",
         "sensor_15": "float64",
-        "sensor_17": "float64",
+        "sensor_17": "int64",
         "sensor_20": "float64",
         "sensor_21": "float64",
         "sensor_2_roll_mean_5": "float64",
@@ -629,7 +681,20 @@
         "sensor_17_delta": "float64",
         "sensor_20_delta": "float64",
         "sensor_21_delta": "float64",
-        "cycle_norm": "float64"
+        "sensor_2_expanding_mean": "float64",
+        "sensor_3_expanding_mean": "float64",
+        "sensor_4_expanding_mean": "float64",
+        "sensor_7_expanding_mean": "float64",
+        "sensor_8_expanding_mean": "float64",
+        "sensor_9_expanding_mean": "float64",
+        "sensor_11_expanding_mean": "float64",
+        "sensor_12_expanding_mean": "float64",
+        "sensor_13_expanding_mean": "float64",
+        "sensor_14_expanding_mean": "float64",
+        "sensor_15_expanding_mean": "float64",
+        "sensor_17_expanding_mean": "float64",
+        "sensor_20_expanding_mean": "float64",
+        "sensor_21_expanding_mean": "float64"
       },
       "outlier_counts": {
         "unit_number": 0,
@@ -752,17 +817,30 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 25,
+        "sensor_3_expanding_mean": 26,
+        "sensor_4_expanding_mean": 27,
+        "sensor_7_expanding_mean": 25,
+        "sensor_8_expanding_mean": 46,
+        "sensor_9_expanding_mean": 31,
+        "sensor_11_expanding_mean": 31,
+        "sensor_12_expanding_mean": 25,
+        "sensor_13_expanding_mean": 60,
+        "sensor_14_expanding_mean": 54,
+        "sensor_15_expanding_mean": 31,
+        "sensor_17_expanding_mean": 27,
+        "sensor_20_expanding_mean": 25,
+        "sensor_21_expanding_mean": 25
       },
       "errors": [],
       "warnings": [
-        "IQR outliers detected in 86 numeric columns"
+        "IQR outliers detected in 100 numeric columns"
       ]
     },
     {
       "dataset_name": "test",
       "row_count": 1132,
-      "column_count": 121,
+      "column_count": 134,
       "missing_values": {
         "unit_number": 0,
         "time_in_cycles": 0,
@@ -884,7 +962,20 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 0,
+        "sensor_3_expanding_mean": 0,
+        "sensor_4_expanding_mean": 0,
+        "sensor_7_expanding_mean": 0,
+        "sensor_8_expanding_mean": 0,
+        "sensor_9_expanding_mean": 0,
+        "sensor_11_expanding_mean": 0,
+        "sensor_12_expanding_mean": 0,
+        "sensor_13_expanding_mean": 0,
+        "sensor_14_expanding_mean": 0,
+        "sensor_15_expanding_mean": 0,
+        "sensor_17_expanding_mean": 0,
+        "sensor_20_expanding_mean": 0,
+        "sensor_21_expanding_mean": 0
       },
       "duplicate_rows": 0,
       "dtype_map": {
@@ -907,7 +998,7 @@
         "sensor_13": "float64",
         "sensor_14": "float64",
         "sensor_15": "float64",
-        "sensor_17": "float64",
+        "sensor_17": "int64",
         "sensor_20": "float64",
         "sensor_21": "float64",
         "sensor_2_roll_mean_5": "float64",
@@ -1008,7 +1099,20 @@
         "sensor_17_delta": "float64",
         "sensor_20_delta": "float64",
         "sensor_21_delta": "float64",
-        "cycle_norm": "float64"
+        "sensor_2_expanding_mean": "float64",
+        "sensor_3_expanding_mean": "float64",
+        "sensor_4_expanding_mean": "float64",
+        "sensor_7_expanding_mean": "float64",
+        "sensor_8_expanding_mean": "float64",
+        "sensor_9_expanding_mean": "float64",
+        "sensor_11_expanding_mean": "float64",
+        "sensor_12_expanding_mean": "float64",
+        "sensor_13_expanding_mean": "float64",
+        "sensor_14_expanding_mean": "float64",
+        "sensor_15_expanding_mean": "float64",
+        "sensor_17_expanding_mean": "float64",
+        "sensor_20_expanding_mean": "float64",
+        "sensor_21_expanding_mean": "float64"
       },
       "outlier_counts": {
         "unit_number": 0,
@@ -1131,11 +1235,24 @@
         "sensor_17_delta": 0,
         "sensor_20_delta": 0,
         "sensor_21_delta": 0,
-        "cycle_norm": 0
+        "sensor_2_expanding_mean": 94,
+        "sensor_3_expanding_mean": 107,
+        "sensor_4_expanding_mean": 105,
+        "sensor_7_expanding_mean": 94,
+        "sensor_8_expanding_mean": 115,
+        "sensor_9_expanding_mean": 97,
+        "sensor_11_expanding_mean": 102,
+        "sensor_12_expanding_mean": 94,
+        "sensor_13_expanding_mean": 113,
+        "sensor_14_expanding_mean": 66,
+        "sensor_15_expanding_mean": 109,
+        "sensor_17_expanding_mean": 113,
+        "sensor_20_expanding_mean": 93,
+        "sensor_21_expanding_mean": 90
       },
       "errors": [],
       "warnings": [
-        "IQR outliers detected in 90 numeric columns"
+        "IQR outliers detected in 104 numeric columns"
       ]
     }
   ],

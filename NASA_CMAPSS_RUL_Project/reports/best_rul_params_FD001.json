@@ -1,6 +1,7 @@
 {
-  "n_estimators": 39,
-  "max_depth": 8,
-  "min_samples_leaf": 3,
-  "max_features": "sqrt"
+  "copy_X": true,
+  "fit_intercept": true,
+  "n_jobs": null,
+  "positive": false,
+  "tol": 1e-06
 }

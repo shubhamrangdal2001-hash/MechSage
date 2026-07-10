@@ -52,14 +52,14 @@
       "rolling_mean",
       "rolling_std",
       "sensor_delta",
-      "cycle_norm"
+      "expanding_mean"
     ],
     "rolling_windows": [
       5,
       10,
       20
     ],
-    "feature_count": 116
+    "feature_count": 129
   },
   "dataset_files": {
     "train": "D:\\Capstone\\MechSage\\data\\NASA C-MAPSS-1 Turbofan Engine Degradation Dataset\\train_FD003.txt",

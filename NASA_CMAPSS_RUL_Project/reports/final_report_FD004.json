@@ -50,238 +50,82 @@
       "rolling_mean",
       "rolling_std",
       "sensor_delta",
-      "cycle_norm"
+      "expanding_mean"
     ],
     "rolling_windows": [
       5,
       10,
       20
     ],
-    "feature_count": 116
+    "feature_count": 129
   },
   "comparison_table": [
     {
       "Model name": "LinearRegression",
       "Best hyperparameters": "{\"copy_X\": true, \"fit_intercept\": true, \"n_jobs\": null, \"positive\": false, \"tol\": 1e-06}",
-      "Train score": 12.673442727926274,
-      "Validation score": 19.048939018542256,
-      "Test score": 19.41124871897188,
+      "Train score": 11.263601782440972,
+      "Validation score": 16.599995897929283,
+      "Test score": 18.361333798100855,
       "Main metric": "RMSE",
-      "Runtime": 0.051724500008276664,
-      "MLflow run ID": "db18b68f01f8449894eeacbd3f6824ee",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/db18b68f01f8449894eeacbd3f6824ee/artifacts/model",
+      "Runtime": 0.018292899999778456,
+      "MLflow run ID": "12ebe49e24404a51b0aa204ee9e53dc6",
+      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/12ebe49e24404a51b0aa204ee9e53dc6/artifacts/model",
       "Task": "RUL Regression",
       "Local model path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\LinearRegression_FD004.joblib"
     },
     {
       "Model name": "RandomForest",
       "Best hyperparameters": "{\"bootstrap\": true, \"ccp_alpha\": 0.0, \"criterion\": \"squared_error\", \"max_depth\": 5, \"max_features\": 1.0, \"max_leaf_nodes\": null, \"max_samples\": null, \"min_impurity_decrease\": 0.0, \"min_samples_leaf\": 1, \"min_samples_split\": 2, \"min_weight_fraction_leaf\": 0.0, \"monotonic_cst\": null, \"n_estimators\": 25, \"n_jobs\": 1, \"oob_score\": false, \"random_state\": 42, \"verbose\": 0, \"warm_start\": false}",
-      "Train score": 5.150220285633122,
-      "Validation score": 6.4682847756236015,
-      "Test score": 27.72105764866898,
+      "Train score": 17.479407493828045,
+      "Validation score": 28.157217409439507,
+      "Test score": 22.387890322508778,
       "Main metric": "RMSE",
-      "Runtime": 1.341933000003337,
-      "MLflow run ID": "b1a697f30ad5416db55817baad58c89c",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/b1a697f30ad5416db55817baad58c89c/artifacts/model",
+      "Runtime": 1.1818349000000126,
+      "MLflow run ID": "30070c06d2d949e1adfa3eb907159da2",
+      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/30070c06d2d949e1adfa3eb907159da2/artifacts/model",
       "Task": "RUL Regression",
       "Local model path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\RandomForest_FD004.joblib"
     },
     {
-      "Model name": "RandomForest_grid",
-      "Best hyperparameters": "{\"max_depth\": 4, \"min_samples_leaf\": 1, \"n_estimators\": 20}",
-      "Train score": 6.899292913727245,
-      "Validation score": 6.468079724023787,
-      "Test score": 27.69835376799446,
-      "Main metric": "RMSE",
-      "Runtime": 4.649057399990852,
-      "MLflow run ID": "a49fb55805704e9c87d3bf3ad7171226",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/a49fb55805704e9c87d3bf3ad7171226/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "RandomForest_random",
-      "Best hyperparameters": "{\"max_depth\": 5, \"max_features\": null, \"min_samples_leaf\": 1, \"n_estimators\": 40}",
-      "Train score": 5.122193790941397,
-      "Validation score": 6.7206719198555245,
-      "Test score": 27.753651782860594,
-      "Main metric": "RMSE",
-      "Runtime": 15.672869699992589,
-      "MLflow run ID": "3cd26f354f4a4a9e98c4a6958f811dc2",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/3cd26f354f4a4a9e98c4a6958f811dc2/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "RandomForest_optuna",
-      "Best hyperparameters": "{\"max_depth\": 2, \"max_features\": null, \"min_samples_leaf\": 2, \"n_estimators\": 51}",
-      "Train score": 10.368797433954425,
-      "Validation score": 7.609556125218092,
-      "Test score": 27.46204929119992,
-      "Main metric": "RMSE",
-      "Runtime": 4.6285401999921305,
-      "MLflow run ID": "35f6328cff574122a85c5f5d273d24ac",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/35f6328cff574122a85c5f5d273d24ac/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "XGBoost_grid",
-      "Best hyperparameters": "{\"learning_rate\": 0.1, \"max_depth\": 3, \"n_estimators\": 50}",
-      "Train score": 5.170807002241552,
-      "Validation score": 5.06325494840686,
-      "Test score": 25.912724103769747,
-      "Main metric": "RMSE",
-      "Runtime": 2.609895800007507,
-      "MLflow run ID": "6ba4cf8df1414e3a8184290365941727",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/6ba4cf8df1414e3a8184290365941727/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "XGBoost_random",
-      "Best hyperparameters": "{\"colsample_bytree\": 1.0, \"learning_rate\": 0.2, \"max_depth\": 2, \"n_estimators\": 80, \"subsample\": 0.7}",
-      "Train score": 5.230407024842974,
-      "Validation score": 5.47570378967297,
-      "Test score": 25.389217229278728,
-      "Main metric": "RMSE",
-      "Runtime": 16.802344099996844,
-      "MLflow run ID": "9e951ad1d19f4eacb82dfeedbe5fa9b6",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/9e951ad1d19f4eacb82dfeedbe5fa9b6/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "XGBoost_optuna",
-      "Best hyperparameters": "{\"colsample_bytree\": 0.7468055921327309, \"learning_rate\": 0.1785436060870726, \"max_depth\": 4, \"n_estimators\": 59, \"subsample\": 0.8795975452591109}",
-      "Train score": 2.589190488723324,
-      "Validation score": 6.8484094033852605,
-      "Test score": 22.180639844856596,
-      "Main metric": "RMSE",
-      "Runtime": 4.509716599990497,
-      "MLflow run ID": "b6e563cc05d84f3380f413413057495d",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/b6e563cc05d84f3380f413413057495d/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "LightGBM_grid",
-      "Best hyperparameters": "{\"learning_rate\": 0.1, \"max_depth\": 3, \"n_estimators\": 50}",
-      "Train score": 5.203263815631534,
-      "Validation score": 5.460073212722465,
-      "Test score": 25.83964232962572,
-      "Main metric": "RMSE",
-      "Runtime": 1.1552181000006385,
-      "MLflow run ID": "05dcf21d992b4e728e183caa3d050795",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/05dcf21d992b4e728e183caa3d050795/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "LightGBM_random",
-      "Best hyperparameters": "{\"learning_rate\": 0.2, \"max_depth\": 3, \"n_estimators\": 80, \"num_leaves\": 63, \"subsample\": 0.7}",
-      "Train score": 3.095524362849091,
-      "Validation score": 5.688481551067239,
-      "Test score": 25.766622766220102,
-      "Main metric": "RMSE",
-      "Runtime": 9.416336000009323,
-      "MLflow run ID": "26b75f4ebe1843f3a43d2e2213673c92",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/26b75f4ebe1843f3a43d2e2213673c92/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "LightGBM_optuna",
-      "Best hyperparameters": "{\"learning_rate\": 0.1785436060870726, \"max_depth\": 5, \"n_estimators\": 59, \"num_leaves\": 44, \"subsample\": 0.7468055921327309}",
-      "Train score": 1.516901607816959,
-      "Validation score": 6.569156630187531,
-      "Test score": 26.908955961105153,
-      "Main metric": "RMSE",
-      "Runtime": 2.5568012000003364,
-      "MLflow run ID": "e687b362faf84e7ab6721dcda7dfa3d5",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/e687b362faf84e7ab6721dcda7dfa3d5/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "CatBoost_grid",
-      "Best hyperparameters": "{\"depth\": 3, \"iterations\": 50, \"learning_rate\": 0.1}",
-      "Train score": 7.311388807181171,
-      "Validation score": 5.379602631354055,
-      "Test score": 25.86880037837026,
-      "Main metric": "RMSE",
-      "Runtime": 1.6480735999939498,
-      "MLflow run ID": "4e5e53b8ede14de786d86f9eb5fbce1f",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/4e5e53b8ede14de786d86f9eb5fbce1f/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "CatBoost_random",
-      "Best hyperparameters": "{\"depth\": 6, \"iterations\": 80, \"l2_leaf_reg\": 10.0, \"learning_rate\": 0.1}",
-      "Train score": 4.59540870712727,
-      "Validation score": 5.965072340244404,
-      "Test score": 25.153183723138774,
-      "Main metric": "RMSE",
-      "Runtime": 16.204048100000364,
-      "MLflow run ID": "681692661143461caece7238cb4c5644",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/681692661143461caece7238cb4c5644/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
-      "Model name": "CatBoost_optuna",
-      "Best hyperparameters": "{\"depth\": 3, \"iterations\": 70, \"l2_leaf_reg\": 8.706020878304859, \"learning_rate\": 0.10211806418789517}",
-      "Train score": 6.770209362087501,
-      "Validation score": 5.615929660510986,
-      "Test score": 25.86711708501905,
-      "Main metric": "RMSE",
-      "Runtime": 2.5974756000068737,
-      "MLflow run ID": "9502130967f04c46a08d79c243692fa0",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/9502130967f04c46a08d79c243692fa0/artifacts/model",
-      "Task": "RUL Regression",
-      "Local model path": NaN
-    },
-    {
       "Model name": "IsolationForest",
-      "Best hyperparameters": "{\"bootstrap\": false, \"contamination\": 0.05, \"fit_data\": \"nominal_train_rows\", \"max_features\": 1.0, \"max_samples\": \"auto\", \"n_estimators\": 100, \"n_jobs\": 1, \"random_state\": 42, \"threshold\": 0.4701297917017067, \"verbose\": 0, \"warm_start\": false}",
-      "Train score": 0.23416506717850288,
-      "Validation score": 0.2037735849056604,
-      "Test score": 0.03023758099352052,
+      "Best hyperparameters": "{\"bootstrap\": false, \"contamination\": 0.05, \"fit_data\": \"nominal_train_rows\", \"max_features\": 1.0, \"max_samples\": \"auto\", \"n_estimators\": 100, \"n_jobs\": 1, \"random_state\": 42, \"threshold\": 0.4323419939672807, \"verbose\": 0, \"warm_start\": false}",
+      "Train score": 0.19230769230769232,
+      "Validation score": 0.17941952506596306,
+      "Test score": 0.03206997084548105,
       "Main metric": "F1_Score",
-      "Runtime": 0.28784089999680873,
-      "MLflow run ID": "4d44d93c38884dafa29853cc2cb2ba4b",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/4d44d93c38884dafa29853cc2cb2ba4b/artifacts/model",
+      "Runtime": 0.2277289000003293,
+      "MLflow run ID": "3ab4ba20ce084bbc97beadd2c732d3d4",
+      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/3ab4ba20ce084bbc97beadd2c732d3d4/artifacts/model",
       "Task": "Anomaly Detection",
       "Local model path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\IsolationForest_FD004.joblib"
     },
     {
       "Model name": "LightGBM_Anomaly",
-      "Best hyperparameters": "{\"class_weight\": \"balanced\", \"learning_rate\": 0.05, \"max_depth\": 6, \"n_estimators\": 120, \"n_jobs\": 1, \"num_leaves\": 31, \"random_state\": 42, \"threshold\": 0.8970476100261541, \"threshold_source\": \"validation_f1\", \"verbose\": -1}",
+      "Best hyperparameters": "{\"class_weight\": \"balanced\", \"learning_rate\": 0.05, \"max_depth\": 6, \"n_estimators\": 120, \"n_jobs\": 1, \"num_leaves\": 31, \"random_state\": 42, \"threshold\": 0.5151814730674342, \"threshold_source\": \"validation_f1\", \"verbose\": -1}",
       "Train score": 1.0,
-      "Validation score": 0.9365079365079365,
-      "Test score": 0.348993288590604,
+      "Validation score": 0.6,
+      "Test score": 0.5862068965517241,
       "Main metric": "F1_Score",
-      "Runtime": 0.4215986999915913,
-      "MLflow run ID": "adc75bef312d4ce9b430e972b2d782ce",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/adc75bef312d4ce9b430e972b2d782ce/artifacts/model",
+      "Runtime": 0.6497308000002704,
+      "MLflow run ID": "87807760e0d14fb7baa7152e265d4338",
+      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/87807760e0d14fb7baa7152e265d4338/artifacts/model",
       "Task": "Anomaly Detection",
       "Local model path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\LightGBM_Anomaly_FD004.joblib"
     }
   ],
   "best_rul_model": {
     "model_name": "LinearRegression",
-    "test_score": 19.41124871897188,
+    "test_score": 18.361333798100855,
     "main_metric": "RMSE",
-    "mlflow_run_id": "db18b68f01f8449894eeacbd3f6824ee",
-    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/db18b68f01f8449894eeacbd3f6824ee/artifacts/model"
+    "mlflow_run_id": "12ebe49e24404a51b0aa204ee9e53dc6",
+    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/12ebe49e24404a51b0aa204ee9e53dc6/artifacts/model"
   },
   "best_anomaly_model": {
     "model_name": "LightGBM_Anomaly",
-    "test_score": 0.348993288590604,
+    "test_score": 0.5862068965517241,
     "main_metric": "F1_Score",
-    "mlflow_run_id": "adc75bef312d4ce9b430e972b2d782ce",
-    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/adc75bef312d4ce9b430e972b2d782ce/artifacts/model"
+    "mlflow_run_id": "87807760e0d14fb7baa7152e265d4338",
+    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/87807760e0d14fb7baa7152e265d4338/artifacts/model"
   },
   "saved_outputs": {
     "best_rul": {
@@ -289,16 +133,70 @@
       "metrics_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_rul_metrics_FD004.json",
       "model_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_rul_model_FD004.joblib",
       "model_card_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_rul_model_card_FD004.json",
-      "mlflow_run_id": "46b2efc5b99b42a294c132db72b501f3",
-      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/46b2efc5b99b42a294c132db72b501f3/artifacts/final_model"
+      "mlflow_run_id": "6e1806bc95b64731a271a730b9697a79",
+      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/6e1806bc95b64731a271a730b9697a79/artifacts/final_model",
+      "top_features": [
+        [
+          "sensor_8_roll_mean_20",
+          813.2593988189935
+        ],
+        [
+          "sensor_8_expanding_mean",
+          627.170946120534
+        ],
+        [
+          "sensor_13_roll_mean_20",
+          574.3611233000069
+        ],
+        [
+          "sensor_13_expanding_mean",
+          551.7647161493691
+        ],
+        [
+          "op_setting_3",
+          439.1605217306335
+        ]
+      ],
+      "shap_plots": {
+        "summary_bar": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_summary_bar_FD004.png",
+        "summary_beeswarm": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_summary_beeswarm_FD004.png",
+        "dependence": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_dependence_FD004.png"
+      }
     },
     "best_anomaly": {
       "params_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_params_FD004.json",
       "metrics_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_metrics_FD004.json",
       "model_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_anomaly_model_FD004.joblib",
       "model_card_path": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_model_card_FD004.json",
-      "mlflow_run_id": "13936d09eb6d4fb38f5b327d9bdb2e60",
-      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/13936d09eb6d4fb38f5b327d9bdb2e60/artifacts/final_model"
+      "mlflow_run_id": "9046f2a4c92e42fc8e818c98dd31f2b3",
+      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203867875341978885/9046f2a4c92e42fc8e818c98dd31f2b3/artifacts/final_model",
+      "top_features": [
+        [
+          "sensor_14_roll_mean_20",
+          0.5225170152364025
+        ],
+        [
+          "sensor_13_expanding_mean",
+          0.4993021242416769
+        ],
+        [
+          "sensor_13",
+          0.3737466163097033
+        ],
+        [
+          "sensor_11_roll_mean_20",
+          0.33821685631998855
+        ],
+        [
+          "sensor_11_expanding_mean",
+          0.18568670950816688
+        ]
+      ],
+      "shap_plots": {
+        "summary_bar": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_summary_bar_FD004.png",
+        "summary_beeswarm": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_summary_beeswarm_FD004.png",
+        "dependence": "D:\\Capstone\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_dependence_FD004.png"
+      }
     }
   },
   "mlflow_ui_command": "mlflow ui --backend-store-uri ./mlruns",

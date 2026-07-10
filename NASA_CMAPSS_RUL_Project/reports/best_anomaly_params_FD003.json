@@ -8,6 +8,6 @@
   "random_state": 42,
   "verbose": 0,
   "warm_start": false,
-  "threshold": 0.6083430247817955,
+  "threshold": 0.6483689995847156,
   "fit_data": "nominal_train_rows"
 }

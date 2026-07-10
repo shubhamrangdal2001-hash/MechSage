@@ -1,5 +1,7 @@
 {
-  "depth": 3,
-  "iterations": 50,
-  "learning_rate": 0.1
+  "copy_X": true,
+  "fit_intercept": true,
+  "n_jobs": null,
+  "positive": false,
+  "tol": 1e-06
 }
