@@ -420,7 +420,7 @@ def _run_cv_search(
             if path and os.path.exists(path):
                 mlflow.log_artifact(path)
 
-        mlflow.sklearn.log_model(best_model, artifact_path="model")
+        mlflow.sklearn.log_model(best_model, artifact_path="model", serialization_format="cloudpickle")
         runtime = time.perf_counter() - parent_started
 
         return {
@@ -568,7 +568,7 @@ def _run_optuna(
             if path and os.path.exists(path):
                 mlflow.log_artifact(path)
 
-        mlflow.sklearn.log_model(best_model, artifact_path="model")
+        mlflow.sklearn.log_model(best_model, artifact_path="model", serialization_format="cloudpickle")
         runtime = time.perf_counter() - parent_started
 
         return {
