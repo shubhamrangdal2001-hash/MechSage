@@ -25,3 +25,9 @@ NASA_CMAPSS_RUL_Project/*.log
 # OS/editor noise
 .DS_Store
 Thumbs.db
+
+# RAG vector store (rebuilt automatically by evaluate_rag.py)
+dev/rag/chroma_db/
+
+# RAG report outputs (generated artifacts)
+dev/rag/reports/
