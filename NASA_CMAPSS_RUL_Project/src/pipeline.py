@@ -858,7 +858,7 @@ def _best_anomaly_row(rows: list) -> Optional[dict]:
     return max(candidates, key=lambda row: row["Validation score"]) if candidates else None
 
 
-def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_context: dict):
+def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_context: dict, data: dict = None):
     if not best_row:
         return None
     params_path = os.path.join(dirs["reports"], f"best_{task_label}_params_{dataset_context['dataset_id']}.json")
@@ -880,6 +880,32 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
         else:
             joblib.dump(best_row["Estimator"], model_path)
 
+    # Run SHAP Analysis
+    shap_artifacts = []
+    top_features = []
+    shap_plots = {}
+    if data is not None:
+        try:
+            from src.shap_explain import run_shap_analysis
+            LOGGER.info("Generating SHAP explanations for best %s model...", task_label)
+            shap_results = run_shap_analysis(
+                model=best_row["Estimator"],
+                data=data,
+                task_type=task_label,
+                model_name=best_row["Model name"],
+                dataset_id=dataset_context["dataset_id"],
+                save_dir=dirs["artifacts"]
+            )
+            if shap_results:
+                shap_plots = shap_results.get("plots", {})
+                top_features = shap_results.get("top_features", [])
+                for plot_path in shap_plots.values():
+                    if os.path.exists(plot_path):
+                        shap_artifacts.append(plot_path)
+                LOGGER.info("SHAP explanations generated for best %s model.", task_label)
+        except Exception as e:
+            LOGGER.error("Failed to run SHAP interpretation for best %s model: %s", task_label, e)
+
     best_context = dict(dataset_context)
     best_context["main_metric"] = best_row["Main metric"]
     
@@ -892,7 +918,7 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
         dataset_context=best_context,
         params=best_row.get("Best params dict", {}),
         metrics=best_row.get("Test metrics dict", {}),
-        artifacts=[params_path, metrics_path, model_path],
+        artifacts=[params_path, metrics_path, model_path] + shap_artifacts,
         model_flavor=model_flavor,
     )
     model_card = build_model_version(
@@ -917,6 +943,8 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
         "model_card_path": model_card_path,
         "mlflow_run_id": log_info["run_id"],
         "mlflow_model_artifact_path": log_info["model_artifact_path"],
+        "top_features": top_features,
+        "shap_plots": shap_plots,
     }
 
 
@@ -969,6 +997,50 @@ def _save_final_report(rows: list, best_rul: Optional[dict], best_anomaly: Optio
         lines.append(f"- Best RUL model: `{best_rul['Model name']}` with test RMSE `{best_rul['Test score']:.4f}`")
     if best_anomaly:
         lines.append(f"- Best anomaly model: `{best_anomaly['Model name']}` with test F1 `{best_anomaly['Test score']:.4f}`")
+
+    # Add SHAP Model Interpretability Section
+    lines.extend([
+        "",
+        "## Model Interpretability (SHAP Analysis)",
+        ""
+    ])
+
+    if best_rul and outputs.get("best_rul") and outputs["best_rul"].get("top_features"):
+        lines.extend([
+            "### Remaining Useful Life (RUL) Regression Interpretability",
+            "",
+            "Top features contributing to RUL predictions:",
+            ""
+        ])
+        for feat, val in outputs["best_rul"]["top_features"]:
+            lines.append(f"- `{feat}`: Shapley value magnitude `{val:.4f}`")
+        lines.extend([
+            "",
+            "SHAP explanation plots:",
+            f"- [Summary Bar Plot](../artifacts/best_rul_shap_summary_bar_{context['dataset_id']}.png)",
+            f"- [Beeswarm Plot](../artifacts/best_rul_shap_summary_beeswarm_{context['dataset_id']}.png)",
+            f"- [Dependence Plot](../artifacts/best_rul_shap_dependence_{context['dataset_id']}.png)",
+            ""
+        ])
+
+    if best_anomaly and outputs.get("best_anomaly") and outputs["best_anomaly"].get("top_features"):
+        lines.extend([
+            "### Anomaly & Degradation Detection Interpretability",
+            "",
+            "Top features contributing to anomaly classification:",
+            ""
+        ])
+        for feat, val in outputs["best_anomaly"]["top_features"]:
+            lines.append(f"- `{feat}`: Shapley value magnitude `{val:.4f}`")
+        lines.extend([
+            "",
+            "SHAP explanation plots:",
+            f"- [Summary Bar Plot](../artifacts/best_anomaly_shap_summary_bar_{context['dataset_id']}.png)",
+            f"- [Beeswarm Plot](../artifacts/best_anomaly_shap_summary_beeswarm_{context['dataset_id']}.png)",
+            f"- [Dependence Plot](../artifacts/best_anomaly_shap_dependence_{context['dataset_id']}.png)",
+            ""
+        ])
+
     lines.extend(
         [
             "",
@@ -1057,8 +1129,8 @@ def run_pipeline(args) -> dict:
     best_rul = _best_rul_row(rows)
     best_anomaly = _best_anomaly_row(rows)
     saved_outputs = {
-        "best_rul": _save_best_outputs(best_rul, "rul", dirs, context) if best_rul else None,
-        "best_anomaly": _save_best_outputs(best_anomaly, "anomaly", dirs, context) if best_anomaly else None,
+        "best_rul": _save_best_outputs(best_rul, "rul", dirs, context, data) if best_rul else None,
+        "best_anomaly": _save_best_outputs(best_anomaly, "anomaly", dirs, context, data) if best_anomaly else None,
     }
     report_paths = _save_final_report(rows, best_rul, best_anomaly, saved_outputs, dirs, context)
     LOGGER.info("Pipeline complete.")
