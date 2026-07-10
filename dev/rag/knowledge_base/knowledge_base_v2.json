@@ -1,0 +1,247 @@
+[
+  {
+    "id": "MAN-HPC-01",
+    "fault_mode": "high pressure compressor degradation",
+    "components": ["HPC"],
+    "sensor_cues": ["s2", "s3", "s4", "s7", "s11"],
+    "text": "Rising core temperature (s2, s3, s4) together with increased HPC outlet pressure (s7, s11) and a drop in isentropic efficiency indicates high pressure compressor degradation. Recommended action: borescope inspection of HPC stages, inspect and replace HPC seal kit if clearance is out of limits."
+  },
+  {
+    "id": "MAN-HPC-02",
+    "fault_mode": "high pressure compressor degradation",
+    "components": ["HPC", "seal"],
+    "sensor_cues": ["s3", "s11", "s14"],
+    "text": "When HPC outlet temperature (s3) rises by more than 2 standard deviations above the rolling mean while static HPC pressure (s11) simultaneously increases, this is a strong indicator of compressor blade tip clearance loss. Corrected core speed (s14) may also decrease. Inspect HPC seal clearances and blade condition."
+  },
+  {
+    "id": "MAN-HPC-03",
+    "fault_mode": "high pressure compressor degradation",
+    "components": ["HPC", "blade"],
+    "sensor_cues": ["s3", "s7", "s12"],
+    "text": "Progressive increase in fuel flow ratio (s12) combined with rising HPC outlet temperature (s3) and HPC outlet pressure (s7) suggests compressor efficiency loss due to blade erosion or fouling. Recommended action: compressor wash if fouling is suspected, or blade inspection if erosion pattern is present."
+  },
+  {
+    "id": "MAN-HPC-04",
+    "fault_mode": "high pressure compressor stall",
+    "components": ["HPC"],
+    "sensor_cues": ["s3", "s7", "s8", "s9"],
+    "text": "Sudden spikes in HPC outlet temperature (s3) with simultaneous drops in HPC outlet pressure (s7) and fluctuations in physical fan speed (s8) and core speed (s9) indicate compressor stall. This is a critical condition requiring immediate engine shutdown and inspection of variable stator vanes and bleed valves."
+  },
+  {
+    "id": "MAN-FAN-01",
+    "fault_mode": "fan degradation",
+    "components": ["Fan"],
+    "sensor_cues": ["s8", "s13", "s15"],
+    "text": "A sustained decrease in corrected fan speed (s13) and bypass ratio (s15) combined with changes in physical fan speed (s8) indicates fan blade degradation. This may be caused by foreign object damage, leading edge erosion, or blade root cracking. Recommended action: fan blade visual inspection and borescope of fan disk."
+  },
+  {
+    "id": "MAN-FAN-02",
+    "fault_mode": "fan imbalance",
+    "components": ["Fan"],
+    "sensor_cues": ["s8", "s13", "s15"],
+    "text": "Periodic vibration synchronous with shaft speed and elevated fan vibration with changes in physical fan speed (s8) and corrected fan speed (s13) suggests fan imbalance. Bypass ratio (s15) may fluctuate. Recommended action: perform vibration survey and apply balance weights. If imbalance persists, inspect for blade damage."
+  },
+  {
+    "id": "MAN-FAN-03",
+    "fault_mode": "fan blade foreign object damage",
+    "components": ["Fan", "blade"],
+    "sensor_cues": ["s8", "s13", "s15"],
+    "text": "Sudden change in vibration signature with immediate shifts in fan speed (s8, s13) and bypass ratio (s15) after a noise event suggests foreign object damage to fan blades. Recommended action: immediate engine inspection, fan blade visual examination for nicks, dents, or cracks. Replace damaged blades per damage limits chart."
+  },
+  {
+    "id": "MAN-BRG-01",
+    "fault_mode": "bearing wear",
+    "components": ["bearing", "shaft"],
+    "sensor_cues": ["s11", "s12"],
+    "text": "A sustained increase in vibration amplitude (s11) combined with a thermal rise at the bearing housing (s12) is characteristic of bearing wear. This typically develops gradually over hundreds of cycles. Recommended action: schedule bearing assembly replacement and re-lubrication at next maintenance slot."
+  },
+  {
+    "id": "MAN-BRG-02",
+    "fault_mode": "bearing failure imminent",
+    "components": ["bearing"],
+    "sensor_cues": ["s9", "s11", "s14"],
+    "text": "Rapid increase in bearing vibration (s11) with changes in physical core speed (s9) and corrected core speed (s14) indicates imminent bearing failure. Metal particles may be present in oil analysis. This is a critical condition requiring immediate scheduling of bearing replacement before catastrophic failure."
+  },
+  {
+    "id": "MAN-LPT-01",
+    "fault_mode": "low pressure turbine degradation",
+    "components": ["LPT"],
+    "sensor_cues": ["s4", "s20", "s21"],
+    "text": "Rising LPT outlet temperature (s4) with changes in HPT coolant bleed (s20) and LPT coolant bleed (s21) suggests low pressure turbine blade degradation. This may be caused by thermal fatigue or hot corrosion. Recommended action: borescope inspection of LPT stages, measure blade tip clearances."
+  },
+  {
+    "id": "MAN-LPT-02",
+    "fault_mode": "turbine cooling system degradation",
+    "components": ["LPT", "HPT", "cooling"],
+    "sensor_cues": ["s4", "s17", "s20", "s21"],
+    "text": "Abnormal patterns in HPT coolant bleed (s20) and LPT coolant bleed (s21) combined with rising turbine outlet temperature (s4) and changes in bleed enthalpy (s17) indicate turbine cooling system degradation. Blocked cooling passages or damaged seals reduce cooling effectiveness. Recommended action: inspect cooling air passages and replace damaged seals."
+  },
+  {
+    "id": "MAN-COMB-01",
+    "fault_mode": "combustor degradation",
+    "components": ["combustor"],
+    "sensor_cues": ["s3", "s4", "s12", "s17"],
+    "text": "Increasing fuel flow ratio (s12) with disproportionate rises in HPC outlet temperature (s3) and LPT outlet temperature (s4), accompanied by changes in bleed enthalpy (s17), suggests combustor liner degradation or fuel nozzle coking. Recommended action: combustor visual inspection, fuel nozzle flow check, and liner inspection for hot spots or cracking."
+  },
+  {
+    "id": "MAN-SEN-01",
+    "fault_mode": "sensor fault",
+    "components": ["sensor"],
+    "sensor_cues": [],
+    "text": "A single channel showing step changes, flat-lining, or extreme spikes while correlated channels remain nominal indicates a sensor fault rather than mechanical degradation. The key diagnostic is disagreement between sensors that normally correlate. Recommended action: replace sensor module and validate harness continuity before trusting the reading."
+  },
+  {
+    "id": "MAN-SEN-02",
+    "fault_mode": "sensor drift",
+    "components": ["sensor"],
+    "sensor_cues": [],
+    "text": "Gradual divergence of a single sensor reading from its expected correlation with related sensors suggests sensor drift rather than component degradation. Unlike mechanical degradation which affects multiple correlated sensors simultaneously, sensor drift affects only one channel. Recommended action: recalibrate or replace the drifting sensor, cross-reference with redundant measurements."
+  },
+  {
+    "id": "MAN-SEN-03",
+    "fault_mode": "sensor intermittent fault",
+    "components": ["sensor", "wiring"],
+    "sensor_cues": [],
+    "text": "Intermittent dropouts or noise spikes on a sensor channel that resolve and return to normal suggest wiring or connector issues rather than sensor element failure. These often correlate with vibration or thermal cycling. Recommended action: inspect wiring harness and connectors for chafing, loose pins, or corrosion. Perform continuity test under vibration."
+  },
+  {
+    "id": "MAN-MULTI-01",
+    "fault_mode": "multiple fault interaction",
+    "components": ["HPC", "Fan"],
+    "sensor_cues": ["s3", "s8", "s11", "s13", "s15"],
+    "text": "When both HPC temperature indicators (s3, s11) and fan performance indicators (s8, s13, s15) show simultaneous degradation trends, this may indicate coupled failure modes where fan degradation increases HPC loading. Recommended action: inspect both fan and HPC stages, as fixing only one may not resolve the combined degradation pattern."
+  },
+  {
+    "id": "MAN-MULTI-02",
+    "fault_mode": "operating regime effect",
+    "components": ["engine"],
+    "sensor_cues": ["s2", "s3", "s7", "s9"],
+    "text": "In multi-condition operation (varying altitude, Mach number, throttle), sensor readings shift between operating regimes. Regime-dependent normalization is required before comparing readings to baseline values. A reading that appears anomalous in one regime may be normal in another. Always normalize by operating condition before triggering alerts."
+  },
+  {
+    "id": "MAN-PERF-01",
+    "fault_mode": "overall engine performance degradation",
+    "components": ["engine"],
+    "sensor_cues": ["s3", "s9", "s12", "s14"],
+    "text": "Simultaneous drift across multiple engine performance parameters — rising fuel flow ratio (s12), dropping corrected core speed (s14), rising HPC outlet temperature (s3), and changes in physical core speed (s9) — indicates overall engine performance degradation. This represents cumulative wear across multiple components. Recommended action: comprehensive engine health review and scheduled overhaul assessment."
+  },
+  {
+    "id": "MAN-PERF-02",
+    "fault_mode": "efficiency loss",
+    "components": ["engine", "HPC"],
+    "sensor_cues": ["s7", "s11", "s12", "s14"],
+    "text": "Declining HPC outlet pressure (s7) and static HPC pressure (s11) with increasing fuel flow ratio (s12) and decreasing corrected core speed (s14) indicates progressive efficiency loss. The engine requires more fuel to maintain the same power output. Recommended action: plan scheduled maintenance based on RUL estimate, monitor rate of degradation."
+  },
+  {
+    "id": "MAN-BLEED-01",
+    "fault_mode": "bleed system fault",
+    "components": ["bleed", "valve"],
+    "sensor_cues": ["s17", "s20", "s21"],
+    "text": "Abnormal bleed enthalpy (s17) combined with erratic HPT coolant bleed (s20) and LPT coolant bleed (s21) values suggests a bleed system fault. This may be a stuck bleed valve or a leak in the bleed air ducting. Recommended action: inspect bleed valve operation and bleed air duct integrity, check for signs of air leaks."
+  },
+  {
+    "id": "MAN-TWF-01",
+    "fault_mode": "tool wear failure",
+    "components": ["tool", "cutting"],
+    "sensor_cues": ["tool_wear"],
+    "text": "Tool wear failure (TWF) occurs when the cumulative tool wear time exceeds the manufacturer's rated tool life. The tool fails due to progressive material removal from the cutting edge. Risk increases sharply after 200 minutes of wear time. Recommended action: replace tool at scheduled intervals before rated life is exceeded, inspect workpiece for quality defects."
+  },
+  {
+    "id": "MAN-HDF-01",
+    "fault_mode": "heat dissipation failure",
+    "components": ["cooling", "process"],
+    "sensor_cues": ["air_temperature", "process_temperature"],
+    "text": "Heat dissipation failure (HDF) occurs when the temperature difference between the process and ambient air is insufficient for adequate cooling. When the temperature differential drops below the critical threshold while rotational speed is low, heat buildup leads to failure. Recommended action: verify cooling system operation, clean heat exchangers, ensure adequate airflow."
+  },
+  {
+    "id": "MAN-PWF-01",
+    "fault_mode": "power failure",
+    "components": ["motor", "drive"],
+    "sensor_cues": ["rotational_speed", "torque"],
+    "text": "Power failure (PWF) occurs when the product of rotational speed and torque falls outside the acceptable operating envelope (below 3500W or above 9000W). Underpowered operation causes insufficient cutting force while overpowered operation causes excessive stress. Recommended action: inspect motor drive system, verify power supply stability, check belt tension and coupling alignment."
+  },
+  {
+    "id": "MAN-OSF-01",
+    "fault_mode": "overstrain failure",
+    "components": ["tool", "workpiece"],
+    "sensor_cues": ["torque", "tool_wear"],
+    "text": "Overstrain failure (OSF) occurs when the product of tool wear and torque exceeds the material-specific strain threshold. As tools wear, more force is needed to maintain cutting, creating a compounding failure risk. Recommended action: replace worn tools before overstrain threshold is reached, reduce feed rate if torque is excessive."
+  },
+  {
+    "id": "MAN-RNF-01",
+    "fault_mode": "random failure",
+    "components": [],
+    "sensor_cues": [],
+    "text": "Random failures (RNF) occur independently of identifiable process parameters and represent approximately 0.2% of all failures. These include manufacturing defects, material inclusions, or unforeseen environmental factors. No specific sensor pattern precedes these failures. Recommended action: maintain general inspection protocols, document failure for root cause analysis."
+  },
+  {
+    "id": "MAN-TWF-02",
+    "fault_mode": "tool wear failure",
+    "components": ["tool", "cutting", "spindle"],
+    "sensor_cues": ["tool_wear", "torque"],
+    "text": "Tool wear failure (TWF) secondary symptoms: chatter marks, workpiece surface finish deterioration, and increase in spindle torque. Spindle rotational speed fluctuations under load can indicate cutting edge chipping. Recommended action: inspect workpiece surface quality, check cutting edge for micro-chipping, and recalibrate tool offsets."
+  },
+  {
+    "id": "MAN-HDF-02",
+    "fault_mode": "heat dissipation failure",
+    "components": ["cooling", "process", "bearing"],
+    "sensor_cues": ["air_temperature", "process_temperature", "rotational_speed"],
+    "text": "Heat dissipation failure (HDF) secondary symptoms: ambient temperature peaks combined with heavy duty operation cycle, causing the difference between process and air temperature to fall below 8 Kelvin. Spindle bearing temperature may spike. Recommended action: halt process, check coolant fluid level and pump pressure, and blow out heat exchanger fins."
+  },
+  {
+    "id": "MAN-PWF-02",
+    "fault_mode": "power failure",
+    "components": ["motor", "drive", "belt"],
+    "sensor_cues": ["rotational_speed", "torque"],
+    "text": "Power failure (PWF) secondary symptoms: high mechanical resistance during high-feed milling cycles, causing power draw to spike beyond 9000W, or motor drive under-voltage causing it to drop below 3500W. Recommended action: check spindle drive belt tension, verify motor controller parameters, and inspect power rails for transient voltage drops."
+  },
+  {
+    "id": "MAN-OSF-02",
+    "fault_mode": "overstrain failure",
+    "components": ["tool", "workpiece", "controller"],
+    "sensor_cues": ["torque", "tool_wear"],
+    "text": "Overstrain failure (OSF) secondary symptoms: milling tough alloys with high tool wear state, leading to axial force spikes and deflection. Compounding load causes tool fracture. Recommended action: immediately reduce program feed override, check tool wear level, and verify that material hardness matches feed parameters."
+  },
+  {
+    "id": "MAN-GUIDE-01",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "General maintenance guidance: confirm trends across multiple correlated sensors over at least five cycles before escalating. Prefer the least intrusive inspection that can confirm the suspected fault mode. Always verify that sensor anomalies are not caused by operating regime changes before attributing them to component degradation."
+  },
+  {
+    "id": "MAN-GUIDE-02",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "When multiple fault hypotheses are possible, prioritize by severity: compressor stall and bearing failure are critical and require immediate action, while gradual degradation modes (efficiency loss, blade erosion) can be scheduled during planned maintenance windows. Always err on the side of safety for critical failure modes."
+  },
+  {
+    "id": "MAN-GUIDE-03",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "RUL estimation should be interpreted as a planning tool, not an exact prediction. Always apply a safety margin: if the model predicts 30 cycles remaining, plan maintenance within the next 20 cycles. Early predictions (overestimating RUL) carry lower risk than late predictions (underestimating RUL) because late predictions may result in unplanned failure."
+  },
+  {
+    "id": "MAN-GUIDE-04",
+    "fault_mode": "general",
+    "components": ["HPC", "Fan", "LPT"],
+    "sensor_cues": ["s2", "s3", "s4", "s7", "s8", "s9", "s11", "s12", "s13", "s14", "s15", "s17", "s20", "s21"],
+    "text": "The 14 informative sensors for degradation monitoring are: s2 (LPC outlet temp), s3 (HPC outlet temp), s4 (LPT outlet temp), s7 (HPC outlet pressure), s8 (fan speed), s9 (core speed), s11 (static HPC pressure), s12 (fuel flow ratio), s13 (corrected fan speed), s14 (corrected core speed), s15 (bypass ratio), s17 (bleed enthalpy), s20 (HPT coolant bleed), s21 (LPT coolant bleed). Sensors s1, s5, s6, s10, s16, s18, s19 are near-constant and can be excluded from anomaly analysis."
+  },
+  {
+    "id": "MAN-GUIDE-05",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "For work order drafting: every work order must include the suspected fault mode, affected component, evidence (which sensors triggered the alert and their trend direction), recommended inspection or repair procedure, required parts and tools, estimated duration, and safety precautions. Work orders missing any of these elements should be rejected and regenerated."
+  },
+  {
+    "id": "MAN-GUIDE-06",
+    "fault_mode": "general",
+    "components": ["tool", "spindle", "cooling", "motor"],
+    "sensor_cues": ["air_temperature", "process_temperature", "rotational_speed", "torque", "tool_wear"],
+    "text": "AI4I Milling Machine Diagnostic Guide: AI4I operates on 5 process variables: air temperature, process temperature, rotational speed, torque, and tool wear. TWF is driven purely by tool wear time. HDF is driven by process-to-air delta. PWF is driven by the speed-torque power product. OSF is driven by combined torque and tool wear. RNF is random and has no sensor cues. Always cross-reference the machine alert with these variable combinations before starting a repair."
+  }
+]
