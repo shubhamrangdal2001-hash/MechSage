@@ -632,6 +632,20 @@ class TestAssetScopedFiltering:
         chunks_guide = chunk_entry(entry_guide)
         assert chunks_guide[0].asset_type == "general"
 
+        # Test Ironside entries via prefix
+        entry_ism = {"id": "ISM-CNC-001", "fault_mode": "bearing", "text": "CNC spindle bearing wear."}
+        chunks_ism = chunk_entry(entry_ism)
+        assert chunks_ism[0].asset_type == "ironside"
+
+        entry_sop = {"id": "SOP-PM-001", "fault_mode": "general", "text": "Bearing replacement SOP."}
+        chunks_sop = chunk_entry(entry_sop)
+        assert chunks_sop[0].asset_type == "ironside"
+
+        # Test Ironside entry via explicit metadata field
+        entry_explicit = {"id": "TEST-EXPL-01", "fault_mode": "general", "text": "Explicit test.", "asset_type": "ironside"}
+        chunks_explicit = chunk_entry(entry_explicit)
+        assert chunks_explicit[0].asset_type == "ironside"
+
     @patch("dev.rag.rag_pipeline.get_pipeline")
     def test_manual_retrieval_rag_derives_correct_filters(self, mock_get_pipeline):
         from dev.rag.rag_pipeline import manual_retrieval_rag
@@ -657,6 +671,25 @@ class TestAssetScopedFiltering:
             fault_hypothesis="",
             top_k=3,
             asset_filter="milling_machine"
+        )
+
+        # Test Ironside asset ID mapping to ironside filter
+        manual_retrieval_rag("query text", asset_id="ISM-CNC-001")
+        mock_pipeline_instance.search.assert_called_with(
+            query="query text",
+            degrading_sensors=None,
+            fault_hypothesis="",
+            top_k=3,
+            asset_filter="ironside"
+        )
+
+        manual_retrieval_rag("query text", asset_id="wo-2025-0012")
+        mock_pipeline_instance.search.assert_called_with(
+            query="query text",
+            degrading_sensors=None,
+            fault_hypothesis="",
+            top_k=3,
+            asset_filter="ironside"
         )
         
         # Test missing / generic asset ID does not apply filters

@@ -67,8 +67,14 @@ def chunk_entry(entry: dict) -> list[Chunk]:
     components = entry.get("components", [])
     sensor_cues = entry.get("sensor_cues", [])
 
-    # Determine asset_type based on entry_id prefix
-    if entry_id.startswith("MAN-GUIDE"):
+    # Determine asset_type based on entry_id prefix or explicit field
+    _IRONSIDE_PREFIXES = (
+        "ISM-", "SOP-", "ANOMALY-", "WO-", "RUL-", "HIST-", "SPARE-",
+    )
+    explicit_type = entry.get("asset_type", "")
+    if explicit_type == "ironside" or entry_id.startswith(_IRONSIDE_PREFIXES):
+        asset_type = "ironside"
+    elif entry_id.startswith("MAN-GUIDE"):
         asset_type = "general"
     elif entry_id.startswith(("MAN-TWF", "MAN-HDF", "MAN-PWF", "MAN-OSF", "MAN-RNF")):
         asset_type = "milling_machine"

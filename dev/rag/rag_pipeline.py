@@ -217,10 +217,19 @@ def manual_retrieval_rag(
     asset_filter = None
     if asset_id:
         asset_id_lower = asset_id.lower()
-        if "engine" in asset_id_lower or "unit" in asset_id_lower or "fd0" in asset_id_lower:
+        # Ironside Manufacturing machine IDs take priority
+        if any(kw in asset_id_lower for kw in (
+            "ism", "cnc", "hyd", "gbx", "cmr", "cvy", "ironside", "wo-"
+        )):
+            asset_filter = "ironside"
+            logger.info(
+                f"[manual_retrieval_rag] Scoping search to 'ironside' documents "
+                f"based on asset_id '{asset_id}'"
+            )
+        elif any(kw in asset_id_lower for kw in ("engine", "unit", "fd0")):
             asset_filter = "turbofan"
             logger.info(f"[manual_retrieval_rag] Scoping search to 'turbofan' documents based on asset_id '{asset_id}'")
-        elif "machine" in asset_id_lower or "milling" in asset_id_lower or "tool" in asset_id_lower:
+        elif any(kw in asset_id_lower for kw in ("machine", "milling", "tool")):
             asset_filter = "milling_machine"
             logger.info(f"[manual_retrieval_rag] Scoping search to 'milling_machine' documents based on asset_id '{asset_id}'")
         else:
