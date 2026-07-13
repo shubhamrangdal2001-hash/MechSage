@@ -37,8 +37,6 @@
 | ROC-AUC | — |
 | PR-AUC | — |
 | Balanced Accuracy | 0.0000 |
-| MCC | 0.0000 |
-| Cohen's Kappa | 0.0000 |
 
 | | Pred: Normal | Pred: Anomaly |
 |---|---|---|
@@ -63,8 +61,6 @@
 | ROC-AUC | 0.9674 |
 | PR-AUC | 0.5548 |
 | Balanced Accuracy | 0.7074 |
-| MCC | 0.5094 |
-| Cohen's Kappa | 0.4946 |
 | FPR | 0.0111 |
 | FNR | 0.5741 |
 
@@ -89,8 +85,6 @@
 | ROC-AUC | 0.9946 |
 | PR-AUC | 0.2650 |
 | Balanced Accuracy | 0.5000 |
-| MCC | 0.0000 |
-| Cohen's Kappa | 0.0000 |
 | FPR | 0.0000 |
 | FNR | 1.0000 |
 
@@ -117,8 +111,6 @@
 | ROC-AUC | 0.8863 |
 | PR-AUC | 0.6330 |
 | Balanced Accuracy | 0.8207 |
-| MCC | 0.5788 |
-| Cohen's Kappa | 0.5686 |
 | FPR | 0.0124 |
 | FNR | 0.3462 |
 
