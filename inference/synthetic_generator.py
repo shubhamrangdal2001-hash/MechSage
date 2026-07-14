@@ -116,12 +116,12 @@ class SyntheticEngine:
 
         # Operational settings
         for col, (val, noise) in OP_SETTING_PROFILES.items():
-            row[col] = val + self._rng.normal(0, noise)
+            row[col] = self._rng.normal(loc=val, scale=noise)
 
         # Sensor readings — interpolate from nominal to failure value
         for sensor, (nominal, failure, noise_std) in SENSOR_PROFILES.items():
             base = nominal + deg * (failure - nominal)
-            row[sensor] = base + self._rng.normal(0, noise_std)
+            row[sensor] = self._rng.normal(loc=base, scale=noise_std)
 
         return pd.Series(row)
 

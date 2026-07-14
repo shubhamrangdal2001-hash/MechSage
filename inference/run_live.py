@@ -177,7 +177,7 @@ def run(args: argparse.Namespace) -> None:
                 )
 
                 # Format payload
-                payload = build_payload(prediction)
+                payload = build_payload(prediction, raw_row)
                 all_payloads.append(payload)
 
                 # Console row
@@ -187,7 +187,7 @@ def run(args: argparse.Namespace) -> None:
                     agent_trigger_count += 1
 
                 # Append flat row to CSV buffer
-                csv_rows.append({
+                csv_row = {
                     "timestamp":        payload["timestamp"],
                     "machine_id":       payload["machine_id"],
                     "dataset_variant":  payload["dataset_variant"],
@@ -200,7 +200,13 @@ def run(args: argparse.Namespace) -> None:
                     "anomaly_alert":    payload["anomaly"]["alert"],
                     "anomaly_severity": payload["anomaly"]["severity"],
                     "trigger_agent":    payload["trigger_agent"],
-                })
+                }
+                
+                # Add raw features for data drift
+                for k, v in payload["raw_features"].items():
+                    csv_row[k] = v
+                    
+                csv_rows.append(csv_row)
 
                 # Write to JSONL log if enabled
                 if log_file:

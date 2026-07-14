@@ -938,3 +938,275 @@ Traceback (most recent call last):
     ...<5 lines>...
     )
 mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['xgboost.core.Booster', 'xgboost.sklearn.XGBRegressor'].
+2026-07-06 17:48:41,012 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 17:48:41,313 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 17:48:42,844 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 113 numeric columns
+2026-07-06 17:48:42,844 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 123 numeric columns
+2026-07-06 17:48:42,844 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 125 numeric columns
+2026-07-06 17:48:42,844 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 17:48:42,883 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 17:48:42,883 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 17:49:08,238 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-07-06 17:49:18,841 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 17:49:28,454 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-07-06 17:49:29,989 | ERROR | mechsage.main | Unexpected pipeline failure
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 683, in _save_model
+    skops.io.load(output_path, trusted=skops_trusted_types)
+    ~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_persist.py", line 151, in load
+    audit_tree(tree, trusted=trusted)
+    ~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\skops\io\_audit.py", line 60, in audit_tree
+    raise UntrustedTypesFoundException(unsafe)
+skops.io.exceptions.UntrustedTypesFoundException: Untrusted types found in the file: ['collections.OrderedDict', 'lightgbm.basic.Booster', 'lightgbm.sklearn.LGBMClassifier'].
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\main.py", line 96, in main
+    result = run_pipeline(args)
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 1123, in run_pipeline
+    rows.append(train_anomaly_model(model_name, data, dirs, context, args.seed))
+                ~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\pipeline.py", line 540, in train_anomaly_model
+    log_info = log_model_run(
+        model=model,
+    ...<7 lines>...
+        tags={"profile": dataset_context.get("profile", "unknown")},
+    )
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\src\mlflow_tracking.py", line 165, in log_model_run
+    mlflow.sklearn.log_model(model, artifact_path="model")
+    ~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 478, in log_model
+    return Model.log(
+           ~~~~~~~~~^
+        artifact_path=artifact_path,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<21 lines>...
+        **kwargs,
+        ^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\models\model.py", line 1218, in log
+    flavor.save_model(path=local_path, mlflow_model=mlflow_model, **kwargs)
+    ~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 301, in save_model
+    _save_model(
+    ~~~~~~~~~~~^
+        sk_model=sk_model,
+        ^^^^^^^^^^^^^^^^^^
+    ...<2 lines>...
+        skops_trusted_types=skops_trusted_types,
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\.venv\Lib\site-packages\mlflow\sklearn\__init__.py", line 686, in _save_model
+    raise MlflowException(
+    ...<5 lines>...
+    )
+mlflow.exceptions.MlflowException: The saved sklearn model references untrusted types. If you are sure loading these types is safe, set the 'skops_trusted_types' parameter when calling 'log_model' or 'save_model' to the list of trusted types. Root error: Untrusted types found in the file: ['collections.OrderedDict', 'lightgbm.basic.Booster', 'lightgbm.sklearn.LGBMClassifier'].
+2026-07-06 17:54:20,716 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 17:54:20,739 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 17:54:21,714 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 113 numeric columns
+2026-07-06 17:54:21,714 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 123 numeric columns
+2026-07-06 17:54:21,714 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 125 numeric columns
+2026-07-06 17:54:21,714 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 17:54:21,716 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 17:54:21,716 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 17:54:27,579 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-07-06 17:54:33,055 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 17:54:36,914 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-07-06 17:54:47,868 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 17:54:47,886 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: RandomForest (RandomForestRegressor)
+2026-07-06 17:54:49,220 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 17:54:52,652 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 17:54:52,654 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: LightGBM_Anomaly (LGBMClassifier)
+2026-07-06 17:54:53,967 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 17:54:57,664 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 17:54:57,664 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:54:57,664 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 17:54:57,664 | INFO | mechsage.main | Best RUL model: RandomForest | test RMSE=23.3381
+2026-07-06 17:54:57,664 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.0000
+2026-07-06 17:54:57,664 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:54:57,664 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-07-06 17:54:57,664 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 17:54:57,664 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 17:55:40,373 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 17:55:40,390 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 17:55:41,149 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 116 numeric columns
+2026-07-06 17:55:41,149 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-07-06 17:55:41,150 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 119 numeric columns
+2026-07-06 17:55:41,150 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 17:55:41,173 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 17:55:41,173 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 17:55:47,431 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-07-06 17:55:51,284 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 17:55:54,948 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 17:55:54,949 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 17:55:56,141 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 17:55:58,886 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 17:55:58,887 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: IsolationForest (IsolationForest)
+2026-07-06 17:56:01,176 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 17:56:04,105 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 17:56:04,105 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:56:04,105 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 17:56:04,105 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=34.5906
+2026-07-06 17:56:04,105 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-07-06 17:56:04,105 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:56:04,106 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-07-06 17:56:04,106 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 17:56:04,106 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 17:57:44,445 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 17:57:44,460 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 17:57:45,167 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 116 numeric columns
+2026-07-06 17:57:45,167 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-07-06 17:57:45,167 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 119 numeric columns
+2026-07-06 17:57:45,167 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 17:57:45,168 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 17:57:45,169 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 17:57:49,993 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-07-06 17:57:53,905 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 17:57:57,633 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 17:57:57,634 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 17:57:58,801 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 17:58:01,704 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 17:58:01,706 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: IsolationForest (IsolationForest)
+2026-07-06 17:58:04,033 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 17:58:06,878 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 17:58:06,878 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:58:06,878 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 17:58:06,878 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=34.5906
+2026-07-06 17:58:06,878 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-07-06 17:58:06,878 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 17:58:06,878 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-07-06 17:58:06,878 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 17:58:06,878 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 18:00:02,768 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 18:00:02,784 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 18:00:03,513 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 116 numeric columns
+2026-07-06 18:00:03,513 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-07-06 18:00:03,513 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 119 numeric columns
+2026-07-06 18:00:03,513 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 18:00:03,515 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 18:00:03,515 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 18:00:09,090 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-07-06 18:00:13,249 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 18:00:17,166 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 18:00:17,167 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 18:00:18,361 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 18:00:21,195 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 18:00:21,196 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: IsolationForest (IsolationForest)
+2026-07-06 18:00:23,468 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 18:00:26,484 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 18:00:26,484 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 18:00:26,484 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 18:00:26,484 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=34.5906
+2026-07-06 18:00:26,484 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-07-06 18:00:26,484 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 18:00:26,484 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-07-06 18:00:26,484 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 18:00:26,484 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 18:14:31,232 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 18:14:31,619 | INFO | mechsage.pipeline | Preparing data for dataset FD002
+2026-07-06 18:14:33,463 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 103 numeric columns
+2026-07-06 18:14:33,463 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 100 numeric columns
+2026-07-06 18:14:33,463 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 104 numeric columns
+2026-07-06 18:14:33,463 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD002.json
+2026-07-06 18:14:33,557 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD002.csv
+2026-07-06 18:14:33,557 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 18:14:55,402 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-07-06 18:15:01,930 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 18:15:06,882 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-07-06 18:15:20,586 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 18:15:20,610 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 18:15:21,851 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 18:15:25,371 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 18:15:25,373 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: LightGBM_Anomaly (LGBMClassifier)
+2026-07-06 18:15:26,613 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 18:15:29,940 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 18:15:29,940 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD002.csv
+2026-07-06 18:15:29,940 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 18:15:29,940 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=27.1321
+2026-07-06 18:15:29,940 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.5169
+2026-07-06 18:15:29,940 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD002.csv
+2026-07-06 18:15:29,940 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD002.md
+2026-07-06 18:15:29,940 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 18:15:29,940 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 18:15:41,211 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 18:15:41,244 | INFO | mechsage.pipeline | Preparing data for dataset FD003
+2026-07-06 18:15:43,086 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 102 numeric columns
+2026-07-06 18:15:43,087 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 115 numeric columns
+2026-07-06 18:15:43,087 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 98 numeric columns
+2026-07-06 18:15:43,087 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD003.json
+2026-07-06 18:15:43,130 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD003.csv
+2026-07-06 18:15:43,130 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 18:15:52,347 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-07-06 18:15:59,082 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 18:16:03,769 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-07-06 18:16:17,260 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 18:16:17,288 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 18:16:18,681 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 18:16:22,246 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 18:16:22,248 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: IsolationForest (IsolationForest)
+2026-07-06 18:16:24,641 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 18:16:28,004 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 18:16:28,004 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD003.csv
+2026-07-06 18:16:28,004 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 18:16:28,004 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=16.1727
+2026-07-06 18:16:28,004 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-07-06 18:16:28,004 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD003.csv
+2026-07-06 18:16:28,004 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD003.md
+2026-07-06 18:16:28,004 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 18:16:28,004 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 18:16:38,171 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 18:16:38,345 | INFO | mechsage.pipeline | Preparing data for dataset FD004
+2026-07-06 18:16:39,910 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 103 numeric columns
+2026-07-06 18:16:39,910 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 104 numeric columns
+2026-07-06 18:16:39,911 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 101 numeric columns
+2026-07-06 18:16:39,911 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD004.json
+2026-07-06 18:16:39,935 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD004.csv
+2026-07-06 18:16:39,936 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 18:16:46,188 | INFO | mechsage.pipeline | Training RUL model: RandomForest
+2026-07-06 18:16:51,718 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 18:16:55,931 | INFO | mechsage.pipeline | Training anomaly model: LightGBM_Anomaly
+2026-07-06 18:17:01,820 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 18:17:01,821 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 18:17:03,439 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 18:17:06,850 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 18:17:06,852 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: LightGBM_Anomaly (LGBMClassifier)
+2026-07-06 18:17:08,195 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 18:17:12,328 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 18:17:12,328 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD004.csv
+2026-07-06 18:17:12,328 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 18:17:12,328 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=18.3613
+2026-07-06 18:17:12,329 | INFO | mechsage.main | Best anomaly model: LightGBM_Anomaly | test F1=0.5862
+2026-07-06 18:17:12,329 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD004.csv
+2026-07-06 18:17:12,329 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD004.md
+2026-07-06 18:17:12,329 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 18:17:12,329 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000
+2026-07-06 18:23:27,370 | INFO | mechsage.main | Logging initialized: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\logs\pipeline.log
+2026-07-06 18:23:27,656 | INFO | mechsage.pipeline | Preparing data for dataset FD001
+2026-07-06 18:23:28,841 | WARNING | mechsage.pipeline | Data validation warning [train]: IQR outliers detected in 116 numeric columns
+2026-07-06 18:23:28,841 | WARNING | mechsage.pipeline | Data validation warning [validation]: IQR outliers detected in 114 numeric columns
+2026-07-06 18:23:28,841 | WARNING | mechsage.pipeline | Data validation warning [test]: IQR outliers detected in 119 numeric columns
+2026-07-06 18:23:28,841 | INFO | mechsage.pipeline | Data validation report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\data_validation_FD001.json
+2026-07-06 18:23:28,888 | INFO | mechsage.pipeline | Split manifest saved: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\artifacts\split_manifest_FD001.csv
+2026-07-06 18:23:28,889 | INFO | mechsage.pipeline | Training RUL model: LinearRegression
+2026-07-06 18:23:45,235 | INFO | mechsage.pipeline | Running hyperparameter tuning methods: optuna
+2026-07-06 18:23:51,441 | INFO | mechsage.pipeline | Training anomaly model: IsolationForest
+2026-07-06 18:24:06,352 | INFO | mechsage.pipeline | Generating SHAP explanations for best rul model...
+2026-07-06 18:24:06,394 | INFO | mechsage.shap_explain | Initializing LinearExplainer for model: LinearRegression (LinearRegression)
+2026-07-06 18:24:07,966 | INFO | mechsage.pipeline | SHAP explanations generated for best rul model.
+2026-07-06 18:24:16,988 | INFO | mechsage.pipeline | Generating SHAP explanations for best anomaly model...
+2026-07-06 18:24:16,990 | INFO | mechsage.shap_explain | Initializing TreeExplainer for model: IsolationForest (IsolationForest)
+2026-07-06 18:24:20,414 | INFO | mechsage.pipeline | SHAP explanations generated for best anomaly model.
+2026-07-06 18:24:25,471 | INFO | mechsage.pipeline | Pipeline complete.
+2026-07-06 18:24:25,471 | INFO | mechsage.pipeline | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 18:24:25,471 | INFO | mechsage.main | Pipeline complete.
+2026-07-06 18:24:25,471 | INFO | mechsage.main | Best RUL model: LinearRegression | test RMSE=34.5906
+2026-07-06 18:24:25,471 | INFO | mechsage.main | Best anomaly model: IsolationForest | test F1=0.0000
+2026-07-06 18:24:25,471 | INFO | mechsage.main | Comparison table: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\model_comparison_FD001.csv
+2026-07-06 18:24:25,472 | INFO | mechsage.main | Final report: D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\reports\final_report_FD001.md
+2026-07-06 18:24:25,472 | INFO | mechsage.main | View MLflow with: mlflow ui --backend-store-uri ./mlruns
+2026-07-06 18:24:25,472 | INFO | mechsage.main | MLflow URL: http://127.0.0.1:5000

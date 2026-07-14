@@ -59,13 +59,14 @@ _ANOMALY_INSTRUCTIONS: dict[str, str] = {
 }
 
 
-def build_payload(prediction: dict, timestamp: datetime | None = None) -> dict:
+def build_payload(prediction: dict, raw_row: pd.Series, timestamp: datetime | None = None) -> dict:
     """
     Convert a raw prediction dict (from predictor.predict_cycle) into a
     structured, agent-ready JSON payload.
 
     Args:
         prediction: Output dict from predictor.predict_cycle().
+        raw_row:    The raw sensor values for this cycle.
         timestamp:  Override timestamp (default: UTC now).
 
     Returns:
@@ -83,6 +84,13 @@ def build_payload(prediction: dict, timestamp: datetime | None = None) -> dict:
         instructions.append(anomaly_instr)
     if not instructions:
         instructions.append("System nominal. No agent action required.")
+
+    # Extract just the sensors/op settings for data drift monitoring
+    raw_dict = {}
+    if raw_row is not None:
+        for k, v in raw_row.items():
+            if k not in ("unit_number", "time_in_cycles"):
+                raw_dict[k] = float(v)
 
     payload = {
         "timestamp": ts.isoformat(),
@@ -104,6 +112,7 @@ def build_payload(prediction: dict, timestamp: datetime | None = None) -> dict:
         },
         "trigger_agent": prediction["trigger_agent"],
         "agent_instruction": " | ".join(instructions),
+        "raw_features": raw_dict,
     }
     return payload
 
