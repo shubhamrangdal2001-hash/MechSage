@@ -31,3 +31,7 @@ dev/rag/chroma_db/
 
 # RAG report outputs (generated artifacts)
 dev/rag/reports/
+
+# Environment variables / secrets — never commit API keys!
+.env
+*.env

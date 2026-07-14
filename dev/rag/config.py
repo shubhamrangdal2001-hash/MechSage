@@ -36,6 +36,10 @@ class RAGConfig:
     openai_embedding_model: str = "text-embedding-3-small"
     embedding_dimension: int = 384  # 384 for MiniLM, 1536 for OpenAI
 
+    # --- Sprint 2: LLM Generation (Gemini Flash) ---
+    llm_provider: str = "gemini"  # Currently only "gemini" is supported
+    gemini_model: str = "gemini-3.1-flash-lite"  # Free-tier model; change to gemini-pro-latest for higher quality
+
     # --- ChromaDB / HNSW ---
     collection_name: str = "mechsage_manuals"
     hnsw_m: int = 16
