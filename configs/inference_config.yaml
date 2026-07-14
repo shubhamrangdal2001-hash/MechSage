@@ -1,0 +1,32 @@
+# inference_config.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# MechSage Live Inference Configuration
+# Applies to: inference/run_live.py
+# ─────────────────────────────────────────────────────────────────────────────
+
+simulation:
+  datasets:           ["FD001", "FD002", "FD003", "FD004"]
+  max_engine_cycles:  200          # Total lifespan per synthetic engine
+  warmup_cycles:      20           # Cycles before rolling features stabilise
+  seed:               42
+
+thresholds:
+  rul:
+    alert_cycles:     30           # RUL < 30  → CRITICAL
+    emergency_cycles: 5            # RUL < 5   → EMERGENCY
+  anomaly:
+    FD001:            0.5449       # IsolationForest — validation-tuned
+    FD002:            0.9209       # LightGBM        — validation-tuned
+    FD003:            0.6484       # IsolationForest — validation-tuned
+    FD004:            0.5152       # LightGBM        — validation-tuned
+
+models:
+  serve_dir:   "serve_models/"
+  rul_prefix:    "RUL"
+  anomaly_prefix: "Anomaly"
+  extension:   ".joblib"
+
+display:
+  sleep_seconds: 0.2              # Pause between cycles (set 0 for --fast mode)
+  save_log:      false
+  log_dir:       "inference/logs/"
