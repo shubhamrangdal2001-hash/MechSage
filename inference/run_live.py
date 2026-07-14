@@ -18,6 +18,7 @@ Output files (when --save-log):
 from __future__ import annotations
 
 import argparse
+import csv
 import json
 import sys
 import time
@@ -80,7 +81,7 @@ def parse_args() -> argparse.Namespace:
 
 def print_header() -> None:
     print("\n" + "=" * 80)
-    print("  MechSage — Simultaneous Live Inference Dashboard")
+    print("  MechSage - Simultaneous Live Inference Dashboard")
     print("  Engines: SIM-FD001 | SIM-FD002 | SIM-FD003 | SIM-FD004")
     print("  Models:  LinearRegression (RUL) | LightGBM / IsolationForest (Anomaly)")
     print("=" * 80)
@@ -90,7 +91,7 @@ def print_header() -> None:
 
 
 def print_cycle_block(cycle: int, rows: list[str]) -> None:
-    print(f"\n  ── Cycle {cycle} ──────────────────────────────────────────────────────────────")
+    print(f"\n  -- Cycle {cycle} " + "-" * 64)
     for row in rows:
         print(row)
 
@@ -115,16 +116,23 @@ def run(args: argparse.Namespace) -> None:
     )
     print("      4 engines ready.\n")
 
-    # Log file setup
+    # Output directory — always created
+    out_dir = _REPO_ROOT / "inference" / "logs"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    ts_str = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+    # CSV table — always saved (flat row per prediction)
+    csv_path = out_dir / f"live_results_{ts_str}.csv"
+    csv_rows: list[dict] = []
+
+    # JSONL log — only when --save-log
     log_file = None
     if args.save_log:
-        log_dir = _REPO_ROOT / "inference" / "logs"
-        log_dir.mkdir(parents=True, exist_ok=True)
-        ts_str = datetime.now().strftime("%Y%m%d_%H%M%S")
-        log_path = log_dir / f"live_inference_{ts_str}.jsonl"
+        log_path = out_dir / f"live_inference_{ts_str}.jsonl"
         log_file = open(log_path, "w", encoding="utf-8")
-        print(f"Logging payloads to: {log_path}\n")
+        print(f"JSONL log: {log_path}\n")
 
+    print(f"CSV table: {csv_path}\n")
     print_header()
 
     agent_trigger_count = 0
@@ -141,7 +149,7 @@ def run(args: argparse.Namespace) -> None:
                 # Skip if engine has already failed
                 if engine.is_failed:
                     cycle_rows.append(
-                        f"  [{ds} | cycle={cycle:>3}]  ⬛ ENGINE FAILED — simulation ended for this unit."
+                        f"  [{ds} | cycle={cycle:>3}]  [XX] ENGINE FAILED - simulation ended for this unit."
                     )
                     continue
 
@@ -154,7 +162,7 @@ def run(args: argparse.Namespace) -> None:
                 if feature_row is None:
                     # Still warming up
                     cycle_rows.append(
-                        f"  [{ds} | cycle={cycle:>3}]  ⏳ Warming up "
+                        f"  [{ds} | cycle={cycle:>3}]  [..] Warming up "
                         f"({builder.n_cycles}/{builder.warmup_cycles} cycles)..."
                     )
                     continue
@@ -178,7 +186,23 @@ def run(args: argparse.Namespace) -> None:
                 if payload["trigger_agent"]:
                     agent_trigger_count += 1
 
-                # Write to log
+                # Append flat row to CSV buffer
+                csv_rows.append({
+                    "timestamp":        payload["timestamp"],
+                    "machine_id":       payload["machine_id"],
+                    "dataset_variant":  payload["dataset_variant"],
+                    "cycle":            payload["cycle"],
+                    "rul_prediction":   payload["rul"]["prediction_cycles"],
+                    "rul_alert":        payload["rul"]["alert"],
+                    "rul_severity":     payload["rul"]["severity"],
+                    "anomaly_score":    payload["anomaly"]["score"],
+                    "anomaly_threshold":payload["anomaly"]["threshold"],
+                    "anomaly_alert":    payload["anomaly"]["alert"],
+                    "anomaly_severity": payload["anomaly"]["severity"],
+                    "trigger_agent":    payload["trigger_agent"],
+                })
+
+                # Write to JSONL log if enabled
                 if log_file:
                     log_file.write(to_json(payload, indent=None) + "\n")
 
@@ -195,12 +219,23 @@ def run(args: argparse.Namespace) -> None:
         if log_file:
             log_file.close()
 
+        # Write CSV table
+        if csv_rows:
+            fieldnames = list(csv_rows[0].keys())
+            with open(csv_path, "w", newline="", encoding="utf-8") as f:
+                writer = csv.DictWriter(f, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(csv_rows)
+            print(f"\n  CSV saved: {csv_path}  ({len(csv_rows)} rows)")
+
     # Summary
     print("\n" + "=" * 80)
     print(f"  Simulation complete.  Cycles run: {cycle}")
     print(f"  Agent triggers fired: {agent_trigger_count}")
-    if args.save_log and log_file:
-        print(f"  Log saved: {log_path}")
+    print(f"  CSV table rows saved: {len(csv_rows)}")
+    if args.save_log:
+        print(f"  JSONL log: {log_path}")
+    print(f"  CSV table:  {csv_path}")
     print("=" * 80 + "\n")
 
 

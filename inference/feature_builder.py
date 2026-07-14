@@ -161,6 +161,6 @@ def build_builders(
     for ds in datasets:
         print(f"  [{ds}] loading training data and fitting scaler...")
         builders[ds] = StreamingFeatureBuilder(dataset_id=ds)
-        print(f"  [{ds}] done — {len(builders[ds]._feature_cols)} feature columns")
+        print(f"  [{ds}] done - {len(builders[ds]._feature_cols)} feature columns")
     print("All scalers ready.\n")
     return builders
