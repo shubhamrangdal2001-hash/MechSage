@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 import yaml
 from pathlib import Path
 import sys
+from streamlit_autorefresh import st_autorefresh
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 if str(_REPO_ROOT) not in sys.path:
@@ -29,6 +30,9 @@ def load_config():
         return yaml.safe_load(f)
 
 CONFIG = load_config()
+
+# Auto-refresh every 5 seconds (5000 ms), limit to 10000 ticks to avoid infinite loops
+st_autorefresh(interval=5000, limit=10000, key="datarefresh")
 
 # ── Sidebar & Data Loading ────────────────────────────────────────────────────
 
@@ -57,38 +61,59 @@ if selected_machine != "All":
     df_filtered = df_filtered[df_filtered["machine_id"] == selected_machine]
 
 st.sidebar.markdown("---")
-if st.sidebar.button("🔄 Refresh Data"):
-    st.rerun()
-
 st.sidebar.markdown(f"**Total Records:** {len(df_filtered)}")
 if "timestamp" in df_filtered.columns and not df_filtered.empty:
-    st.sidebar.markdown(f"**Latest:** {df_filtered['timestamp'].max().strftime('%H:%M:%S')}")
+    st.sidebar.markdown(f"**Latest Event:** {df_filtered['timestamp'].max().strftime('%H:%M:%S')}")
 
 
 # ── Tabs ──────────────────────────────────────────────────────────────────────
 
-tab1, tab2, tab3, tab4 = st.tabs([
+tab1, tab2, tab3, tab4, tab5 = st.tabs([
     "🚀 Fleet Health", 
+    "🚨 Incident Feed",
     "📉 Degradation", 
     "⚠️ Drift & Anomalies", 
     "⚙️ System Health"
 ])
 
-# ── Tab 1: Fleet Health ───────────────────────────────────────────────────────
+# ── Tab 1: Fleet Health (KPIs with Deltas) ────────────────────────────────────
 with tab1:
     st.header("Live Fleet Status")
     
     if df_filtered.empty:
         st.info("No data for current selection.")
     else:
-        # Get latest status per machine
+        # We need historical context for deltas. Let's compare last 20% of data vs previous 20%
+        # Or more simply, compare the latest cycle vs previous cycle for the fleet.
+        # Let's aggregate by cycle across the fleet.
+        
+        cycle_agg = df_filtered.groupby("cycle").agg({
+            "machine_id": "count",
+            "rul_alert": "sum",
+            "anomaly_alert": "sum"
+        }).sort_index()
+
+        if len(cycle_agg) > 1:
+            curr_anomalies = int(cycle_agg.iloc[-1]["anomaly_alert"])
+            prev_anomalies = int(cycle_agg.iloc[-2]["anomaly_alert"])
+            delta_anom = curr_anomalies - prev_anomalies
+            
+            curr_rul_alert = int(cycle_agg.iloc[-1]["rul_alert"])
+            prev_rul_alert = int(cycle_agg.iloc[-2]["rul_alert"])
+            delta_rul = curr_rul_alert - prev_rul_alert
+        else:
+            curr_anomalies = int(cycle_agg.iloc[-1]["anomaly_alert"])
+            delta_anom = 0
+            curr_rul_alert = int(cycle_agg.iloc[-1]["rul_alert"])
+            delta_rul = 0
+
         latest_status = df_filtered.sort_values("cycle").groupby("machine_id").tail(1)
         
         # Metrics Row
         col1, col2, col3 = st.columns(3)
         col1.metric("Active Engines", len(latest_status))
-        col2.metric("Critical / Emergency", len(latest_status[latest_status["rul_alert"] == True]))
-        col3.metric("Anomalies Detected", len(latest_status[latest_status["anomaly_alert"] == True]))
+        col2.metric("Critical / Emergency", curr_rul_alert, delta=delta_rul, delta_color="inverse")
+        col3.metric("Anomalies Detected", curr_anomalies, delta=delta_anom, delta_color="inverse")
         
         st.markdown("### Engine Status Matrix")
         
@@ -105,8 +130,24 @@ with tab1:
         display_df = latest_status[["machine_id", "cycle", "rul_prediction", "rul_severity", "anomaly_score", "anomaly_severity"]]
         st.dataframe(display_df.style.map(color_status, subset=['rul_severity', 'anomaly_severity']), use_container_width=True)
 
-# ── Tab 2: Degradation ────────────────────────────────────────────────────────
+
+# ── Tab 2: Incident Feed ──────────────────────────────────────────────────────
 with tab2:
+    st.header("🚨 Active Incident Log")
+    
+    incidents = df_filtered[df_filtered["trigger_agent"] == True].sort_values("timestamp", ascending=False)
+    
+    if incidents.empty:
+        st.success("No active incidents. System nominal.")
+    else:
+        st.warning(f"{len(incidents)} Incidents Logged")
+        # Display the feed
+        feed_df = incidents[["timestamp", "machine_id", "cycle", "rul_severity", "anomaly_severity"]]
+        st.dataframe(feed_df, use_container_width=True, height=400)
+
+
+# ── Tab 3: Degradation ────────────────────────────────────────────────────────
+with tab3:
     st.header("RUL Degradation Trajectory")
     
     if selected_machine == "All":
@@ -141,8 +182,8 @@ with tab2:
         fig2.add_hline(y=thresh, line_dash="dash", line_color="red", annotation_text="Threshold")
         st.plotly_chart(fig2, use_container_width=True)
 
-# ── Tab 3: Drift & Anomalies ──────────────────────────────────────────────────
-with tab3:
+# ── Tab 4: Drift & Anomalies ──────────────────────────────────────────────────
+with tab4:
     st.header("Data & Concept Drift Monitoring")
     
     st.markdown("### Concept Drift (Predictions)")
@@ -166,29 +207,44 @@ with tab3:
     if not has_sensors:
         st.warning("Live logs do not contain raw sensor features. Please run the updated `run_live.py`.")
     else:
-        # Load baseline for this dataset
+        # Load baseline for this dataset (cached)
         baseline_df = get_baseline_data(selected_ds)
         
-        # Calculate PSI for all sensors
         st.markdown(f"Comparing live `{selected_ds}` data to training baseline.")
         
         psi_results = []
         for s in sensors:
             psi_val = calculate_psi(baseline_df[s], df_filtered[s], buckets=10)
             status = "🟢 Normal"
+            color = "green"
             if psi_val > CONFIG["thresholds"]["drift"]["psi_critical"]:
-                status = "🔴 Critical Drift"
+                status = "🔴 Critical"
+                color = "red"
             elif psi_val > CONFIG["thresholds"]["drift"]["psi_warning"]:
                 status = "🟡 Warning"
+                color = "orange"
                 
             psi_results.append({
                 "Feature": s,
                 "PSI": round(psi_val, 4),
-                "Status": status
+                "Status": status,
+                "Color": color
             })
             
         psi_df = pd.DataFrame(psi_results)
-        st.dataframe(psi_df, use_container_width=True)
+        
+        # Plotly Bar Chart for PSI
+        fig_psi = px.bar(
+            psi_df, 
+            x="Feature", 
+            y="PSI", 
+            color="Color", 
+            title="Population Stability Index (PSI) per Sensor",
+            color_discrete_map={"green":"#00cc96", "orange":"#ffa15a", "red":"#ef553b"}
+        )
+        fig_psi.add_hline(y=CONFIG["thresholds"]["drift"]["psi_critical"], line_dash="dash", line_color="red", annotation_text="Critical Drift (0.2)")
+        fig_psi.add_hline(y=CONFIG["thresholds"]["drift"]["psi_warning"], line_dash="dash", line_color="orange", annotation_text="Warning (0.1)")
+        st.plotly_chart(fig_psi, use_container_width=True)
         
         # Feature Inspector
         st.markdown("#### Feature Inspector")
@@ -200,8 +256,8 @@ with tab3:
         fig_feat.update_layout(barmode='overlay', title=f"Distribution of {inspect_feat}")
         st.plotly_chart(fig_feat, use_container_width=True)
 
-# ── Tab 4: System Health ──────────────────────────────────────────────────────
-with tab4:
+# ── Tab 5: System Health ──────────────────────────────────────────────────────
+with tab5:
     st.header("System Health & Latency")
     st.info("Latency metrics require timestamp diffs from a real API or explicit latency logs. Showing throughput based on timestamps.")
     

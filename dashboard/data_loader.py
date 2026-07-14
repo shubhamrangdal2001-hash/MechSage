@@ -2,6 +2,7 @@ import sys
 import glob
 from pathlib import Path
 import pandas as pd
+import streamlit as st
 
 _REPO_ROOT = Path(__file__).resolve().parent.parent
 _PROJECT_ROOT = _REPO_ROOT / "NASA_CMAPSS_RUL_Project"
@@ -24,6 +25,7 @@ def get_latest_live_log() -> pd.DataFrame | None:
         df["timestamp"] = pd.to_datetime(df["timestamp"])
     return df
 
+@st.cache_data
 def get_baseline_data(dataset_variant: str) -> pd.DataFrame:
     """Load the training data for the specified dataset to serve as the baseline."""
     # load_cmapss_data returns (train_df, test_df)
