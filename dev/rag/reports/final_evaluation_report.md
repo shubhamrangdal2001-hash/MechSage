@@ -9,7 +9,7 @@
 
 This master evaluation report consolidates the performance metrics and testing validation results of the **MechSage Predictive Maintenance System** across the three core evaluation pathways:
 
-1. **RAG Search & Retrieval Path** (30-scenario Golden set)
+1. **RAG Search & Retrieval Path** (30-scenario Golden test set)
 2. **RAG Generation & LLM-as-Judge Path** (RAGAS Faithfulness & Relevancy + 4D Rubric Quality)
 3. **Agent Work-Order Action Path** (Usefulness validation of generated orders)
 4. **Predictive Analytics Path** (Early detection lead time backtesting on NASA C-MAPSS turbofan data)
@@ -20,7 +20,7 @@ This master evaluation report consolidates the performance metrics and testing v
 - **Adversarial / Typo Robustness:** **`100.0%`** (Target: >85.0%) — **PASSED**
 - **LLM Answer Grounding (RAGAS Faithfulness):** **`98.3%`** (Target: >90.0%) — **PASSED**
 - **Work-Order Action Usefulness:** **`100.0%` Approved** (Target: >=75.0%) — **PASSED**
-- **Early Warning Alert Lead Time:** **`205.5 cycles`** (Target: >=20 cycles) — **PASSED**
+- **Early Warning Alert Lead Time:** **`205.5 cycles`** (Target: >=25 cycles) — **PASSED**
 
 ---
 
@@ -100,4 +100,4 @@ We backtested the pre-trained `IsolationForest` (anomaly) and `LinearRegression`
 ## 📂 Verification Sources & Artifact Paths
 - Master RAG Evaluation Report: [rag_evaluation_report.md](file:///c:/Users/siddp/Downloads/MechSage/dev/rag/reports/rag_evaluation_report.md)
 - Work Order Audit Report: [work_order_eval_report.md](file:///c:/Users/siddp/Downloads/MechSage/dev/rag/reports/work_order_eval_report.md)
-- C-MAPSS Backtest Details: [lead_time_backtest_FD001.md](file:///c:/Users/siddp/Downloads/MechSage/NASA_CMAPSS_RUL_Project/reports/lead_time_backtest_FD001.md)
+- C-MAPSS Backtest Details: [lead_time_backtest_FD001.md](file:///c:/Users/siddp/Downloads/MechSage/dev/rag/reports/lead_time_backtest_FD001.md)
