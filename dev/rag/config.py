@@ -36,9 +36,10 @@ class RAGConfig:
     openai_embedding_model: str = "text-embedding-3-small"
     embedding_dimension: int = 384  # 384 for MiniLM, 1536 for OpenAI
 
-    # --- Sprint 2: LLM Generation (Gemini Flash) ---
-    llm_provider: str = "gemini"  # Currently only "gemini" is supported
-    gemini_model: str = "gemini-3.1-flash-lite"  # Free-tier model; change to gemini-pro-latest for higher quality
+    # --- LLM Generation (OpenRouter) ---
+    llm_provider: str = "openrouter"  # Uses OpenAI-compatible API via OpenRouter
+    openrouter_model: str = "anthropic/claude-sonnet-4-5"  # Model slug from openrouter.ai/models
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
 
     # --- ChromaDB / HNSW ---
     collection_name: str = "mechsage_manuals"

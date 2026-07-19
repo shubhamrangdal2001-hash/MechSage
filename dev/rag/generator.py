@@ -1,7 +1,8 @@
-"""LLM Generator for MechSage RAG Pipeline (Sprint 2).
+"""LLM Generator for MechSage RAG Pipeline.
 
-Wraps Google Gemini Flash to produce structured maintenance diagnosis answers
-from retrieved context passages. Used by both the evaluation harness and demos.
+Wraps OpenRouter (OpenAI-compatible API) to produce structured maintenance
+diagnosis answers from retrieved context passages. Used by both the evaluation
+harness and demos.
 
 Usage:
     from dev.rag.generator import MechSageGenerator
@@ -27,21 +28,25 @@ except ImportError:
 
 
 def _require_api_key() -> str:
-    """Return the GOOGLE_API_KEY or raise a clear error with instructions."""
-    key = os.getenv("GOOGLE_API_KEY", "").strip()
+    """Return the OPENROUTER_API_KEY or raise a clear error with instructions."""
+    key = os.getenv("OPENROUTER_API_KEY", "").strip()
     if not key:
         raise EnvironmentError(
-            "\n\n[MechSage Generator] GOOGLE_API_KEY is not set.\n"
-            "  1. Get a free key at: https://aistudio.google.com/apikey\n"
+            "\n\n[MechSage Generator] OPENROUTER_API_KEY is not set.\n"
+            "  1. Get a free key at: https://openrouter.ai/keys\n"
             "  2. Add it to your .env file at the project root:\n"
-            "       GOOGLE_API_KEY=AIzaSy...\n"
+            "       OPENROUTER_API_KEY=sk-or-...\n"
             "  3. Re-run the script.\n"
         )
     return key
 
 
 class MechSageGenerator:
-    """Gemini Flash-based answer generator for MechSage maintenance queries."""
+    """OpenRouter-based answer generator for MechSage maintenance queries.
+
+    Uses the OpenAI-compatible SDK pointed at https://openrouter.ai/api/v1
+    so any model available on OpenRouter can be swapped in via config.
+    """
 
     SYSTEM_PROMPT = textwrap.dedent("""\
         You are MechSage, an expert maintenance engineer AI assistant.
@@ -54,40 +59,71 @@ class MechSageGenerator:
         actionable. Do not add information beyond what is in the context.
     """)
 
-    # Retry settings for Gemini free-tier rate limits
+    # Retry settings for rate limits (429)
     MAX_RETRIES = 4
     INITIAL_BACKOFF_SECS = 10
 
-    def __init__(self, model: str = "gemini-3.1-flash-lite"):
-        import google.generativeai as genai  # imported lazily to avoid hard dep
+    def __init__(
+        self,
+        model: str = "anthropic/claude-sonnet-4-5",
+        base_url: str = "https://openrouter.ai/api/v1",
+    ):
+        from openai import OpenAI  # imported lazily to avoid hard dep
 
         api_key = _require_api_key()
-        genai.configure(api_key=api_key)
-        self.model = genai.GenerativeModel(
-            model_name=model,
-            system_instruction=self.SYSTEM_PROMPT,
+        self._client = OpenAI(
+            base_url=base_url,
+            api_key=api_key,
+            default_headers={
+                "HTTP-Referer": "https://github.com/MechSage",
+                "X-Title": "MechSage",
+            },
         )
         self._model_name = model
 
-    def _call_with_retry(self, prompt: str, *, max_output_tokens: int = 256, temperature: float = 0.0) -> str:
-        """Call Gemini with exponential backoff on 429 rate-limit errors."""
+    def _call_with_retry(
+        self,
+        messages: list[dict],
+        *,
+        max_tokens: int = 256,
+        temperature: float = 0.0,
+    ) -> str:
+        """Call OpenRouter with exponential backoff on 429 rate-limit errors."""
         for attempt in range(self.MAX_RETRIES + 1):
             try:
-                response = self.model.generate_content(
-                    prompt,
-                    generation_config={"max_output_tokens": max_output_tokens, "temperature": temperature},
+                response = self._client.chat.completions.create(
+                    model=self._model_name,
+                    messages=messages,
+                    max_tokens=max_tokens,
+                    temperature=temperature,
                 )
-                return response.text.strip()
+                return response.choices[0].message.content.strip()
             except Exception as exc:  # noqa: BLE001
                 err_str = str(exc)
-                print(f"    [Gemini Debug] Attempt {attempt+1} failed with exception: {type(exc).__name__}: {err_str}")
-                if "429" in err_str or "ResourceExhausted" in type(exc).__name__:
+                print(
+                    f"    [OpenRouter Debug] Attempt {attempt+1} failed: "
+                    f"{type(exc).__name__}: {err_str}"
+                )
+                if "429" in err_str or "rate" in err_str.lower():
                     wait = self.INITIAL_BACKOFF_SECS * (2 ** attempt)
-                    print(f"    [Gemini] Rate limited (attempt {attempt+1}/{self.MAX_RETRIES+1}). Waiting {wait}s...")
+                    print(
+                        f"    [OpenRouter] Rate limited (attempt {attempt+1}/"
+                        f"{self.MAX_RETRIES+1}). Waiting {wait}s..."
+                    )
                     time.sleep(wait)
                     continue
                 raise  # Re-raise non-rate-limit errors
         return f"[RateLimitError] Exceeded {self.MAX_RETRIES} retries"
+
+    # ------------------------------------------------------------------
+    # Convenience: build the messages list with system prompt
+    # ------------------------------------------------------------------
+
+    def _build_messages(self, user_content: str) -> list[dict]:
+        return [
+            {"role": "system", "content": self.SYSTEM_PROMPT},
+            {"role": "user", "content": user_content},
+        ]
 
     def generate_answer(
         self,
@@ -115,7 +151,7 @@ class MechSageGenerator:
             for i, p in enumerate(passages)
         )
 
-        prompt = (
+        user_content = (
             f"CONTEXT:\n{context_block}\n\n"
             f"QUESTION: {query}\n\n"
             "ANSWER (based only on the above context):"
@@ -123,8 +159,8 @@ class MechSageGenerator:
 
         try:
             return self._call_with_retry(
-                prompt,
-                max_output_tokens=max_output_tokens,
+                self._build_messages(user_content),
+                max_tokens=max_output_tokens,
                 temperature=0.1,
             )
         except Exception as exc:  # noqa: BLE001
@@ -147,7 +183,7 @@ class MechSageGenerator:
             f"[Doc {i + 1}]\n{p.get('text', '')}" for i, p in enumerate(passages)
         )
 
-        prompt = textwrap.dedent(f"""\
+        user_content = textwrap.dedent(f"""\
             You are an evaluation assistant checking whether an AI-generated answer
             is factually faithful to the provided context documents.
 
@@ -169,8 +205,8 @@ class MechSageGenerator:
 
         try:
             text = self._call_with_retry(
-                prompt,
-                max_output_tokens=256,
+                self._build_messages(user_content),
+                max_tokens=256,
                 temperature=0.0,
             )
 
@@ -201,10 +237,6 @@ class MechSageGenerator:
     def judge_answer_relevancy(self, query: str, answer: str) -> dict:
         """LLM-as-judge: measure how well the answer addresses the query.
 
-        Asks the LLM to generate N synthetic questions that the answer addresses,
-        then computes the fraction that match the original query semantically
-        (via a direct LLM similarity judgment, avoiding a separate embedding call).
-
         Args:
             query: The original user question.
             answer: The generated answer to evaluate.
@@ -212,7 +244,7 @@ class MechSageGenerator:
         Returns:
             Dict with 'score' (float 0-1) and 'reasoning'.
         """
-        prompt = textwrap.dedent(f"""\
+        user_content = textwrap.dedent(f"""\
             You are an evaluation assistant measuring answer relevancy.
 
             ORIGINAL QUESTION: {query}
@@ -236,8 +268,8 @@ class MechSageGenerator:
 
         try:
             text = self._call_with_retry(
-                prompt,
-                max_output_tokens=128,
+                self._build_messages(user_content),
+                max_tokens=128,
                 temperature=0.0,
             )
 
@@ -269,7 +301,7 @@ class MechSageGenerator:
         Returns:
             Dict with per-dimension scores and overall average.
         """
-        prompt = textwrap.dedent(f"""\
+        user_content = textwrap.dedent(f"""\
             You are an expert maintenance engineer evaluating an AI-generated diagnosis.
 
             CONTEXT (from technical manual):
@@ -294,8 +326,8 @@ class MechSageGenerator:
 
         try:
             text = self._call_with_retry(
-                prompt,
-                max_output_tokens=128,
+                self._build_messages(user_content),
+                max_tokens=128,
                 temperature=0.0,
             )
 
@@ -329,43 +361,43 @@ class MechSageGenerator:
 
     def judge_all_generation_metrics(self, query: str, answer: str, passages: list[dict]) -> dict:
         """LLM-as-judge: measure faithfulness, relevancy, and explanation quality rubric.
-        
+
         Runs a single LLM call to save token quota and requests/min.
         """
         context_block = "\n\n".join(
             f"[Doc {i + 1}]\n{p.get('text', '')}" for i, p in enumerate(passages)
         )
 
-        prompt = textwrap.dedent(f"""\
+        user_content = textwrap.dedent(f"""\
             You are an expert quality evaluation assistant assessing a maintenance AI's response.
-            
+
             CONTEXT (from technical manuals):
             {context_block[:1200]}
-            
+
             USER QUESTION:
             {query}
-            
+
             GENERATED AI ANSWER:
             {answer}
-            
+
             Please evaluate the answer across the following dimensions:
-            
+
             1. FAITHFULNESS TO CONTEXT:
                - Extract distinct factual claims from the AI Answer.
                - Check if each claim is directly supported by the Context.
                - Determine: total_claims and supported_claims.
-               
+
             2. ANSWER RELEVANCY TO QUESTION:
                - Rate on a scale of 0.0 to 1.0 how well the AI Answer addresses the User Question.
                - 1.0 = perfectly addresses it. 0.0 = completely irrelevant/refuses to answer.
-               
+
             3. EXPLANATION QUALITY RUBRIC:
                Rate each of these on a 1 to 5 scale (where 1 is poor and 5 is excellent):
                - Clarity: Is it easy to understand for a technician?
                - Actionability: Does it give clear, concrete next steps?
                - Technical Accuracy: Is the technical content correct per context?
                - Conciseness: Is it appropriately brief without losing details?
-               
+
             Respond in this exact format:
             TOTAL_CLAIMS: <integer>
             SUPPORTED_CLAIMS: <integer>
@@ -379,8 +411,8 @@ class MechSageGenerator:
 
         try:
             text = self._call_with_retry(
-                prompt,
-                max_output_tokens=384,
+                self._build_messages(user_content),
+                max_tokens=384,
                 temperature=0.0,
             )
 
@@ -417,7 +449,7 @@ class MechSageGenerator:
                     reasoning = line.split(":", 1)[1].strip()
 
             faithfulness_score = max(0.0, min(1.0, supported_claims / total_claims))
-            
+
             # Calculate overall average for rubric
             overall = sum(scores.values()) / len(scores)
             scores["overall"] = round(overall, 4)
@@ -446,7 +478,6 @@ class MechSageGenerator:
                 }
             }
 
-
     def judge_work_order_usefulness(
         self,
         work_order_text: str,
@@ -463,7 +494,7 @@ class MechSageGenerator:
         Returns:
             Dict with 'score' (float 0-1), 'pass' (bool), 'reasoning'.
         """
-        prompt = textwrap.dedent(f"""\
+        user_content = textwrap.dedent(f"""\
             You are a maintenance manager evaluating whether a work order is useful
             and actionable based on the available maintenance documentation.
 
@@ -488,8 +519,8 @@ class MechSageGenerator:
         threshold = 0.75
         try:
             text = self._call_with_retry(
-                prompt,
-                max_output_tokens=192,
+                self._build_messages(user_content),
+                max_tokens=192,
                 temperature=0.0,
             )
 

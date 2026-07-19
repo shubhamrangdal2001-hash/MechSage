@@ -1,11 +1,12 @@
-"""Unit tests for MechSage RAG pipeline components.
+"""Unit and integration tests for MechSage RAG pipeline components.
 
 Tests cover:
 - Chunking: parent/child structure, metadata propagation
-- Config: path existence, field defaults
+- Config: path existence, field defaults (now OpenRouter)
 - Retriever: BM25 tokenizer, RRF fusion logic
 - Embedding: shape, normalization
 - Pipeline: search happy path, abstain path, error handling
+- Generator: unit (mocked) + integration (live API, requires OPENROUTER_API_KEY)
 """
 
 from __future__ import annotations
@@ -135,6 +136,10 @@ class TestConfig:
         assert config.reranker_top_k == 3
         assert config.dense_top_k == 10
         assert config.bm25_top_k == 10
+        # LLM provider is now OpenRouter
+        assert config.llm_provider == "openrouter"
+        assert hasattr(config, "openrouter_model")
+        assert hasattr(config, "openrouter_base_url")
 
     def test_abstain_queries_path_attribute_exists(self):
         from dev.rag.config import RAGConfig
@@ -701,3 +706,222 @@ class TestAssetScopedFiltering:
             top_k=3,
             asset_filter=None
         )
+
+
+# ---------------------------------------------------------------------------
+# Generator unit tests (mocked — no real API call)
+# ---------------------------------------------------------------------------
+
+class TestGeneratorUnit:
+    """Unit tests for MechSageGenerator using a mocked OpenAI client."""
+
+    def _make_mock_response(self, content: str):
+        """Build a minimal mock that looks like an openai ChatCompletion response."""
+        msg = MagicMock()
+        msg.content = content
+        choice = MagicMock()
+        choice.message = msg
+        resp = MagicMock()
+        resp.choices = [choice]
+        return resp
+
+    def test_generate_answer_returns_string(self):
+        """generate_answer must return a non-empty string when passages are provided."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        mock_client = MagicMock()
+        mock_client.chat.completions.create.return_value = self._make_mock_response(
+            "Borescope inspection is recommended."
+        )
+        gen._client = mock_client
+        gen._model_name = "anthropic/claude-sonnet-4-5"
+
+        passages = [{"text": "HPC blades show erosion.", "doc_ref": "MAN-HPC-01", "fault_mode": "hpc"}]
+        result = gen.generate_answer("What is the fault?", passages)
+
+        assert isinstance(result, str)
+        assert len(result) > 0
+        assert "[GenerationError]" not in result
+
+    def test_generate_answer_no_passages_returns_fallback(self):
+        """generate_answer with empty passages must return the 'no context' fallback."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        result = gen.generate_answer("What is the fault?", [])
+        assert result == "No relevant context was retrieved."
+
+    def test_retry_on_429_then_succeeds(self):
+        """_call_with_retry must retry on 429 errors and return success on later attempt."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        mock_client = MagicMock()
+        gen._client = mock_client
+        gen._model_name = "anthropic/claude-sonnet-4-5"
+
+        # First call raises 429, second call succeeds
+        good_response = self._make_mock_response("Success after retry.")
+        mock_client.chat.completions.create.side_effect = [
+            Exception("429 Too Many Requests"),
+            good_response,
+        ]
+
+        result = gen._call_with_retry(
+            [{"role": "user", "content": "test"}],
+            max_tokens=128,
+        )
+        assert result == "Success after retry."
+        assert mock_client.chat.completions.create.call_count == 2
+
+    def test_require_api_key_raises_when_missing(self):
+        """_require_api_key must raise EnvironmentError when OPENROUTER_API_KEY is unset."""
+        import os
+        from dev.rag.generator import _require_api_key
+
+        original = os.environ.pop("OPENROUTER_API_KEY", None)
+        try:
+            with pytest.raises(EnvironmentError, match="OPENROUTER_API_KEY"):
+                _require_api_key()
+        finally:
+            if original is not None:
+                os.environ["OPENROUTER_API_KEY"] = original
+
+    def test_judge_faithfulness_parses_response(self):
+        """judge_faithfulness must correctly parse TOTAL_CLAIMS/SUPPORTED_CLAIMS lines."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        mock_client = MagicMock()
+        gen._client = mock_client
+        gen._model_name = "anthropic/claude-sonnet-4-5"
+
+        mock_client.chat.completions.create.return_value = self._make_mock_response(
+            "TOTAL_CLAIMS: 3\nSUPPORTED_CLAIMS: 2\nREASONING: One claim lacked direct support."
+        )
+
+        result = gen.judge_faithfulness("answer text", [{"text": "context"}])
+        assert result["total"] == 3
+        assert result["supported"] == 2
+        assert abs(result["score"] - 2 / 3) < 1e-6
+
+    def test_judge_answer_relevancy_parses_score(self):
+        """judge_answer_relevancy must extract the SCORE float correctly."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        mock_client = MagicMock()
+        gen._client = mock_client
+        gen._model_name = "anthropic/claude-sonnet-4-5"
+
+        mock_client.chat.completions.create.return_value = self._make_mock_response(
+            "SCORE: 0.92\nREASONING: The answer directly addresses the question."
+        )
+
+        result = gen.judge_answer_relevancy("query", "answer")
+        assert abs(result["score"] - 0.92) < 1e-6
+
+    def test_judge_explanation_quality_fills_missing_dims(self):
+        """judge_explanation_quality must fill missing dimension scores with 3.0."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator.__new__(MechSageGenerator)
+        mock_client = MagicMock()
+        gen._client = mock_client
+        gen._model_name = "anthropic/claude-sonnet-4-5"
+
+        # Only CLARITY returned — rest should default to 3.0
+        mock_client.chat.completions.create.return_value = self._make_mock_response(
+            "CLARITY: 5"
+        )
+
+        result = gen.judge_explanation_quality("query", "answer", "context")
+        assert result["clarity"] == 5.0
+        assert result["actionability"] == 3.0
+        assert result["technical_accuracy"] == 3.0
+        assert result["conciseness"] == 3.0
+        assert "overall" in result
+        assert "overall_normalized" in result
+
+
+# ---------------------------------------------------------------------------
+# Generator integration tests (live API — skipped when key is absent)
+# ---------------------------------------------------------------------------
+
+def _openrouter_key_available() -> bool:
+    """Return True if OPENROUTER_API_KEY is set (non-empty) in environment."""
+    import os
+    from pathlib import Path
+    # Try loading .env first so CI/local both work
+    try:
+        from dotenv import load_dotenv
+        load_dotenv(Path(__file__).resolve().parents[3] / ".env", override=False)
+    except ImportError:
+        pass
+    return bool(os.getenv("OPENROUTER_API_KEY", "").strip())
+
+
+@pytest.mark.skipif(
+    not _openrouter_key_available(),
+    reason="OPENROUTER_API_KEY not set — skipping live API integration tests"
+)
+class TestGeneratorIntegration:
+    """Live integration tests against OpenRouter API.
+
+    These tests make real HTTP calls and consume API quota.
+    They are skipped automatically when OPENROUTER_API_KEY is absent.
+    Run with: pytest -m 'not skipif' or just set the env var.
+    """
+
+    def test_generate_answer_live(self):
+        """Live smoke test: generate_answer returns a non-empty string from the API."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator()  # reads key from env / .env
+        passages = [{
+            "text": (
+                "High Pressure Compressor (HPC) degradation is indicated by rising "
+                "EGT and declining N2 speed. Recommended action: borescope inspection "
+                "of HPC blades and replacement of worn seals."
+            ),
+            "doc_ref": "MAN-HPC-01",
+            "fault_mode": "hpc_degradation",
+        }]
+        query = "What are the signs of HPC degradation and what should a technician do?"
+        answer = gen.generate_answer(query, passages)
+
+        assert isinstance(answer, str), "Answer must be a string"
+        assert len(answer) > 20, "Answer appears too short — possible API error"
+        assert "[GenerationError]" not in answer, f"Generation failed: {answer}"
+        assert "[RateLimitError]" not in answer, f"Rate limited: {answer}"
+        print(f"\n[Integration] generate_answer response:\n{answer}")
+
+    def test_api_key_validity(self):
+        """Verify the OPENROUTER_API_KEY works by making a minimal API call."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator()
+        # Minimal 1-token prompt to check auth
+        response = gen._call_with_retry(
+            [{"role": "user", "content": "Reply with just: OK"}],
+            max_tokens=10,
+            temperature=0.0,
+        )
+        assert response, "Empty response — possible auth failure"
+        assert "[RateLimitError]" not in response
+        print(f"\n[Integration] API key check response: {response!r}")
+
+    def test_judge_faithfulness_live(self):
+        """Live test: judge_faithfulness returns a valid score dict from the API."""
+        from dev.rag.generator import MechSageGenerator
+
+        gen = MechSageGenerator()
+        passages = [{"text": "Bearing wear causes elevated vibration and noise."}]
+        answer = "Bearing wear leads to increased vibration."
+
+        result = gen.judge_faithfulness(answer, passages)
+        assert "score" in result
+        assert 0.0 <= result["score"] <= 1.0
+        assert "reasoning" in result
+        print(f"\n[Integration] Faithfulness result: {result}")
