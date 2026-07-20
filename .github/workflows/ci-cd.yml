@@ -103,7 +103,9 @@ jobs:
         id: tag
         run: |
           SHORT_SHA=${GITHUB_SHA::8}
-          IMAGE="${{ env.GCP_REGION }}-docker.pkg.dev/${{ env.GCP_PROJECT_ID }}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
+          PROJECT_ID=$(echo "${{ env.GCP_PROJECT_ID }}" | tr -d '\n\r ')
+          REGION=$(echo "${{ env.GCP_REGION }}" | tr -d '\n\r ')
+          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
           echo "image=${IMAGE}:${SHORT_SHA}" >> $GITHUB_OUTPUT
           echo "image_latest=${IMAGE}:latest" >> $GITHUB_OUTPUT
           echo "short_sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
