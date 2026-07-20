@@ -1,0 +1,59 @@
+# ── Git internals ──────────────────────────────────────────────────────────────
+.git/
+.gitignore
+
+# ── Python cache & build artifacts ────────────────────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.egg-info/
+dist/
+build/
+*.so
+*.whl
+
+# ── Virtual environments ───────────────────────────────────────────────────────
+venv/
+.venv/
+env/
+.env/
+
+# ── Secrets — NEVER include in container ─────────────────────────────────────
+.env
+*.env.*
+secrets/
+
+# ── Local development / test artifacts ────────────────────────────────────────
+test_*.py
+tests/
+pytest_cache/
+.pytest_cache/
+*.log
+*.jsonl
+inference/logs/
+mechsage.db
+
+# ── IDE / Editor configs ───────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.code-workspace
+.DS_Store
+Thumbs.db
+
+# ── Documentation & notebooks ─────────────────────────────────────────────────
+*.ipynb
+*.ipynb_checkpoints/
+docs/
+*.md
+!README.md
+
+# ── Reports & evaluation outputs ──────────────────────────────────────────────
+dev/rag/reports/
+dev/rag/tests/
+
+# ── GCP setup scripts (not needed in runtime container) ───────────────────────
+gcp/
+
+# ── CI/CD configs (not needed in runtime container) ──────────────────────────
+.github/

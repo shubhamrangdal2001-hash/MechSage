@@ -1,0 +1,11 @@
+{
+  "threshold": 0.2,
+  "timestamp": "2026-07-16T10:50:56Z",
+  "is_sample": true,
+  "features": {
+    "sensor_11": {
+      "psi": 0.01,
+      "status": "stable"
+    }
+  }
+}

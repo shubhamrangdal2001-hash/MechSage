@@ -25,6 +25,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse, StreamingResponse
 from pydantic import BaseModel
 
+from app.db import (
+    insert_work_order,
+    get_work_orders,
+    get_work_order,
+    update_work_order_status,
+    get_summary_counts,
+)
+
 # Load .env from project root
 try:
     from dotenv import load_dotenv
@@ -32,18 +40,22 @@ try:
 except ImportError:
     pass
 
-from dev.rag.rag_pipeline import manual_retrieval_rag
-from dev.rag.generator import MechSageGenerator
-from dev.rag.config import RAGConfig
+from app.core.rag.rag_pipeline import manual_retrieval_rag
+from app.core.rag.generator import MechSageGenerator
+from app.core.rag.config import RAGConfig
 
 # ---------------------------------------------------------------------------
 # App setup
 # ---------------------------------------------------------------------------
 
+ENVIRONMENT = os.getenv("ENVIRONMENT", "development")
+
 app = FastAPI(
     title="MechSage API",
     description="Predictive Maintenance AI — RAG + structured diagnosis + approval workflow",
     version="3.0.0",
+    docs_url="/docs" if ENVIRONMENT != "production" else None,
+    redoc_url=None,
 )
 
 app.add_middleware(
@@ -59,8 +71,36 @@ static_dir = Path(__file__).parent / "static"
 static_dir.mkdir(exist_ok=True)
 app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 
+
+# ---------------------------------------------------------------------------
+# Health & readiness endpoints (required by Cloud Run load balancer)
+# ---------------------------------------------------------------------------
+
+@app.get("/health", tags=["ops"])
+async def health_check():
+    """Liveness probe — returns 200 when the process is alive."""
+    return {"status": "ok", "environment": ENVIRONMENT}
+
+
+@app.get("/readiness", tags=["ops"])
+async def readiness_check():
+    """Readiness probe — returns 200 when the app is ready to serve traffic."""
+    # Quick check: can we reach the DB?
+    try:
+        from app.db import get_summary_counts
+        get_summary_counts()
+        db_ok = True
+    except Exception:
+        db_ok = False
+
+    if not db_ok:
+        from fastapi.responses import JSONResponse
+        return JSONResponse(status_code=503, content={"status": "unavailable", "db": False})
+
+    return {"status": "ready", "db": True, "environment": ENVIRONMENT}
+
 # C-MAPSS dataset directory
-CMAPSS_DATA_DIR = Path(__file__).resolve().parents[1] / "NASA_CMAPSS_RUL_Project" / "data"
+CMAPSS_DATA_DIR = Path(__file__).resolve().parents[1] / "ML" / "data"
 
 # Informative sensors to stream (14 selected features)
 KEY_SENSORS = [
@@ -149,9 +189,18 @@ def generate_structured_diagnosis(
     # Strip markdown code fences if present
     raw = raw.strip()
     if raw.startswith("```"):
-        raw = raw.split("```")[1]
-        if raw.startswith("json"):
-            raw = raw[4:]
+        blocks = raw.split("```")
+        if len(blocks) > 1:
+            raw = blocks[1]
+            if raw.strip().startswith("json"):
+                raw = raw.strip()[4:].strip()
+    else:
+        # Sometimes models wrap JSON in markdown but add text before it
+        import re
+        match = re.search(r'```json\s*(.*?)\s*```', raw, re.DOTALL)
+        if match:
+            raw = match.group(1).strip()
+
     raw = raw.strip()
     try:
         return json.loads(raw)
@@ -253,6 +302,12 @@ async def serve_dashboard():
     return FileResponse(str(static_dir / "dashboard.html"))
 
 
+@app.get("/work-orders", response_class=FileResponse)
+async def serve_work_orders():
+    """Serve the Work Orders / HITL review dashboard."""
+    return FileResponse(str(static_dir / "work_orders.html"))
+
+
 @app.get("/health", response_model=HealthResponse)
 async def health():
     """Health check — confirms API key and model config."""
@@ -351,10 +406,37 @@ async def diagnose(req: DiagnoseRequest):
 
         except Exception as exc:
             answer = f"[GenerationError] {exc}"
+            explanation = answer
+
+
+    diag_id = str(uuid.uuid4()) if req.generate_answer else None
+
+    # --- Persist to SQLite DB ---
+    if diag_id and work_order:
+        rag_snippet = passages_out[0].text[:300] if passages_out else ""
+        try:
+            insert_work_order(
+                wo_id=diag_id,
+                asset_id=req.asset_id or "UNKNOWN",
+                failure_mode=work_order.failure_mode,
+                severity=work_order.severity,
+                priority=work_order.priority,
+                recommended_action=work_order.recommended_action,
+                explanation=explanation or "",
+                parts_needed=work_order.parts_needed,
+                estimated_duration_hrs=work_order.estimated_duration_hrs,
+                technician_notes=work_order.technician_notes,
+                evidence_sensors=work_order.evidence_sensors,
+                confidence=confidence,
+                rul_estimate_cycles=rul_estimate,
+                rag_snippet=rag_snippet,
+            )
+        except Exception as db_exc:
+            print(f"[DB] Failed to persist work order: {db_exc}")
 
     return DiagnoseResponse(
         status="ok",
-        diagnosis_id=str(uuid.uuid4()) if req.generate_answer else None,
+        diagnosis_id=diag_id,
         passages=passages_out,
         explanation=explanation,
         confidence=confidence,
@@ -368,21 +450,73 @@ async def diagnose(req: DiagnoseRequest):
     )
 
 
+class ApprovalRequestFull(BaseModel):
+    decision: str           # "approve" | "reject" | "escalate"
+    notes: str = ""
+    assigned_technician: str = ""
+    proposed_start: str = ""
+    approved_by: str = ""
+
+
 @app.post("/api/diagnose/{diagnosis_id}/approve")
-async def approve_diagnosis(diagnosis_id: str, req: ApprovalRequest):
+async def approve_diagnosis(diagnosis_id: str, req: ApprovalRequestFull):
     """
-    Human approval workflow endpoint.
-    Records the approval decision and notes.
-    (In production this writes to an outcome log / feedback store.)
+    Human-in-the-loop approval endpoint.
+    Writes decision + technician assignment to the SQLite work orders DB.
     """
-    # In v1: log to stdout / return ack. Future: write to outcome DB.
-    print(f"[Approval] diagnosis_id={diagnosis_id} decision={req.decision} notes={req.notes!r}")
+    status_map = {"approve": "APPROVED", "reject": "REJECTED", "escalate": "ESCALATED"}
+    new_status = status_map.get(req.decision.lower(), "PENDING_APPROVAL")
+
+    updated = update_work_order_status(
+        wo_id=diagnosis_id,
+        new_status=new_status,
+        assigned_technician=req.assigned_technician,
+        proposed_start=req.proposed_start,
+        decision_notes=req.notes,
+        approved_by=req.approved_by,
+    )
+
+    msg_map = {
+        "APPROVED":  "Work order approved and scheduled.",
+        "REJECTED":  "Work order rejected and de-escalated.",
+        "ESCALATED": "Escalated to senior engineer.",
+    }
+    print(f"[Approval] id={diagnosis_id} status={new_status} tech={req.assigned_technician!r}")
     return {
         "status": "recorded",
         "diagnosis_id": diagnosis_id,
-        "decision": req.decision,
-        "message": f"Decision '{req.decision}' recorded. {'Work order issued.' if req.decision == 'approve' else 'Escalated to engineer.' if req.decision == 'escalate' else 'Dismissed and logged.'}",
+        "new_status": new_status,
+        "db_updated": updated,
+        "message": msg_map.get(new_status, "Decision recorded."),
     }
+
+
+@app.get("/api/work-orders")
+async def list_work_orders(
+    status: str = Query("ALL"),
+    priority: str = Query("ALL"),
+):
+    """Return all work orders, optionally filtered by status/priority."""
+    records = get_work_orders(
+        status_filter=status if status != "ALL" else None,
+        priority_filter=priority if priority != "ALL" else None,
+    )
+    return {"work_orders": records, "total": len(records)}
+
+
+@app.get("/api/work-orders/summary")
+async def work_orders_summary():
+    """Return KPI counts for the Work Orders dashboard."""
+    return get_summary_counts()
+
+
+@app.get("/api/work-orders/{wo_id}")
+async def get_single_work_order(wo_id: str):
+    """Return a single work order by ID."""
+    rec = get_work_order(wo_id)
+    if not rec:
+        raise HTTPException(status_code=404, detail="Work order not found")
+    return rec
 
 
 @app.post("/api/retrieve-only", response_model=DiagnoseResponse)
@@ -457,6 +591,7 @@ async def stream_sensor_data(
     dataset_id: str = Query("FD001", regex="^FD00[1-4]$"),
     unit_id: int = Query(1, ge=1),
     speed_ms: int = Query(400, ge=50, le=5000),
+    start_cycle: int = Query(1, ge=1),
 ):
     """
     Stream C-MAPSS test sensor data as Server-Sent Events.
@@ -480,13 +615,21 @@ async def stream_sensor_data(
                 if v:
                     rul_values.append(int(v))
 
-    # Read rows for requested unit only
+    def get_op_cond(row):
+        return round(row.get("op_setting_1", 0.0))
+
+    # Read rows for requested unit, and collect healthy samples for all conditions
+    healthy_samples: Dict[int, Dict[str, List[float]]] = {}
     unit_rows: List[Dict] = []
+    
     with open(test_file) as fh:
         for line in fh:
             parts = line.strip().split()
-            if not parts or int(parts[0]) != unit_id:
+            if not parts:
                 continue
+            u = int(parts[0])
+            c = int(parts[1])
+            
             row: Dict = {}
             for j, col in enumerate(CMAPSS_COLUMNS):
                 if j < len(parts):
@@ -494,7 +637,17 @@ async def stream_sensor_data(
                         row[col] = float(parts[j])
                     except ValueError:
                         row[col] = 0.0
-            unit_rows.append(row)
+            
+            if c <= 30:
+                op_cond = get_op_cond(row)
+                if op_cond not in healthy_samples:
+                    healthy_samples[op_cond] = {s: [] for s in KEY_SENSORS}
+                for s in KEY_SENSORS:
+                    if s in row:
+                        healthy_samples[op_cond][s].append(row[s])
+
+            if u == unit_id:
+                unit_rows.append(row)
 
     if not unit_rows:
         raise HTTPException(status_code=404, detail=f"Unit {unit_id} not found in {dataset_id}")
@@ -503,40 +656,59 @@ async def stream_sensor_data(
     final_rul = rul_values[unit_id - 1] if unit_id - 1 < len(rul_values) else 0
     max_cycle = int(unit_rows[-1]["time_in_cycles"])
 
-    # Compute baseline stats from first 30 cycles (healthy window)
-    baseline_n = min(30, len(unit_rows))
-    baseline: Dict[str, Dict] = {}
+    # Compute baseline stats per condition
+    baseline_per_cond: Dict[int, Dict[str, Dict[str, float]]] = {}
+    for op_cond, sensors_data in healthy_samples.items():
+        baseline_per_cond[op_cond] = {}
+        for sensor, vals in sensors_data.items():
+            if not vals:
+                baseline_per_cond[op_cond][sensor] = {"mean": 0.0, "std": 1.0}
+            else:
+                mean = sum(vals) / len(vals)
+                variance = sum((v - mean) ** 2 for v in vals) / len(vals)
+                std = variance ** 0.5 or 1e-6
+                baseline_per_cond[op_cond][sensor] = {"mean": mean, "std": std}
+                
+    # Fallback global baseline from the current unit's first 30 cycles
+    global_baseline = {}
     for sensor in KEY_SENSORS:
-        vals = [r[sensor] for r in unit_rows[:baseline_n] if sensor in r]
-        if not vals:
-            baseline[sensor] = {"mean": 0.0, "std": 1.0}
-            continue
-        mean = sum(vals) / len(vals)
-        variance = sum((v - mean) ** 2 for v in vals) / len(vals)
-        std = variance ** 0.5 or 1e-6
-        baseline[sensor] = {"mean": mean, "std": std}
+        vals = [r[sensor] for r in unit_rows[:min(30, len(unit_rows))] if sensor in r]
+        if vals:
+            mean = sum(vals) / len(vals)
+            std = (sum((v - mean) ** 2 for v in vals) / len(vals)) ** 0.5 or 1e-6
+            global_baseline[sensor] = {"mean": mean, "std": std}
+        else:
+            global_baseline[sensor] = {"mean": 0.0, "std": 1.0}
 
     async def event_generator():
         for i, row in enumerate(unit_rows):
             cycle = int(row["time_in_cycles"])
+            if cycle < start_cycle:
+                continue
 
             # Compute per-sensor Z-scores
             sensor_vals: Dict[str, float] = {}
             z_scores: Dict[str, float] = {}
             anomaly_sensors: List[str] = []
 
+            op_cond = get_op_cond(row)
+            b_cond = baseline_per_cond.get(op_cond, global_baseline)
+
             for sensor in KEY_SENSORS:
                 if sensor not in row:
                     continue
                 val = row[sensor]
-                b = baseline[sensor]
-                z = abs((val - b["mean"]) / b["std"])
+                b = b_cond.get(sensor, global_baseline[sensor])
+                z_raw = (val - b["mean"]) / b["std"]
+                z_abs = abs(z_raw)
+                
                 sensor_vals[sensor] = round(val, 4)
-                z_scores[sensor] = round(z, 3)
-                if z > 2.5:
+                z_scores[sensor] = round(z_raw, 3)
+                
+                if z_abs > 2.5:
                     anomaly_sensors.append(sensor)
 
-            max_z = max(z_scores.values()) if z_scores else 0.0
+            max_z = max([abs(z) for z in z_scores.values()]) if z_scores else 0.0
             anomaly_score = round(min(1.0, max_z / 5.0), 3)
             is_anomaly = (len(anomaly_sensors) >= 2) and (anomaly_score > 0.4)
 
@@ -568,3 +740,13 @@ async def stream_sensor_data(
             "X-Accel-Buffering": "no",
         },
     )
+
+
+# ---------------------------------------------------------------------------
+# Entrypoint — respects Cloud Run's dynamic $PORT env var
+# ---------------------------------------------------------------------------
+
+if __name__ == "__main__":
+    import uvicorn
+    port = int(os.getenv("PORT", "8001"))
+    uvicorn.run("app.main:app", host="0.0.0.0", port=port, reload=ENVIRONMENT == "development")

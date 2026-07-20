@@ -501,7 +501,7 @@ FD003 is severely imbalanced (302:1). LightGBM's `class_weight="balanced"` parti
 """
 MechSage ML Evaluation Script
 Reproduces all metrics and figures from saved model artifacts.
-Run from: d:\Capstone\MechSage\NASA_CMAPSS_RUL_Project\
+Run from: d:\Capstone\MechSage\ML\
 """
 
 import json, time, warnings

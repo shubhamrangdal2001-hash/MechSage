@@ -14,20 +14,20 @@ data/
 *.zip
 
 # ML experiment outputs
-NASA_CMAPSS_RUL_Project/artifacts/
-NASA_CMAPSS_RUL_Project/models/
-NASA_CMAPSS_RUL_Project/mlruns/
-NASA_CMAPSS_RUL_Project/catboost_info/
-NASA_CMAPSS_RUL_Project/data/
-NASA_CMAPSS_RUL_Project/notebooks/
-NASA_CMAPSS_RUL_Project/*.log
+ML/artifacts/
+ML/models/
+ML/mlruns/
+ML/catboost_info/
+ML/data/
+ML/notebooks/
+ML/*.log
 
 # OS/editor noise
 .DS_Store
 Thumbs.db
 
 # RAG vector store (rebuilt automatically by evaluate_rag.py)
-dev/rag/chroma_db/
+app/core/rag/chroma_db/
 
 # RAG report outputs (generated artifacts)
 # dev/rag/reports/

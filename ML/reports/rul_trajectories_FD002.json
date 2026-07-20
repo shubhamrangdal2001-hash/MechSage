@@ -1,0 +1,5710 @@
+[
+  {
+    "unit_number": 1,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 99.2456261226871
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 70.81310996082902
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 72.50558188201467
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 90.74915412148766
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 96.51286639563477
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 96.9254286942305
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 103.46155757027736
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 106.64396258516535
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 100.11241444127518
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 101.02125008971598
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 96.07763526171766
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 94.75570796512329
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 93.39410446137117
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 103.38272538042293
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 99.1959219935361
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 93.93586557776507
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 91.95065003559102
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 91.27926436589587
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 93.95484670649785
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 96.69449283563881
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 102.12111080105751
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 102.7708429299837
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 100.10347772366185
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 111.76711769404574
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 104.00376535983378
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 102.46619245009606
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 98.85896643636079
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 104.15375052774834
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 98.28751273862326
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 99.8235428735752
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 94.40363755808721
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 97.30439836018377
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 99.78235419487646
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 94.0615655507172
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 101.45448843055055
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 100.4934956572688
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 114.1191234856542
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 114.85312794737365
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 123.90606106158339
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 118.75847374460864
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 117.68313399519866
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 118.05485557413886
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 113.07863910225024
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 112.39157260062893
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 108.47602199513312
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 109.22454485005801
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 103.9993034380841
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 107.46839089384412
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 101.45555717414209
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 108.18284483075331
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 107.90483390086956
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 108.82585666522937
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 101.74288096568125
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 102.4203163046077
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 97.77247045128024
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 93.59646095793869
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 97.57958494918967
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 97.91287020119671
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 100.53066699819465
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 102.8302031573894
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 96.27420095387242
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 93.41541909328953
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 89.75027787491126
+      },
+      {
+        "cycle": 64,
+        "true_rul": 125.0,
+        "predicted_rul": 92.8322357260513
+      },
+      {
+        "cycle": 65,
+        "true_rul": 125.0,
+        "predicted_rul": 103.92566369487031
+      },
+      {
+        "cycle": 66,
+        "true_rul": 125.0,
+        "predicted_rul": 107.69030224992275
+      },
+      {
+        "cycle": 67,
+        "true_rul": 125.0,
+        "predicted_rul": 112.06501268224201
+      },
+      {
+        "cycle": 68,
+        "true_rul": 125.0,
+        "predicted_rul": 105.72372209937384
+      },
+      {
+        "cycle": 69,
+        "true_rul": 125.0,
+        "predicted_rul": 112.31068628594221
+      },
+      {
+        "cycle": 70,
+        "true_rul": 125.0,
+        "predicted_rul": 109.62977688859792
+      },
+      {
+        "cycle": 71,
+        "true_rul": 125.0,
+        "predicted_rul": 102.83534537504238
+      },
+      {
+        "cycle": 72,
+        "true_rul": 125.0,
+        "predicted_rul": 98.1655490358171
+      },
+      {
+        "cycle": 73,
+        "true_rul": 125.0,
+        "predicted_rul": 105.72690269796112
+      },
+      {
+        "cycle": 74,
+        "true_rul": 125.0,
+        "predicted_rul": 106.16193598151403
+      },
+      {
+        "cycle": 75,
+        "true_rul": 125.0,
+        "predicted_rul": 112.69163669622685
+      },
+      {
+        "cycle": 76,
+        "true_rul": 125.0,
+        "predicted_rul": 111.3415345598878
+      },
+      {
+        "cycle": 77,
+        "true_rul": 125.0,
+        "predicted_rul": 105.77542942197033
+      },
+      {
+        "cycle": 78,
+        "true_rul": 125.0,
+        "predicted_rul": 105.58728682866058
+      },
+      {
+        "cycle": 79,
+        "true_rul": 125.0,
+        "predicted_rul": 107.34126935975837
+      },
+      {
+        "cycle": 80,
+        "true_rul": 125.0,
+        "predicted_rul": 110.48914261063692
+      },
+      {
+        "cycle": 81,
+        "true_rul": 125.0,
+        "predicted_rul": 107.50547014070798
+      },
+      {
+        "cycle": 82,
+        "true_rul": 125.0,
+        "predicted_rul": 105.9311805963116
+      },
+      {
+        "cycle": 83,
+        "true_rul": 125.0,
+        "predicted_rul": 104.18030978841125
+      },
+      {
+        "cycle": 84,
+        "true_rul": 125.0,
+        "predicted_rul": 94.96567644358947
+      },
+      {
+        "cycle": 85,
+        "true_rul": 125.0,
+        "predicted_rul": 92.530979687941
+      },
+      {
+        "cycle": 86,
+        "true_rul": 125.0,
+        "predicted_rul": 90.0451055755475
+      },
+      {
+        "cycle": 87,
+        "true_rul": 125.0,
+        "predicted_rul": 89.46292989959329
+      },
+      {
+        "cycle": 88,
+        "true_rul": 125.0,
+        "predicted_rul": 84.139733715474
+      },
+      {
+        "cycle": 89,
+        "true_rul": 125.0,
+        "predicted_rul": 82.8818038944355
+      },
+      {
+        "cycle": 90,
+        "true_rul": 125.0,
+        "predicted_rul": 84.7746999717674
+      },
+      {
+        "cycle": 91,
+        "true_rul": 125.0,
+        "predicted_rul": 80.53394213901629
+      },
+      {
+        "cycle": 92,
+        "true_rul": 125.0,
+        "predicted_rul": 78.65161046167668
+      },
+      {
+        "cycle": 93,
+        "true_rul": 125.0,
+        "predicted_rul": 70.64807912214746
+      },
+      {
+        "cycle": 94,
+        "true_rul": 125.0,
+        "predicted_rul": 86.34822029732095
+      },
+      {
+        "cycle": 95,
+        "true_rul": 125.0,
+        "predicted_rul": 75.46549289293944
+      },
+      {
+        "cycle": 96,
+        "true_rul": 125.0,
+        "predicted_rul": 71.52743925039795
+      },
+      {
+        "cycle": 97,
+        "true_rul": 125.0,
+        "predicted_rul": 70.51488342962148
+      },
+      {
+        "cycle": 98,
+        "true_rul": 125.0,
+        "predicted_rul": 68.93605359499998
+      },
+      {
+        "cycle": 99,
+        "true_rul": 125.0,
+        "predicted_rul": 81.70242754490755
+      },
+      {
+        "cycle": 100,
+        "true_rul": 125.0,
+        "predicted_rul": 79.68150559383321
+      },
+      {
+        "cycle": 101,
+        "true_rul": 125.0,
+        "predicted_rul": 82.10647327269908
+      },
+      {
+        "cycle": 102,
+        "true_rul": 125.0,
+        "predicted_rul": 82.33414372554944
+      },
+      {
+        "cycle": 103,
+        "true_rul": 125.0,
+        "predicted_rul": 81.85358233181978
+      },
+      {
+        "cycle": 104,
+        "true_rul": 125.0,
+        "predicted_rul": 85.46156092862839
+      },
+      {
+        "cycle": 105,
+        "true_rul": 125.0,
+        "predicted_rul": 75.64968896446953
+      },
+      {
+        "cycle": 106,
+        "true_rul": 125.0,
+        "predicted_rul": 80.16493615305808
+      },
+      {
+        "cycle": 107,
+        "true_rul": 125.0,
+        "predicted_rul": 84.63308036330454
+      },
+      {
+        "cycle": 108,
+        "true_rul": 125.0,
+        "predicted_rul": 82.80072892625503
+      },
+      {
+        "cycle": 109,
+        "true_rul": 125.0,
+        "predicted_rul": 86.14432366085748
+      },
+      {
+        "cycle": 110,
+        "true_rul": 125.0,
+        "predicted_rul": 78.92323476485944
+      },
+      {
+        "cycle": 111,
+        "true_rul": 125.0,
+        "predicted_rul": 78.08482084860589
+      },
+      {
+        "cycle": 112,
+        "true_rul": 125.0,
+        "predicted_rul": 74.7433727833668
+      },
+      {
+        "cycle": 113,
+        "true_rul": 125.0,
+        "predicted_rul": 65.83674517253166
+      },
+      {
+        "cycle": 114,
+        "true_rul": 125.0,
+        "predicted_rul": 66.45462716462134
+      },
+      {
+        "cycle": 115,
+        "true_rul": 125.0,
+        "predicted_rul": 72.73188592873521
+      },
+      {
+        "cycle": 116,
+        "true_rul": 125.0,
+        "predicted_rul": 75.42816950779525
+      },
+      {
+        "cycle": 117,
+        "true_rul": 125.0,
+        "predicted_rul": 68.62256108380461
+      },
+      {
+        "cycle": 118,
+        "true_rul": 125.0,
+        "predicted_rul": 76.50286563157715
+      },
+      {
+        "cycle": 119,
+        "true_rul": 125.0,
+        "predicted_rul": 78.82531128228038
+      },
+      {
+        "cycle": 120,
+        "true_rul": 125.0,
+        "predicted_rul": 87.73729298672697
+      },
+      {
+        "cycle": 121,
+        "true_rul": 125.0,
+        "predicted_rul": 93.86596976698456
+      },
+      {
+        "cycle": 122,
+        "true_rul": 125.0,
+        "predicted_rul": 91.50427490770016
+      },
+      {
+        "cycle": 123,
+        "true_rul": 125.0,
+        "predicted_rul": 95.40048267404563
+      },
+      {
+        "cycle": 124,
+        "true_rul": 125.0,
+        "predicted_rul": 93.33341322142951
+      },
+      {
+        "cycle": 125,
+        "true_rul": 125.0,
+        "predicted_rul": 91.73438459398494
+      },
+      {
+        "cycle": 126,
+        "true_rul": 125.0,
+        "predicted_rul": 92.34904729107257
+      },
+      {
+        "cycle": 127,
+        "true_rul": 125.0,
+        "predicted_rul": 96.32753346124991
+      },
+      {
+        "cycle": 128,
+        "true_rul": 125.0,
+        "predicted_rul": 92.6883177272448
+      },
+      {
+        "cycle": 129,
+        "true_rul": 125.0,
+        "predicted_rul": 85.54696675812556
+      },
+      {
+        "cycle": 130,
+        "true_rul": 125.0,
+        "predicted_rul": 92.69033193860014
+      },
+      {
+        "cycle": 131,
+        "true_rul": 125.0,
+        "predicted_rul": 90.72483151679444
+      },
+      {
+        "cycle": 132,
+        "true_rul": 125.0,
+        "predicted_rul": 90.66967171225406
+      },
+      {
+        "cycle": 133,
+        "true_rul": 125.0,
+        "predicted_rul": 91.85597961117674
+      },
+      {
+        "cycle": 134,
+        "true_rul": 125.0,
+        "predicted_rul": 89.97224427541369
+      },
+      {
+        "cycle": 135,
+        "true_rul": 125.0,
+        "predicted_rul": 95.5985807539364
+      },
+      {
+        "cycle": 136,
+        "true_rul": 125.0,
+        "predicted_rul": 89.32435515907673
+      },
+      {
+        "cycle": 137,
+        "true_rul": 125.0,
+        "predicted_rul": 90.69289579887482
+      },
+      {
+        "cycle": 138,
+        "true_rul": 125.0,
+        "predicted_rul": 89.25762976212536
+      },
+      {
+        "cycle": 139,
+        "true_rul": 125.0,
+        "predicted_rul": 86.48370862277989
+      },
+      {
+        "cycle": 140,
+        "true_rul": 125.0,
+        "predicted_rul": 91.38282585327397
+      },
+      {
+        "cycle": 141,
+        "true_rul": 125.0,
+        "predicted_rul": 87.50714630624134
+      },
+      {
+        "cycle": 142,
+        "true_rul": 125.0,
+        "predicted_rul": 87.54721951571082
+      },
+      {
+        "cycle": 143,
+        "true_rul": 125.0,
+        "predicted_rul": 88.73679925362558
+      },
+      {
+        "cycle": 144,
+        "true_rul": 125.0,
+        "predicted_rul": 85.748410684997
+      },
+      {
+        "cycle": 145,
+        "true_rul": 125.0,
+        "predicted_rul": 87.67738889334578
+      },
+      {
+        "cycle": 146,
+        "true_rul": 125.0,
+        "predicted_rul": 85.95699643837725
+      },
+      {
+        "cycle": 147,
+        "true_rul": 125.0,
+        "predicted_rul": 85.2717009005155
+      },
+      {
+        "cycle": 148,
+        "true_rul": 125.0,
+        "predicted_rul": 84.44731517371292
+      },
+      {
+        "cycle": 149,
+        "true_rul": 125.0,
+        "predicted_rul": 89.92362064122062
+      },
+      {
+        "cycle": 150,
+        "true_rul": 125.0,
+        "predicted_rul": 90.83442617543551
+      },
+      {
+        "cycle": 151,
+        "true_rul": 125.0,
+        "predicted_rul": 86.58948503340434
+      },
+      {
+        "cycle": 152,
+        "true_rul": 124.0,
+        "predicted_rul": 81.59834968106952
+      },
+      {
+        "cycle": 153,
+        "true_rul": 123.0,
+        "predicted_rul": 87.47457737300101
+      },
+      {
+        "cycle": 154,
+        "true_rul": 122.0,
+        "predicted_rul": 83.99069643279654
+      },
+      {
+        "cycle": 155,
+        "true_rul": 121.0,
+        "predicted_rul": 83.87671634983417
+      },
+      {
+        "cycle": 156,
+        "true_rul": 120.0,
+        "predicted_rul": 83.35293991799517
+      },
+      {
+        "cycle": 157,
+        "true_rul": 119.0,
+        "predicted_rul": 79.22525928962023
+      },
+      {
+        "cycle": 158,
+        "true_rul": 118.0,
+        "predicted_rul": 68.51932098217367
+      },
+      {
+        "cycle": 159,
+        "true_rul": 117.0,
+        "predicted_rul": 64.61655129226165
+      },
+      {
+        "cycle": 160,
+        "true_rul": 116.0,
+        "predicted_rul": 60.930318724682365
+      },
+      {
+        "cycle": 161,
+        "true_rul": 115.0,
+        "predicted_rul": 68.56179389458521
+      },
+      {
+        "cycle": 162,
+        "true_rul": 114.0,
+        "predicted_rul": 63.8058141574802
+      },
+      {
+        "cycle": 163,
+        "true_rul": 113.0,
+        "predicted_rul": 66.32914686291042
+      },
+      {
+        "cycle": 164,
+        "true_rul": 112.0,
+        "predicted_rul": 62.18057544592193
+      },
+      {
+        "cycle": 165,
+        "true_rul": 111.0,
+        "predicted_rul": 70.05914548927103
+      },
+      {
+        "cycle": 166,
+        "true_rul": 110.0,
+        "predicted_rul": 67.45835887115572
+      },
+      {
+        "cycle": 167,
+        "true_rul": 109.0,
+        "predicted_rul": 61.601493786158244
+      },
+      {
+        "cycle": 168,
+        "true_rul": 108.0,
+        "predicted_rul": 56.13607584030069
+      },
+      {
+        "cycle": 169,
+        "true_rul": 107.0,
+        "predicted_rul": 62.01131332922341
+      },
+      {
+        "cycle": 170,
+        "true_rul": 106.0,
+        "predicted_rul": 61.64558814648626
+      },
+      {
+        "cycle": 171,
+        "true_rul": 105.0,
+        "predicted_rul": 51.91834268342427
+      },
+      {
+        "cycle": 172,
+        "true_rul": 104.0,
+        "predicted_rul": 60.42826340971624
+      },
+      {
+        "cycle": 173,
+        "true_rul": 103.0,
+        "predicted_rul": 61.40785481187595
+      },
+      {
+        "cycle": 174,
+        "true_rul": 102.0,
+        "predicted_rul": 59.481521326320944
+      },
+      {
+        "cycle": 175,
+        "true_rul": 101.0,
+        "predicted_rul": 62.810090768727605
+      },
+      {
+        "cycle": 176,
+        "true_rul": 100.0,
+        "predicted_rul": 70.9494020390066
+      },
+      {
+        "cycle": 177,
+        "true_rul": 99.0,
+        "predicted_rul": 67.12531914876854
+      },
+      {
+        "cycle": 178,
+        "true_rul": 98.0,
+        "predicted_rul": 68.13059408002118
+      },
+      {
+        "cycle": 179,
+        "true_rul": 97.0,
+        "predicted_rul": 63.78545150716309
+      },
+      {
+        "cycle": 180,
+        "true_rul": 96.0,
+        "predicted_rul": 62.77947023147135
+      },
+      {
+        "cycle": 181,
+        "true_rul": 95.0,
+        "predicted_rul": 60.38657944854094
+      },
+      {
+        "cycle": 182,
+        "true_rul": 94.0,
+        "predicted_rul": 58.83249320662799
+      },
+      {
+        "cycle": 183,
+        "true_rul": 93.0,
+        "predicted_rul": 52.98599160778758
+      },
+      {
+        "cycle": 184,
+        "true_rul": 92.0,
+        "predicted_rul": 60.52649114572523
+      },
+      {
+        "cycle": 185,
+        "true_rul": 91.0,
+        "predicted_rul": 61.944078747454114
+      },
+      {
+        "cycle": 186,
+        "true_rul": 90.0,
+        "predicted_rul": 54.647202423362614
+      },
+      {
+        "cycle": 187,
+        "true_rul": 89.0,
+        "predicted_rul": 52.812842146546245
+      },
+      {
+        "cycle": 188,
+        "true_rul": 88.0,
+        "predicted_rul": 56.90549637397271
+      },
+      {
+        "cycle": 189,
+        "true_rul": 87.0,
+        "predicted_rul": 57.18726520088239
+      },
+      {
+        "cycle": 190,
+        "true_rul": 86.0,
+        "predicted_rul": 58.595923441071136
+      },
+      {
+        "cycle": 191,
+        "true_rul": 85.0,
+        "predicted_rul": 59.179752739519245
+      },
+      {
+        "cycle": 192,
+        "true_rul": 84.0,
+        "predicted_rul": 62.78339257742846
+      },
+      {
+        "cycle": 193,
+        "true_rul": 83.0,
+        "predicted_rul": 56.49308257942721
+      },
+      {
+        "cycle": 194,
+        "true_rul": 82.0,
+        "predicted_rul": 49.68157647901353
+      },
+      {
+        "cycle": 195,
+        "true_rul": 81.0,
+        "predicted_rul": 48.939115637251234
+      },
+      {
+        "cycle": 196,
+        "true_rul": 80.0,
+        "predicted_rul": 47.00536965552601
+      },
+      {
+        "cycle": 197,
+        "true_rul": 79.0,
+        "predicted_rul": 40.618689137709225
+      },
+      {
+        "cycle": 198,
+        "true_rul": 78.0,
+        "predicted_rul": 41.446476835672
+      },
+      {
+        "cycle": 199,
+        "true_rul": 77.0,
+        "predicted_rul": 37.56070712065775
+      },
+      {
+        "cycle": 200,
+        "true_rul": 76.0,
+        "predicted_rul": 37.12847512472945
+      },
+      {
+        "cycle": 201,
+        "true_rul": 75.0,
+        "predicted_rul": 35.67593818376554
+      },
+      {
+        "cycle": 202,
+        "true_rul": 74.0,
+        "predicted_rul": 43.58482501070466
+      },
+      {
+        "cycle": 203,
+        "true_rul": 73.0,
+        "predicted_rul": 52.320042465009465
+      },
+      {
+        "cycle": 204,
+        "true_rul": 72.0,
+        "predicted_rul": 47.19120029367696
+      },
+      {
+        "cycle": 205,
+        "true_rul": 71.0,
+        "predicted_rul": 44.702377077483106
+      },
+      {
+        "cycle": 206,
+        "true_rul": 70.0,
+        "predicted_rul": 41.333649427131604
+      },
+      {
+        "cycle": 207,
+        "true_rul": 69.0,
+        "predicted_rul": 38.27435127343415
+      },
+      {
+        "cycle": 208,
+        "true_rul": 68.0,
+        "predicted_rul": 39.75604076331729
+      },
+      {
+        "cycle": 209,
+        "true_rul": 67.0,
+        "predicted_rul": 44.927382998552275
+      },
+      {
+        "cycle": 210,
+        "true_rul": 66.0,
+        "predicted_rul": 45.921729034920645
+      },
+      {
+        "cycle": 211,
+        "true_rul": 65.0,
+        "predicted_rul": 31.289902963517306
+      },
+      {
+        "cycle": 212,
+        "true_rul": 64.0,
+        "predicted_rul": 31.348529292969033
+      },
+      {
+        "cycle": 213,
+        "true_rul": 63.0,
+        "predicted_rul": 27.92894879731466
+      },
+      {
+        "cycle": 214,
+        "true_rul": 62.0,
+        "predicted_rul": 29.76416699465699
+      },
+      {
+        "cycle": 215,
+        "true_rul": 61.0,
+        "predicted_rul": 31.061438401342457
+      },
+      {
+        "cycle": 216,
+        "true_rul": 60.0,
+        "predicted_rul": 27.90869862364889
+      },
+      {
+        "cycle": 217,
+        "true_rul": 59.0,
+        "predicted_rul": 38.65468865119874
+      },
+      {
+        "cycle": 218,
+        "true_rul": 58.0,
+        "predicted_rul": 35.697981888148206
+      },
+      {
+        "cycle": 219,
+        "true_rul": 57.0,
+        "predicted_rul": 41.026749418462714
+      },
+      {
+        "cycle": 220,
+        "true_rul": 56.0,
+        "predicted_rul": 32.956763865495304
+      },
+      {
+        "cycle": 221,
+        "true_rul": 55.0,
+        "predicted_rul": 34.95200234074946
+      },
+      {
+        "cycle": 222,
+        "true_rul": 54.0,
+        "predicted_rul": 33.53794918793392
+      },
+      {
+        "cycle": 223,
+        "true_rul": 53.0,
+        "predicted_rul": 28.553525506815276
+      },
+      {
+        "cycle": 224,
+        "true_rul": 52.0,
+        "predicted_rul": 31.802827084953606
+      },
+      {
+        "cycle": 225,
+        "true_rul": 51.0,
+        "predicted_rul": 31.2892150155767
+      },
+      {
+        "cycle": 226,
+        "true_rul": 50.0,
+        "predicted_rul": 33.37295945237747
+      },
+      {
+        "cycle": 227,
+        "true_rul": 49.0,
+        "predicted_rul": 40.369517057639314
+      },
+      {
+        "cycle": 228,
+        "true_rul": 48.0,
+        "predicted_rul": 36.1727459587928
+      },
+      {
+        "cycle": 229,
+        "true_rul": 47.0,
+        "predicted_rul": 30.833935073529574
+      },
+      {
+        "cycle": 230,
+        "true_rul": 46.0,
+        "predicted_rul": 32.98283994390658
+      },
+      {
+        "cycle": 231,
+        "true_rul": 45.0,
+        "predicted_rul": 38.06313858846079
+      },
+      {
+        "cycle": 232,
+        "true_rul": 44.0,
+        "predicted_rul": 38.91463110316363
+      },
+      {
+        "cycle": 233,
+        "true_rul": 43.0,
+        "predicted_rul": 29.97842012959518
+      },
+      {
+        "cycle": 234,
+        "true_rul": 42.0,
+        "predicted_rul": 35.019269024953246
+      },
+      {
+        "cycle": 235,
+        "true_rul": 41.0,
+        "predicted_rul": 42.581014420584324
+      },
+      {
+        "cycle": 236,
+        "true_rul": 40.0,
+        "predicted_rul": 36.92572488766382
+      },
+      {
+        "cycle": 237,
+        "true_rul": 39.0,
+        "predicted_rul": 30.3064092842651
+      },
+      {
+        "cycle": 238,
+        "true_rul": 38.0,
+        "predicted_rul": 30.259326021605375
+      },
+      {
+        "cycle": 239,
+        "true_rul": 37.0,
+        "predicted_rul": 25.53203126150038
+      },
+      {
+        "cycle": 240,
+        "true_rul": 36.0,
+        "predicted_rul": 31.328426196230794
+      },
+      {
+        "cycle": 241,
+        "true_rul": 35.0,
+        "predicted_rul": 28.23876615626068
+      },
+      {
+        "cycle": 242,
+        "true_rul": 34.0,
+        "predicted_rul": 28.697616037319676
+      },
+      {
+        "cycle": 243,
+        "true_rul": 33.0,
+        "predicted_rul": 34.133143343824486
+      },
+      {
+        "cycle": 244,
+        "true_rul": 32.0,
+        "predicted_rul": 29.085111784603214
+      },
+      {
+        "cycle": 245,
+        "true_rul": 31.0,
+        "predicted_rul": 16.2820548664331
+      },
+      {
+        "cycle": 246,
+        "true_rul": 30.0,
+        "predicted_rul": 13.641197926372115
+      },
+      {
+        "cycle": 247,
+        "true_rul": 29.0,
+        "predicted_rul": 12.244887508948523
+      },
+      {
+        "cycle": 248,
+        "true_rul": 28.0,
+        "predicted_rul": 18.892713743181957
+      },
+      {
+        "cycle": 249,
+        "true_rul": 27.0,
+        "predicted_rul": 19.088069878614988
+      },
+      {
+        "cycle": 250,
+        "true_rul": 26.0,
+        "predicted_rul": 15.180209038109751
+      },
+      {
+        "cycle": 251,
+        "true_rul": 25.0,
+        "predicted_rul": 15.615645325011428
+      },
+      {
+        "cycle": 252,
+        "true_rul": 24.0,
+        "predicted_rul": 10.207692540365315
+      },
+      {
+        "cycle": 253,
+        "true_rul": 23.0,
+        "predicted_rul": 10.230718720660661
+      },
+      {
+        "cycle": 254,
+        "true_rul": 22.0,
+        "predicted_rul": 6.104605869521038
+      },
+      {
+        "cycle": 255,
+        "true_rul": 21.0,
+        "predicted_rul": -5.948293252142321
+      },
+      {
+        "cycle": 256,
+        "true_rul": 20.0,
+        "predicted_rul": -1.7030238902298152
+      },
+      {
+        "cycle": 257,
+        "true_rul": 19.0,
+        "predicted_rul": -9.492403074000322
+      },
+      {
+        "cycle": 258,
+        "true_rul": 18.0,
+        "predicted_rul": -11.32691343670922
+      }
+    ]
+  },
+  {
+    "unit_number": 2,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 119.07361991053585
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 158.88771016969986
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 135.1310601800942
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 120.18305463301658
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 104.71901955164685
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 118.05145205158806
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 129.633628005442
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 122.54158790623842
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 115.08715378567285
+      },
+      {
+        "cycle": 10,
+        "true_rul": 124.0,
+        "predicted_rul": 110.62238514596174
+      },
+      {
+        "cycle": 11,
+        "true_rul": 123.0,
+        "predicted_rul": 119.29466102560036
+      },
+      {
+        "cycle": 12,
+        "true_rul": 122.0,
+        "predicted_rul": 120.28230519325552
+      },
+      {
+        "cycle": 13,
+        "true_rul": 121.0,
+        "predicted_rul": 125.55834036191845
+      },
+      {
+        "cycle": 14,
+        "true_rul": 120.0,
+        "predicted_rul": 117.56178122964047
+      },
+      {
+        "cycle": 15,
+        "true_rul": 119.0,
+        "predicted_rul": 117.85897665893572
+      },
+      {
+        "cycle": 16,
+        "true_rul": 118.0,
+        "predicted_rul": 110.63479622227896
+      },
+      {
+        "cycle": 17,
+        "true_rul": 117.0,
+        "predicted_rul": 112.05483512705541
+      },
+      {
+        "cycle": 18,
+        "true_rul": 116.0,
+        "predicted_rul": 112.07239715758806
+      },
+      {
+        "cycle": 19,
+        "true_rul": 115.0,
+        "predicted_rul": 116.28426173316984
+      },
+      {
+        "cycle": 20,
+        "true_rul": 114.0,
+        "predicted_rul": 107.8728754919739
+      },
+      {
+        "cycle": 21,
+        "true_rul": 113.0,
+        "predicted_rul": 119.97442775108539
+      },
+      {
+        "cycle": 22,
+        "true_rul": 112.0,
+        "predicted_rul": 124.71024937633956
+      },
+      {
+        "cycle": 23,
+        "true_rul": 111.0,
+        "predicted_rul": 119.69914403156508
+      },
+      {
+        "cycle": 24,
+        "true_rul": 110.0,
+        "predicted_rul": 120.02020568111948
+      },
+      {
+        "cycle": 25,
+        "true_rul": 109.0,
+        "predicted_rul": 123.85712207949655
+      },
+      {
+        "cycle": 26,
+        "true_rul": 108.0,
+        "predicted_rul": 117.42498200673617
+      },
+      {
+        "cycle": 27,
+        "true_rul": 107.0,
+        "predicted_rul": 111.55973518261453
+      },
+      {
+        "cycle": 28,
+        "true_rul": 106.0,
+        "predicted_rul": 111.81736049187748
+      },
+      {
+        "cycle": 29,
+        "true_rul": 105.0,
+        "predicted_rul": 110.66137795489703
+      },
+      {
+        "cycle": 30,
+        "true_rul": 104.0,
+        "predicted_rul": 113.3671260212559
+      },
+      {
+        "cycle": 31,
+        "true_rul": 103.0,
+        "predicted_rul": 108.06848742746115
+      },
+      {
+        "cycle": 32,
+        "true_rul": 102.0,
+        "predicted_rul": 112.13845530599974
+      },
+      {
+        "cycle": 33,
+        "true_rul": 101.0,
+        "predicted_rul": 115.70365345039136
+      },
+      {
+        "cycle": 34,
+        "true_rul": 100.0,
+        "predicted_rul": 113.86452827947141
+      },
+      {
+        "cycle": 35,
+        "true_rul": 99.0,
+        "predicted_rul": 113.89192096400257
+      },
+      {
+        "cycle": 36,
+        "true_rul": 98.0,
+        "predicted_rul": 119.17963562389014
+      },
+      {
+        "cycle": 37,
+        "true_rul": 97.0,
+        "predicted_rul": 114.30246026902387
+      },
+      {
+        "cycle": 38,
+        "true_rul": 96.0,
+        "predicted_rul": 112.38252557994929
+      },
+      {
+        "cycle": 39,
+        "true_rul": 95.0,
+        "predicted_rul": 116.4291233142394
+      },
+      {
+        "cycle": 40,
+        "true_rul": 94.0,
+        "predicted_rul": 119.64048706521498
+      },
+      {
+        "cycle": 41,
+        "true_rul": 93.0,
+        "predicted_rul": 116.4287292079025
+      },
+      {
+        "cycle": 42,
+        "true_rul": 92.0,
+        "predicted_rul": 111.10816623378014
+      },
+      {
+        "cycle": 43,
+        "true_rul": 91.0,
+        "predicted_rul": 108.2539033637131
+      },
+      {
+        "cycle": 44,
+        "true_rul": 90.0,
+        "predicted_rul": 106.16713595494366
+      },
+      {
+        "cycle": 45,
+        "true_rul": 89.0,
+        "predicted_rul": 91.34782521596935
+      },
+      {
+        "cycle": 46,
+        "true_rul": 88.0,
+        "predicted_rul": 95.32924073262984
+      },
+      {
+        "cycle": 47,
+        "true_rul": 87.0,
+        "predicted_rul": 85.55667796772104
+      },
+      {
+        "cycle": 48,
+        "true_rul": 86.0,
+        "predicted_rul": 90.90131422959712
+      },
+      {
+        "cycle": 49,
+        "true_rul": 85.0,
+        "predicted_rul": 96.79022536678349
+      },
+      {
+        "cycle": 50,
+        "true_rul": 84.0,
+        "predicted_rul": 90.65104890771545
+      },
+      {
+        "cycle": 51,
+        "true_rul": 83.0,
+        "predicted_rul": 96.66393913993306
+      },
+      {
+        "cycle": 52,
+        "true_rul": 82.0,
+        "predicted_rul": 100.39301126687678
+      },
+      {
+        "cycle": 53,
+        "true_rul": 81.0,
+        "predicted_rul": 104.09535560231416
+      },
+      {
+        "cycle": 54,
+        "true_rul": 80.0,
+        "predicted_rul": 100.19626004100428
+      },
+      {
+        "cycle": 55,
+        "true_rul": 79.0,
+        "predicted_rul": 99.48373972369154
+      }
+    ]
+  },
+  {
+    "unit_number": 3,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 42.89073459382416
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 41.747258940391475
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 71.87485553151782
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 66.6616457995442
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 81.60521815612265
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 87.53952475968435
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 102.05498745936893
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 92.67032737428781
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 99.09454566758177
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 96.79574685285297
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 90.51195394803653
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 89.29480562352546
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 88.05703298079789
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 89.80761938316209
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 90.37813720893246
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 94.86402979848026
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 99.52816187078497
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 95.42567095707636
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 100.95060857205863
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 98.11615354443347
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 95.44234735529608
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 96.2112970228336
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 87.37429428549149
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 88.20266334186817
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 83.12068111692861
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 93.0799735982473
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 94.5449037416729
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 99.63491490281376
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 99.59771428115891
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 99.66839156145579
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 104.30616343822112
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 99.78176366432308
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 97.65323890012587
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 99.47605850793843
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 102.113844181893
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 99.504108018431
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 94.88267210075355
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 97.76193952128779
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 103.04712763173302
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 97.56583147440142
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 95.29632000779202
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 99.96997176249897
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 104.46603506780411
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 105.33008959746803
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 103.05741552535437
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 103.8047524124413
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 103.00153244292414
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 106.23363645138306
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 108.0577026797655
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 100.66789294155569
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 102.63919549467028
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 102.45498684258018
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 101.7627949963935
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 95.46801419471012
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 90.56062534234479
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 88.45216936082579
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 88.58832158313089
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 81.61063606356947
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 81.17297792991485
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 84.35675141943102
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 79.91546486728112
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 84.0032382309546
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 81.18974957485807
+      },
+      {
+        "cycle": 64,
+        "true_rul": 125.0,
+        "predicted_rul": 81.35920065648679
+      },
+      {
+        "cycle": 65,
+        "true_rul": 125.0,
+        "predicted_rul": 74.11565142939253
+      },
+      {
+        "cycle": 66,
+        "true_rul": 125.0,
+        "predicted_rul": 73.94097617117404
+      },
+      {
+        "cycle": 67,
+        "true_rul": 125.0,
+        "predicted_rul": 78.4084525196904
+      },
+      {
+        "cycle": 68,
+        "true_rul": 125.0,
+        "predicted_rul": 74.92594646004909
+      },
+      {
+        "cycle": 69,
+        "true_rul": 125.0,
+        "predicted_rul": 81.34256224595083
+      },
+      {
+        "cycle": 70,
+        "true_rul": 125.0,
+        "predicted_rul": 85.05774892573208
+      },
+      {
+        "cycle": 71,
+        "true_rul": 125.0,
+        "predicted_rul": 89.2996969066462
+      },
+      {
+        "cycle": 72,
+        "true_rul": 125.0,
+        "predicted_rul": 98.39530003182153
+      },
+      {
+        "cycle": 73,
+        "true_rul": 125.0,
+        "predicted_rul": 97.82663016763036
+      },
+      {
+        "cycle": 74,
+        "true_rul": 125.0,
+        "predicted_rul": 86.3163735380258
+      },
+      {
+        "cycle": 75,
+        "true_rul": 125.0,
+        "predicted_rul": 90.33955639952728
+      },
+      {
+        "cycle": 76,
+        "true_rul": 125.0,
+        "predicted_rul": 87.36320573263583
+      },
+      {
+        "cycle": 77,
+        "true_rul": 125.0,
+        "predicted_rul": 89.4371833956775
+      },
+      {
+        "cycle": 78,
+        "true_rul": 125.0,
+        "predicted_rul": 92.97158274627327
+      },
+      {
+        "cycle": 79,
+        "true_rul": 125.0,
+        "predicted_rul": 96.09199073302261
+      },
+      {
+        "cycle": 80,
+        "true_rul": 125.0,
+        "predicted_rul": 95.15010971340052
+      },
+      {
+        "cycle": 81,
+        "true_rul": 125.0,
+        "predicted_rul": 111.11264467457295
+      },
+      {
+        "cycle": 82,
+        "true_rul": 125.0,
+        "predicted_rul": 105.76944579039446
+      },
+      {
+        "cycle": 83,
+        "true_rul": 125.0,
+        "predicted_rul": 111.5910791109527
+      },
+      {
+        "cycle": 84,
+        "true_rul": 125.0,
+        "predicted_rul": 111.01980658450702
+      },
+      {
+        "cycle": 85,
+        "true_rul": 125.0,
+        "predicted_rul": 120.22305656979006
+      },
+      {
+        "cycle": 86,
+        "true_rul": 125.0,
+        "predicted_rul": 115.24655690118016
+      },
+      {
+        "cycle": 87,
+        "true_rul": 125.0,
+        "predicted_rul": 105.98261280758561
+      },
+      {
+        "cycle": 88,
+        "true_rul": 125.0,
+        "predicted_rul": 107.78418530138333
+      },
+      {
+        "cycle": 89,
+        "true_rul": 125.0,
+        "predicted_rul": 105.22923225150043
+      },
+      {
+        "cycle": 90,
+        "true_rul": 125.0,
+        "predicted_rul": 99.41822065567794
+      },
+      {
+        "cycle": 91,
+        "true_rul": 125.0,
+        "predicted_rul": 97.28838544695282
+      },
+      {
+        "cycle": 92,
+        "true_rul": 125.0,
+        "predicted_rul": 97.72895786349545
+      },
+      {
+        "cycle": 93,
+        "true_rul": 125.0,
+        "predicted_rul": 93.33674534437705
+      },
+      {
+        "cycle": 94,
+        "true_rul": 125.0,
+        "predicted_rul": 95.49072413852991
+      },
+      {
+        "cycle": 95,
+        "true_rul": 125.0,
+        "predicted_rul": 92.48597768148102
+      },
+      {
+        "cycle": 96,
+        "true_rul": 125.0,
+        "predicted_rul": 92.51174812633872
+      },
+      {
+        "cycle": 97,
+        "true_rul": 125.0,
+        "predicted_rul": 90.91527312904327
+      },
+      {
+        "cycle": 98,
+        "true_rul": 125.0,
+        "predicted_rul": 84.88595302221256
+      },
+      {
+        "cycle": 99,
+        "true_rul": 125.0,
+        "predicted_rul": 84.21409688737367
+      },
+      {
+        "cycle": 100,
+        "true_rul": 125.0,
+        "predicted_rul": 83.0619965026035
+      },
+      {
+        "cycle": 101,
+        "true_rul": 125.0,
+        "predicted_rul": 80.90186220864598
+      },
+      {
+        "cycle": 102,
+        "true_rul": 125.0,
+        "predicted_rul": 74.66267892862925
+      },
+      {
+        "cycle": 103,
+        "true_rul": 125.0,
+        "predicted_rul": 75.36135028234821
+      },
+      {
+        "cycle": 104,
+        "true_rul": 125.0,
+        "predicted_rul": 82.61274356044669
+      },
+      {
+        "cycle": 105,
+        "true_rul": 125.0,
+        "predicted_rul": 81.37840673796563
+      },
+      {
+        "cycle": 106,
+        "true_rul": 125.0,
+        "predicted_rul": 85.59082175272124
+      },
+      {
+        "cycle": 107,
+        "true_rul": 125.0,
+        "predicted_rul": 87.37061809025909
+      },
+      {
+        "cycle": 108,
+        "true_rul": 125.0,
+        "predicted_rul": 81.36198830991088
+      },
+      {
+        "cycle": 109,
+        "true_rul": 125.0,
+        "predicted_rul": 77.51535477273137
+      },
+      {
+        "cycle": 110,
+        "true_rul": 125.0,
+        "predicted_rul": 78.65904477138793
+      },
+      {
+        "cycle": 111,
+        "true_rul": 125.0,
+        "predicted_rul": 88.77610916594676
+      },
+      {
+        "cycle": 112,
+        "true_rul": 125.0,
+        "predicted_rul": 82.68197592038268
+      },
+      {
+        "cycle": 113,
+        "true_rul": 125.0,
+        "predicted_rul": 80.86844177648709
+      },
+      {
+        "cycle": 114,
+        "true_rul": 125.0,
+        "predicted_rul": 79.52557507976599
+      },
+      {
+        "cycle": 115,
+        "true_rul": 125.0,
+        "predicted_rul": 78.39447680122066
+      },
+      {
+        "cycle": 116,
+        "true_rul": 125.0,
+        "predicted_rul": 77.63813294137253
+      },
+      {
+        "cycle": 117,
+        "true_rul": 125.0,
+        "predicted_rul": 73.4710998048995
+      },
+      {
+        "cycle": 118,
+        "true_rul": 125.0,
+        "predicted_rul": 80.71894043072098
+      },
+      {
+        "cycle": 119,
+        "true_rul": 125.0,
+        "predicted_rul": 75.55301127721214
+      },
+      {
+        "cycle": 120,
+        "true_rul": 125.0,
+        "predicted_rul": 86.21191163723233
+      },
+      {
+        "cycle": 121,
+        "true_rul": 125.0,
+        "predicted_rul": 85.82708904749234
+      },
+      {
+        "cycle": 122,
+        "true_rul": 125.0,
+        "predicted_rul": 86.88397199507381
+      },
+      {
+        "cycle": 123,
+        "true_rul": 125.0,
+        "predicted_rul": 82.97272522114872
+      },
+      {
+        "cycle": 124,
+        "true_rul": 125.0,
+        "predicted_rul": 70.4258652646422
+      },
+      {
+        "cycle": 125,
+        "true_rul": 125.0,
+        "predicted_rul": 67.96771754747715
+      },
+      {
+        "cycle": 126,
+        "true_rul": 125.0,
+        "predicted_rul": 73.2709856754027
+      },
+      {
+        "cycle": 127,
+        "true_rul": 125.0,
+        "predicted_rul": 73.65016606135396
+      },
+      {
+        "cycle": 128,
+        "true_rul": 125.0,
+        "predicted_rul": 79.83584188417808
+      },
+      {
+        "cycle": 129,
+        "true_rul": 125.0,
+        "predicted_rul": 74.62393446435271
+      },
+      {
+        "cycle": 130,
+        "true_rul": 125.0,
+        "predicted_rul": 74.73885748100292
+      },
+      {
+        "cycle": 131,
+        "true_rul": 125.0,
+        "predicted_rul": 77.76523912188532
+      },
+      {
+        "cycle": 132,
+        "true_rul": 125.0,
+        "predicted_rul": 79.65894625316287
+      },
+      {
+        "cycle": 133,
+        "true_rul": 125.0,
+        "predicted_rul": 78.0762499446264
+      },
+      {
+        "cycle": 134,
+        "true_rul": 125.0,
+        "predicted_rul": 82.33262084357557
+      },
+      {
+        "cycle": 135,
+        "true_rul": 125.0,
+        "predicted_rul": 85.92285015663765
+      },
+      {
+        "cycle": 136,
+        "true_rul": 125.0,
+        "predicted_rul": 80.57832688979397
+      },
+      {
+        "cycle": 137,
+        "true_rul": 125.0,
+        "predicted_rul": 81.71415917284685
+      },
+      {
+        "cycle": 138,
+        "true_rul": 125.0,
+        "predicted_rul": 83.77223744695402
+      },
+      {
+        "cycle": 139,
+        "true_rul": 125.0,
+        "predicted_rul": 82.86366934218677
+      },
+      {
+        "cycle": 140,
+        "true_rul": 125.0,
+        "predicted_rul": 84.12651082186494
+      },
+      {
+        "cycle": 141,
+        "true_rul": 125.0,
+        "predicted_rul": 79.6576923535431
+      },
+      {
+        "cycle": 142,
+        "true_rul": 125.0,
+        "predicted_rul": 86.02950991069702
+      },
+      {
+        "cycle": 143,
+        "true_rul": 125.0,
+        "predicted_rul": 87.45631691188646
+      },
+      {
+        "cycle": 144,
+        "true_rul": 125.0,
+        "predicted_rul": 87.72018735510756
+      },
+      {
+        "cycle": 145,
+        "true_rul": 125.0,
+        "predicted_rul": 86.80909903755128
+      },
+      {
+        "cycle": 146,
+        "true_rul": 125.0,
+        "predicted_rul": 87.91095214514644
+      },
+      {
+        "cycle": 147,
+        "true_rul": 124.0,
+        "predicted_rul": 88.49552892962492
+      },
+      {
+        "cycle": 148,
+        "true_rul": 123.0,
+        "predicted_rul": 76.70161863964495
+      },
+      {
+        "cycle": 149,
+        "true_rul": 122.0,
+        "predicted_rul": 79.4108917917074
+      },
+      {
+        "cycle": 150,
+        "true_rul": 121.0,
+        "predicted_rul": 72.78812288679183
+      },
+      {
+        "cycle": 151,
+        "true_rul": 120.0,
+        "predicted_rul": 72.5313178081542
+      },
+      {
+        "cycle": 152,
+        "true_rul": 119.0,
+        "predicted_rul": 70.3054527299555
+      },
+      {
+        "cycle": 153,
+        "true_rul": 118.0,
+        "predicted_rul": 73.31998310088602
+      },
+      {
+        "cycle": 154,
+        "true_rul": 117.0,
+        "predicted_rul": 66.2575698217297
+      },
+      {
+        "cycle": 155,
+        "true_rul": 116.0,
+        "predicted_rul": 69.37564949571606
+      },
+      {
+        "cycle": 156,
+        "true_rul": 115.0,
+        "predicted_rul": 63.83215449985619
+      },
+      {
+        "cycle": 157,
+        "true_rul": 114.0,
+        "predicted_rul": 67.38550873175154
+      },
+      {
+        "cycle": 158,
+        "true_rul": 113.0,
+        "predicted_rul": 69.40560489938616
+      },
+      {
+        "cycle": 159,
+        "true_rul": 112.0,
+        "predicted_rul": 71.96869454937769
+      },
+      {
+        "cycle": 160,
+        "true_rul": 111.0,
+        "predicted_rul": 76.45886663821511
+      },
+      {
+        "cycle": 161,
+        "true_rul": 110.0,
+        "predicted_rul": 72.612705300784
+      },
+      {
+        "cycle": 162,
+        "true_rul": 109.0,
+        "predicted_rul": 68.82910474909295
+      },
+      {
+        "cycle": 163,
+        "true_rul": 108.0,
+        "predicted_rul": 70.05266088147437
+      },
+      {
+        "cycle": 164,
+        "true_rul": 107.0,
+        "predicted_rul": 59.515482919572605
+      },
+      {
+        "cycle": 165,
+        "true_rul": 106.0,
+        "predicted_rul": 65.26443775366351
+      }
+    ]
+  },
+  {
+    "unit_number": 4,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 59.898180690830486
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 92.40758676963196
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 100.04271314771904
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 100.42995143710323
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 107.90109046681937
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 108.55600455643435
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 122.24623401247482
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 118.15908021740688
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 94.86103972907222
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 86.7976620742993
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 87.71749408818323
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 89.49763202301256
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 89.23665541518676
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 89.80754542304385
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 91.82938205821847
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 90.76509065242863
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 93.50613978505316
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 91.76717294957052
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 108.30067026536562
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 98.03601462630104
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 98.0832687458169
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 103.82344864480547
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 101.73341859155153
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 94.80739385337438
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 99.19139747061854
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 97.79624394628445
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 98.03907761129813
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 97.33020222149389
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 100.06087355644377
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 92.9458969631014
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 88.14695208682497
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 89.35892084879742
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 89.89607822977996
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 96.92646622478242
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 96.46065433723925
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 92.66067317885427
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 89.28733818652654
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 94.36086802914724
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 93.98012478297824
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 91.59953170930203
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 93.88901460657144
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 92.89366819123279
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 100.92416479936946
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 99.09242713651656
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 101.35767048871094
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 102.07571044206452
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 100.75914123002076
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 95.22255799974118
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 101.11823571415152
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 95.33850308638102
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 92.93962370268491
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 86.36888241431006
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 83.59509232546043
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 85.43357987299896
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 79.39452537250872
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 90.11567165659653
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 83.1651673886081
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 83.60759261737621
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 85.36549939100587
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 87.65813601436821
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 90.15888570146672
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 92.50893601956886
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 94.29321295563204
+      },
+      {
+        "cycle": 64,
+        "true_rul": 125.0,
+        "predicted_rul": 91.49053375358562
+      },
+      {
+        "cycle": 65,
+        "true_rul": 125.0,
+        "predicted_rul": 93.67195867874761
+      },
+      {
+        "cycle": 66,
+        "true_rul": 125.0,
+        "predicted_rul": 93.96747302492622
+      },
+      {
+        "cycle": 67,
+        "true_rul": 125.0,
+        "predicted_rul": 89.4492991547886
+      },
+      {
+        "cycle": 68,
+        "true_rul": 125.0,
+        "predicted_rul": 90.71447094112045
+      },
+      {
+        "cycle": 69,
+        "true_rul": 125.0,
+        "predicted_rul": 80.98391073876883
+      },
+      {
+        "cycle": 70,
+        "true_rul": 125.0,
+        "predicted_rul": 87.09297979697658
+      },
+      {
+        "cycle": 71,
+        "true_rul": 125.0,
+        "predicted_rul": 86.76659000049222
+      },
+      {
+        "cycle": 72,
+        "true_rul": 124.0,
+        "predicted_rul": 86.92188330806312
+      },
+      {
+        "cycle": 73,
+        "true_rul": 123.0,
+        "predicted_rul": 84.38298898564244
+      },
+      {
+        "cycle": 74,
+        "true_rul": 122.0,
+        "predicted_rul": 88.65847417630539
+      },
+      {
+        "cycle": 75,
+        "true_rul": 121.0,
+        "predicted_rul": 84.85693625687964
+      },
+      {
+        "cycle": 76,
+        "true_rul": 120.0,
+        "predicted_rul": 82.58514644862953
+      },
+      {
+        "cycle": 77,
+        "true_rul": 119.0,
+        "predicted_rul": 91.03158535400871
+      },
+      {
+        "cycle": 78,
+        "true_rul": 118.0,
+        "predicted_rul": 96.43861711898717
+      },
+      {
+        "cycle": 79,
+        "true_rul": 117.0,
+        "predicted_rul": 98.51515636971453
+      },
+      {
+        "cycle": 80,
+        "true_rul": 116.0,
+        "predicted_rul": 90.03763550484473
+      },
+      {
+        "cycle": 81,
+        "true_rul": 115.0,
+        "predicted_rul": 88.4038147220308
+      },
+      {
+        "cycle": 82,
+        "true_rul": 114.0,
+        "predicted_rul": 87.88395061871051
+      },
+      {
+        "cycle": 83,
+        "true_rul": 113.0,
+        "predicted_rul": 83.89654551892636
+      },
+      {
+        "cycle": 84,
+        "true_rul": 112.0,
+        "predicted_rul": 76.12756585185161
+      },
+      {
+        "cycle": 85,
+        "true_rul": 111.0,
+        "predicted_rul": 82.61183041355252
+      },
+      {
+        "cycle": 86,
+        "true_rul": 110.0,
+        "predicted_rul": 77.3562918641037
+      }
+    ]
+  },
+  {
+    "unit_number": 5,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 171.6035287063587
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 206.2019203119562
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 189.03007181473004
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 166.60130367570855
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 127.33975014692078
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 133.69255323319885
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 145.39746992748587
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 137.67920944317848
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 133.69306376157874
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 137.06725097719573
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 132.28016995399412
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 129.52431080629322
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 128.855365042411
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 126.99334390003423
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 130.31794456579155
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 126.72059963255379
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 130.13957627006312
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 124.68697901791529
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 119.27880542545427
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 124.65405337953052
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 121.35579623157537
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 115.46416460162618
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 111.10554444872832
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 108.60827290266752
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 114.52355274113143
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 106.65210540565022
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 105.76284964314618
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 101.20656745497945
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 97.04340518816207
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 92.76400827191537
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 94.818755217113
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 94.79079818799983
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 90.68818806691343
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 97.49588430656331
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 98.61510061637637
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 97.94321512569513
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 96.45955546211735
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 99.74587843878362
+      },
+      {
+        "cycle": 39,
+        "true_rul": 124.0,
+        "predicted_rul": 92.4425807900916
+      },
+      {
+        "cycle": 40,
+        "true_rul": 123.0,
+        "predicted_rul": 96.46731771215127
+      },
+      {
+        "cycle": 41,
+        "true_rul": 122.0,
+        "predicted_rul": 96.9731901063351
+      },
+      {
+        "cycle": 42,
+        "true_rul": 121.0,
+        "predicted_rul": 93.42000094797368
+      },
+      {
+        "cycle": 43,
+        "true_rul": 120.0,
+        "predicted_rul": 88.76351311019789
+      },
+      {
+        "cycle": 44,
+        "true_rul": 119.0,
+        "predicted_rul": 83.66095944329572
+      },
+      {
+        "cycle": 45,
+        "true_rul": 118.0,
+        "predicted_rul": 84.38913201684045
+      },
+      {
+        "cycle": 46,
+        "true_rul": 117.0,
+        "predicted_rul": 86.19436352848788
+      },
+      {
+        "cycle": 47,
+        "true_rul": 116.0,
+        "predicted_rul": 86.14949575749597
+      },
+      {
+        "cycle": 48,
+        "true_rul": 115.0,
+        "predicted_rul": 84.6932694097759
+      },
+      {
+        "cycle": 49,
+        "true_rul": 114.0,
+        "predicted_rul": 88.43380007264568
+      },
+      {
+        "cycle": 50,
+        "true_rul": 113.0,
+        "predicted_rul": 92.06945164856734
+      },
+      {
+        "cycle": 51,
+        "true_rul": 112.0,
+        "predicted_rul": 86.06793149597979
+      },
+      {
+        "cycle": 52,
+        "true_rul": 111.0,
+        "predicted_rul": 87.59485189561201
+      },
+      {
+        "cycle": 53,
+        "true_rul": 110.0,
+        "predicted_rul": 87.28485289666241
+      },
+      {
+        "cycle": 54,
+        "true_rul": 109.0,
+        "predicted_rul": 93.3826675961227
+      },
+      {
+        "cycle": 55,
+        "true_rul": 108.0,
+        "predicted_rul": 94.82757640502496
+      },
+      {
+        "cycle": 56,
+        "true_rul": 107.0,
+        "predicted_rul": 98.12574697084528
+      },
+      {
+        "cycle": 57,
+        "true_rul": 106.0,
+        "predicted_rul": 102.0182867140029
+      },
+      {
+        "cycle": 58,
+        "true_rul": 105.0,
+        "predicted_rul": 105.35212590424089
+      },
+      {
+        "cycle": 59,
+        "true_rul": 104.0,
+        "predicted_rul": 102.01835755491084
+      },
+      {
+        "cycle": 60,
+        "true_rul": 103.0,
+        "predicted_rul": 94.42269925912296
+      },
+      {
+        "cycle": 61,
+        "true_rul": 102.0,
+        "predicted_rul": 91.93544172458132
+      },
+      {
+        "cycle": 62,
+        "true_rul": 101.0,
+        "predicted_rul": 94.6309190220054
+      },
+      {
+        "cycle": 63,
+        "true_rul": 100.0,
+        "predicted_rul": 104.20737502237534
+      },
+      {
+        "cycle": 64,
+        "true_rul": 99.0,
+        "predicted_rul": 101.04167171462905
+      },
+      {
+        "cycle": 65,
+        "true_rul": 98.0,
+        "predicted_rul": 102.28948221322935
+      },
+      {
+        "cycle": 66,
+        "true_rul": 97.0,
+        "predicted_rul": 93.64526603009472
+      },
+      {
+        "cycle": 67,
+        "true_rul": 96.0,
+        "predicted_rul": 94.159358000883
+      },
+      {
+        "cycle": 68,
+        "true_rul": 95.0,
+        "predicted_rul": 89.58344203762499
+      },
+      {
+        "cycle": 69,
+        "true_rul": 94.0,
+        "predicted_rul": 94.9213954274419
+      },
+      {
+        "cycle": 70,
+        "true_rul": 93.0,
+        "predicted_rul": 86.87302021734286
+      },
+      {
+        "cycle": 71,
+        "true_rul": 92.0,
+        "predicted_rul": 84.28263204414543
+      },
+      {
+        "cycle": 72,
+        "true_rul": 91.0,
+        "predicted_rul": 89.66633139791884
+      },
+      {
+        "cycle": 73,
+        "true_rul": 90.0,
+        "predicted_rul": 85.42553216059059
+      },
+      {
+        "cycle": 74,
+        "true_rul": 89.0,
+        "predicted_rul": 81.36337098648801
+      },
+      {
+        "cycle": 75,
+        "true_rul": 88.0,
+        "predicted_rul": 86.92298373109043
+      },
+      {
+        "cycle": 76,
+        "true_rul": 87.0,
+        "predicted_rul": 87.09906177418088
+      },
+      {
+        "cycle": 77,
+        "true_rul": 86.0,
+        "predicted_rul": 84.33969927871112
+      },
+      {
+        "cycle": 78,
+        "true_rul": 85.0,
+        "predicted_rul": 83.99671856370696
+      },
+      {
+        "cycle": 79,
+        "true_rul": 84.0,
+        "predicted_rul": 81.15484785579065
+      },
+      {
+        "cycle": 80,
+        "true_rul": 83.0,
+        "predicted_rul": 80.29318225951465
+      },
+      {
+        "cycle": 81,
+        "true_rul": 82.0,
+        "predicted_rul": 76.51401832639021
+      },
+      {
+        "cycle": 82,
+        "true_rul": 81.0,
+        "predicted_rul": 75.61027138546888
+      },
+      {
+        "cycle": 83,
+        "true_rul": 80.0,
+        "predicted_rul": 74.26718468134823
+      },
+      {
+        "cycle": 84,
+        "true_rul": 79.0,
+        "predicted_rul": 76.34368181679383
+      },
+      {
+        "cycle": 85,
+        "true_rul": 78.0,
+        "predicted_rul": 80.51827963293181
+      },
+      {
+        "cycle": 86,
+        "true_rul": 77.0,
+        "predicted_rul": 81.52364978604237
+      },
+      {
+        "cycle": 87,
+        "true_rul": 76.0,
+        "predicted_rul": 80.17728245833132
+      },
+      {
+        "cycle": 88,
+        "true_rul": 75.0,
+        "predicted_rul": 73.89231098989694
+      },
+      {
+        "cycle": 89,
+        "true_rul": 74.0,
+        "predicted_rul": 67.93909497911227
+      },
+      {
+        "cycle": 90,
+        "true_rul": 73.0,
+        "predicted_rul": 71.77231459933864
+      },
+      {
+        "cycle": 91,
+        "true_rul": 72.0,
+        "predicted_rul": 77.25206887167951
+      },
+      {
+        "cycle": 92,
+        "true_rul": 71.0,
+        "predicted_rul": 76.94007419929403
+      },
+      {
+        "cycle": 93,
+        "true_rul": 70.0,
+        "predicted_rul": 79.54430720654818
+      },
+      {
+        "cycle": 94,
+        "true_rul": 69.0,
+        "predicted_rul": 87.63522352439395
+      },
+      {
+        "cycle": 95,
+        "true_rul": 68.0,
+        "predicted_rul": 85.69515005373796
+      },
+      {
+        "cycle": 96,
+        "true_rul": 67.0,
+        "predicted_rul": 83.40522167541712
+      },
+      {
+        "cycle": 97,
+        "true_rul": 66.0,
+        "predicted_rul": 82.27096872215225
+      },
+      {
+        "cycle": 98,
+        "true_rul": 65.0,
+        "predicted_rul": 80.31055955076044
+      },
+      {
+        "cycle": 99,
+        "true_rul": 64.0,
+        "predicted_rul": 82.24213877898183
+      },
+      {
+        "cycle": 100,
+        "true_rul": 63.0,
+        "predicted_rul": 88.94265975901908
+      },
+      {
+        "cycle": 101,
+        "true_rul": 62.0,
+        "predicted_rul": 88.31387093974263
+      },
+      {
+        "cycle": 102,
+        "true_rul": 61.0,
+        "predicted_rul": 82.75933556373639
+      },
+      {
+        "cycle": 103,
+        "true_rul": 60.0,
+        "predicted_rul": 87.05057625018708
+      },
+      {
+        "cycle": 104,
+        "true_rul": 59.0,
+        "predicted_rul": 81.15940394677455
+      },
+      {
+        "cycle": 105,
+        "true_rul": 58.0,
+        "predicted_rul": 80.50058601309138
+      },
+      {
+        "cycle": 106,
+        "true_rul": 57.0,
+        "predicted_rul": 79.79873462433534
+      },
+      {
+        "cycle": 107,
+        "true_rul": 56.0,
+        "predicted_rul": 77.4937889077737
+      },
+      {
+        "cycle": 108,
+        "true_rul": 55.0,
+        "predicted_rul": 79.7893937814988
+      },
+      {
+        "cycle": 109,
+        "true_rul": 54.0,
+        "predicted_rul": 77.19985895603168
+      },
+      {
+        "cycle": 110,
+        "true_rul": 53.0,
+        "predicted_rul": 75.32134867855348
+      },
+      {
+        "cycle": 111,
+        "true_rul": 52.0,
+        "predicted_rul": 79.99954198745581
+      },
+      {
+        "cycle": 112,
+        "true_rul": 51.0,
+        "predicted_rul": 82.89402187567248
+      },
+      {
+        "cycle": 113,
+        "true_rul": 50.0,
+        "predicted_rul": 78.62219388475023
+      },
+      {
+        "cycle": 114,
+        "true_rul": 49.0,
+        "predicted_rul": 77.20375721916753
+      },
+      {
+        "cycle": 115,
+        "true_rul": 48.0,
+        "predicted_rul": 67.51955001357965
+      },
+      {
+        "cycle": 116,
+        "true_rul": 47.0,
+        "predicted_rul": 69.20030193727325
+      },
+      {
+        "cycle": 117,
+        "true_rul": 46.0,
+        "predicted_rul": 77.37085725694669
+      },
+      {
+        "cycle": 118,
+        "true_rul": 45.0,
+        "predicted_rul": 70.306428023845
+      },
+      {
+        "cycle": 119,
+        "true_rul": 44.0,
+        "predicted_rul": 62.4384147474575
+      },
+      {
+        "cycle": 120,
+        "true_rul": 43.0,
+        "predicted_rul": 64.43462636500044
+      },
+      {
+        "cycle": 121,
+        "true_rul": 42.0,
+        "predicted_rul": 67.25174217788299
+      },
+      {
+        "cycle": 122,
+        "true_rul": 41.0,
+        "predicted_rul": 62.72215613744265
+      },
+      {
+        "cycle": 123,
+        "true_rul": 40.0,
+        "predicted_rul": 61.706565973441684
+      },
+      {
+        "cycle": 124,
+        "true_rul": 39.0,
+        "predicted_rul": 63.85624932881001
+      },
+      {
+        "cycle": 125,
+        "true_rul": 38.0,
+        "predicted_rul": 63.290916488873336
+      },
+      {
+        "cycle": 126,
+        "true_rul": 37.0,
+        "predicted_rul": 66.61492207778247
+      },
+      {
+        "cycle": 127,
+        "true_rul": 36.0,
+        "predicted_rul": 51.98647375143264
+      },
+      {
+        "cycle": 128,
+        "true_rul": 35.0,
+        "predicted_rul": 56.38325863460159
+      },
+      {
+        "cycle": 129,
+        "true_rul": 34.0,
+        "predicted_rul": 53.00878477533479
+      },
+      {
+        "cycle": 130,
+        "true_rul": 33.0,
+        "predicted_rul": 55.43855593566332
+      },
+      {
+        "cycle": 131,
+        "true_rul": 32.0,
+        "predicted_rul": 58.07073407643111
+      },
+      {
+        "cycle": 132,
+        "true_rul": 31.0,
+        "predicted_rul": 59.45117127193771
+      },
+      {
+        "cycle": 133,
+        "true_rul": 30.0,
+        "predicted_rul": 51.612413106586246
+      },
+      {
+        "cycle": 134,
+        "true_rul": 29.0,
+        "predicted_rul": 55.122138873946824
+      },
+      {
+        "cycle": 135,
+        "true_rul": 28.0,
+        "predicted_rul": 55.735372967516014
+      },
+      {
+        "cycle": 136,
+        "true_rul": 27.0,
+        "predicted_rul": 59.14986204291927
+      },
+      {
+        "cycle": 137,
+        "true_rul": 26.0,
+        "predicted_rul": 56.779498099211196
+      },
+      {
+        "cycle": 138,
+        "true_rul": 25.0,
+        "predicted_rul": 49.3566406348491
+      },
+      {
+        "cycle": 139,
+        "true_rul": 24.0,
+        "predicted_rul": 45.2257990306025
+      },
+      {
+        "cycle": 140,
+        "true_rul": 23.0,
+        "predicted_rul": 41.00133315354469
+      },
+      {
+        "cycle": 141,
+        "true_rul": 22.0,
+        "predicted_rul": 29.892536965757245
+      },
+      {
+        "cycle": 142,
+        "true_rul": 21.0,
+        "predicted_rul": 33.49432429678927
+      },
+      {
+        "cycle": 143,
+        "true_rul": 20.0,
+        "predicted_rul": 28.063064940630284
+      },
+      {
+        "cycle": 144,
+        "true_rul": 19.0,
+        "predicted_rul": 28.570920078722338
+      },
+      {
+        "cycle": 145,
+        "true_rul": 18.0,
+        "predicted_rul": 23.41810173196245
+      },
+      {
+        "cycle": 146,
+        "true_rul": 17.0,
+        "predicted_rul": 15.823521108235582
+      },
+      {
+        "cycle": 147,
+        "true_rul": 16.0,
+        "predicted_rul": 22.05770334511908
+      },
+      {
+        "cycle": 148,
+        "true_rul": 15.0,
+        "predicted_rul": 18.50044390837502
+      }
+    ]
+  },
+  {
+    "unit_number": 6,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 163.48818674979339
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 132.67596513793433
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 148.41576964481828
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 132.90962821071298
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 132.14784170803432
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 128.29277104915673
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 119.29573495897057
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 117.54515412453657
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 114.78599897199092
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 118.91784091766567
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 110.4559858459179
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 107.0683360239309
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 111.35660498277502
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 106.39321806533917
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 105.2249605478828
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 113.42424518367989
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 108.70489677837213
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 108.48225487106174
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 109.07651544498913
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 110.71428640445811
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 116.17417742220096
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 118.99863369783998
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 118.56993057700492
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 104.9480287250608
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 107.51137986287722
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 101.56942704452558
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 93.65483365838372
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 97.33686540442432
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 98.42871103048674
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 102.64445197881469
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 102.09465517944591
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 102.86641028454505
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 100.22958843551896
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 100.44119651558503
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 103.5083260881056
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 97.45944281772972
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 96.83691152655592
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 90.3800087343916
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 89.50800870166677
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 89.01186616284213
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 90.67647424634197
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 94.39560268278365
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 100.36512834377754
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 98.60022945477249
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 96.18633662114735
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 94.7997771919363
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 85.86148120746111
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 86.42998714539681
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 92.21679793315343
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 89.52120908608958
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 88.09946905728066
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 90.32546749959693
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 86.88141870176878
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 88.69206905866668
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 80.57726120796724
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 81.97538421148056
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 86.68356689887878
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 93.96781081794506
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 94.03386329362729
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 95.68723795202095
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 93.81910673374841
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 96.89089960053025
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 97.4839663215007
+      }
+    ]
+  },
+  {
+    "unit_number": 7,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 97.64691659480377
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 124.36548321388727
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 120.85015733145337
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 112.50432653611097
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 99.02986732746103
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 104.48017965777763
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 116.2950749318261
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 120.5204502836732
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 120.93698730242795
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 117.26725848015849
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 115.48899060648546
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 113.83129264816671
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 113.58643165607464
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 120.06730784935644
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 122.76230916060013
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 120.94771636884616
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 121.66576661308318
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 119.05164760822845
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 125.13689897235054
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 121.6019933897096
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 119.04480904278353
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 118.48779040032241
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 120.71312043513535
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 119.99543713866296
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 118.87405742327246
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 116.05950737055173
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 111.01813818432856
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 109.92590841995661
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 113.28265697618008
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 110.21463417034101
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 111.69953918984902
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 112.0498934292682
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 103.77498750330778
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 104.38776511808828
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 103.97314752495367
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 107.95860698968136
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 116.62734602815726
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 121.60408014125096
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 118.29299106867802
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 122.22781287118414
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 122.5687267044068
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 124.16206983748998
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 126.23725456266766
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 126.59625326605055
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 130.9377309299016
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 127.55693667413834
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 136.07863190987518
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 134.11771535861772
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 127.67959129304472
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 126.01434260073256
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 126.72021069641232
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 129.8813061382716
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 127.31179785679888
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 125.79574436457187
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 118.04019934986536
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 109.56747015929068
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 115.20000511998296
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 102.46355016456619
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 104.01493491346628
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 99.42673281836323
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 101.36648736967618
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 99.38651594734074
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 99.6415185345104
+      },
+      {
+        "cycle": 64,
+        "true_rul": 125.0,
+        "predicted_rul": 96.81796852519619
+      },
+      {
+        "cycle": 65,
+        "true_rul": 125.0,
+        "predicted_rul": 101.98883444700368
+      },
+      {
+        "cycle": 66,
+        "true_rul": 124.0,
+        "predicted_rul": 103.09624237628486
+      },
+      {
+        "cycle": 67,
+        "true_rul": 123.0,
+        "predicted_rul": 101.4349141434559
+      },
+      {
+        "cycle": 68,
+        "true_rul": 122.0,
+        "predicted_rul": 107.3399364420693
+      },
+      {
+        "cycle": 69,
+        "true_rul": 121.0,
+        "predicted_rul": 105.72590377257984
+      },
+      {
+        "cycle": 70,
+        "true_rul": 120.0,
+        "predicted_rul": 105.62272179241336
+      },
+      {
+        "cycle": 71,
+        "true_rul": 119.0,
+        "predicted_rul": 106.27466752695
+      },
+      {
+        "cycle": 72,
+        "true_rul": 118.0,
+        "predicted_rul": 98.39811504401769
+      },
+      {
+        "cycle": 73,
+        "true_rul": 117.0,
+        "predicted_rul": 100.66012214534567
+      },
+      {
+        "cycle": 74,
+        "true_rul": 116.0,
+        "predicted_rul": 97.42002501652314
+      },
+      {
+        "cycle": 75,
+        "true_rul": 115.0,
+        "predicted_rul": 96.33726500333069
+      },
+      {
+        "cycle": 76,
+        "true_rul": 114.0,
+        "predicted_rul": 96.09771258170076
+      },
+      {
+        "cycle": 77,
+        "true_rul": 113.0,
+        "predicted_rul": 93.47754449221247
+      },
+      {
+        "cycle": 78,
+        "true_rul": 112.0,
+        "predicted_rul": 96.45510833962362
+      },
+      {
+        "cycle": 79,
+        "true_rul": 111.0,
+        "predicted_rul": 91.39682031901248
+      },
+      {
+        "cycle": 80,
+        "true_rul": 110.0,
+        "predicted_rul": 93.10208611689268
+      },
+      {
+        "cycle": 81,
+        "true_rul": 109.0,
+        "predicted_rul": 89.06257639527757
+      },
+      {
+        "cycle": 82,
+        "true_rul": 108.0,
+        "predicted_rul": 93.22356773895626
+      },
+      {
+        "cycle": 83,
+        "true_rul": 107.0,
+        "predicted_rul": 91.35141103757996
+      },
+      {
+        "cycle": 84,
+        "true_rul": 106.0,
+        "predicted_rul": 92.62264912072897
+      },
+      {
+        "cycle": 85,
+        "true_rul": 105.0,
+        "predicted_rul": 88.45745699386316
+      },
+      {
+        "cycle": 86,
+        "true_rul": 104.0,
+        "predicted_rul": 94.8681867411633
+      },
+      {
+        "cycle": 87,
+        "true_rul": 103.0,
+        "predicted_rul": 90.9910709944852
+      },
+      {
+        "cycle": 88,
+        "true_rul": 102.0,
+        "predicted_rul": 94.27679860235912
+      },
+      {
+        "cycle": 89,
+        "true_rul": 101.0,
+        "predicted_rul": 91.1512668685209
+      },
+      {
+        "cycle": 90,
+        "true_rul": 100.0,
+        "predicted_rul": 84.67057521301831
+      },
+      {
+        "cycle": 91,
+        "true_rul": 99.0,
+        "predicted_rul": 85.75043184298374
+      },
+      {
+        "cycle": 92,
+        "true_rul": 98.0,
+        "predicted_rul": 82.58644312348042
+      },
+      {
+        "cycle": 93,
+        "true_rul": 97.0,
+        "predicted_rul": 84.71852812036741
+      },
+      {
+        "cycle": 94,
+        "true_rul": 96.0,
+        "predicted_rul": 81.97315875049026
+      },
+      {
+        "cycle": 95,
+        "true_rul": 95.0,
+        "predicted_rul": 80.92998229592376
+      },
+      {
+        "cycle": 96,
+        "true_rul": 94.0,
+        "predicted_rul": 77.6783893614629
+      },
+      {
+        "cycle": 97,
+        "true_rul": 93.0,
+        "predicted_rul": 76.77864153816518
+      },
+      {
+        "cycle": 98,
+        "true_rul": 92.0,
+        "predicted_rul": 76.27647704070114
+      },
+      {
+        "cycle": 99,
+        "true_rul": 91.0,
+        "predicted_rul": 75.63252747322986
+      },
+      {
+        "cycle": 100,
+        "true_rul": 90.0,
+        "predicted_rul": 78.01064123017386
+      },
+      {
+        "cycle": 101,
+        "true_rul": 89.0,
+        "predicted_rul": 76.49737986660693
+      },
+      {
+        "cycle": 102,
+        "true_rul": 88.0,
+        "predicted_rul": 71.18365139913658
+      },
+      {
+        "cycle": 103,
+        "true_rul": 87.0,
+        "predicted_rul": 74.37544308607721
+      },
+      {
+        "cycle": 104,
+        "true_rul": 86.0,
+        "predicted_rul": 74.66323880556229
+      },
+      {
+        "cycle": 105,
+        "true_rul": 85.0,
+        "predicted_rul": 77.36982738458391
+      },
+      {
+        "cycle": 106,
+        "true_rul": 84.0,
+        "predicted_rul": 83.34561979137652
+      },
+      {
+        "cycle": 107,
+        "true_rul": 83.0,
+        "predicted_rul": 79.13084501989579
+      },
+      {
+        "cycle": 108,
+        "true_rul": 82.0,
+        "predicted_rul": 77.26427501010403
+      },
+      {
+        "cycle": 109,
+        "true_rul": 81.0,
+        "predicted_rul": 78.47897346203536
+      },
+      {
+        "cycle": 110,
+        "true_rul": 80.0,
+        "predicted_rul": 75.98811743026272
+      },
+      {
+        "cycle": 111,
+        "true_rul": 79.0,
+        "predicted_rul": 74.69803979224525
+      },
+      {
+        "cycle": 112,
+        "true_rul": 78.0,
+        "predicted_rul": 75.97708677933406
+      },
+      {
+        "cycle": 113,
+        "true_rul": 77.0,
+        "predicted_rul": 71.22094047013888
+      },
+      {
+        "cycle": 114,
+        "true_rul": 76.0,
+        "predicted_rul": 69.01445846313072
+      },
+      {
+        "cycle": 115,
+        "true_rul": 75.0,
+        "predicted_rul": 70.24927482501516
+      },
+      {
+        "cycle": 116,
+        "true_rul": 74.0,
+        "predicted_rul": 81.54043103938784
+      },
+      {
+        "cycle": 117,
+        "true_rul": 73.0,
+        "predicted_rul": 83.0952352910681
+      },
+      {
+        "cycle": 118,
+        "true_rul": 72.0,
+        "predicted_rul": 82.2485969532463
+      },
+      {
+        "cycle": 119,
+        "true_rul": 71.0,
+        "predicted_rul": 87.34649271950366
+      },
+      {
+        "cycle": 120,
+        "true_rul": 70.0,
+        "predicted_rul": 87.17562349232867
+      },
+      {
+        "cycle": 121,
+        "true_rul": 69.0,
+        "predicted_rul": 76.98373487795288
+      },
+      {
+        "cycle": 122,
+        "true_rul": 68.0,
+        "predicted_rul": 74.11606287284849
+      },
+      {
+        "cycle": 123,
+        "true_rul": 67.0,
+        "predicted_rul": 74.05646495902874
+      },
+      {
+        "cycle": 124,
+        "true_rul": 66.0,
+        "predicted_rul": 78.52348647246617
+      },
+      {
+        "cycle": 125,
+        "true_rul": 65.0,
+        "predicted_rul": 74.02302029508064
+      },
+      {
+        "cycle": 126,
+        "true_rul": 64.0,
+        "predicted_rul": 72.47119308001493
+      },
+      {
+        "cycle": 127,
+        "true_rul": 63.0,
+        "predicted_rul": 70.40048754461714
+      },
+      {
+        "cycle": 128,
+        "true_rul": 62.0,
+        "predicted_rul": 70.40190157292272
+      },
+      {
+        "cycle": 129,
+        "true_rul": 61.0,
+        "predicted_rul": 70.49321600156509
+      },
+      {
+        "cycle": 130,
+        "true_rul": 60.0,
+        "predicted_rul": 68.75566015314689
+      },
+      {
+        "cycle": 131,
+        "true_rul": 59.0,
+        "predicted_rul": 66.30680456758637
+      },
+      {
+        "cycle": 132,
+        "true_rul": 58.0,
+        "predicted_rul": 70.60296758713594
+      },
+      {
+        "cycle": 133,
+        "true_rul": 57.0,
+        "predicted_rul": 74.65242196530016
+      },
+      {
+        "cycle": 134,
+        "true_rul": 56.0,
+        "predicted_rul": 69.1089065116812
+      },
+      {
+        "cycle": 135,
+        "true_rul": 55.0,
+        "predicted_rul": 67.70160460350053
+      },
+      {
+        "cycle": 136,
+        "true_rul": 54.0,
+        "predicted_rul": 65.67824621236832
+      },
+      {
+        "cycle": 137,
+        "true_rul": 53.0,
+        "predicted_rul": 62.79790063105247
+      },
+      {
+        "cycle": 138,
+        "true_rul": 52.0,
+        "predicted_rul": 61.9300360350062
+      },
+      {
+        "cycle": 139,
+        "true_rul": 51.0,
+        "predicted_rul": 59.49301428196486
+      },
+      {
+        "cycle": 140,
+        "true_rul": 50.0,
+        "predicted_rul": 57.32226290903964
+      },
+      {
+        "cycle": 141,
+        "true_rul": 49.0,
+        "predicted_rul": 58.068177040910086
+      },
+      {
+        "cycle": 142,
+        "true_rul": 48.0,
+        "predicted_rul": 61.31037034187102
+      },
+      {
+        "cycle": 143,
+        "true_rul": 47.0,
+        "predicted_rul": 65.9402368483552
+      },
+      {
+        "cycle": 144,
+        "true_rul": 46.0,
+        "predicted_rul": 44.36961426832386
+      },
+      {
+        "cycle": 145,
+        "true_rul": 45.0,
+        "predicted_rul": 51.71609368923055
+      },
+      {
+        "cycle": 146,
+        "true_rul": 44.0,
+        "predicted_rul": 46.11317283585595
+      },
+      {
+        "cycle": 147,
+        "true_rul": 43.0,
+        "predicted_rul": 33.840936299913665
+      },
+      {
+        "cycle": 148,
+        "true_rul": 42.0,
+        "predicted_rul": 42.60714231144266
+      },
+      {
+        "cycle": 149,
+        "true_rul": 41.0,
+        "predicted_rul": 39.287549484623014
+      },
+      {
+        "cycle": 150,
+        "true_rul": 40.0,
+        "predicted_rul": 29.496649335123948
+      },
+      {
+        "cycle": 151,
+        "true_rul": 39.0,
+        "predicted_rul": 22.346205131598254
+      },
+      {
+        "cycle": 152,
+        "true_rul": 38.0,
+        "predicted_rul": 20.672762986905582
+      },
+      {
+        "cycle": 153,
+        "true_rul": 37.0,
+        "predicted_rul": 18.554606801388218
+      },
+      {
+        "cycle": 154,
+        "true_rul": 36.0,
+        "predicted_rul": 25.330925238189593
+      },
+      {
+        "cycle": 155,
+        "true_rul": 35.0,
+        "predicted_rul": 31.60513182945033
+      },
+      {
+        "cycle": 156,
+        "true_rul": 34.0,
+        "predicted_rul": 24.324413759904928
+      },
+      {
+        "cycle": 157,
+        "true_rul": 33.0,
+        "predicted_rul": 19.777095792736873
+      },
+      {
+        "cycle": 158,
+        "true_rul": 32.0,
+        "predicted_rul": 20.90115854594478
+      },
+      {
+        "cycle": 159,
+        "true_rul": 31.0,
+        "predicted_rul": 26.870862106534332
+      },
+      {
+        "cycle": 160,
+        "true_rul": 30.0,
+        "predicted_rul": 25.15276959378025
+      },
+      {
+        "cycle": 161,
+        "true_rul": 29.0,
+        "predicted_rul": 20.483602597323625
+      },
+      {
+        "cycle": 162,
+        "true_rul": 28.0,
+        "predicted_rul": 21.647087396488132
+      },
+      {
+        "cycle": 163,
+        "true_rul": 27.0,
+        "predicted_rul": 24.001216467086124
+      },
+      {
+        "cycle": 164,
+        "true_rul": 26.0,
+        "predicted_rul": 27.41640951829504
+      },
+      {
+        "cycle": 165,
+        "true_rul": 25.0,
+        "predicted_rul": 23.08420160555397
+      },
+      {
+        "cycle": 166,
+        "true_rul": 24.0,
+        "predicted_rul": 22.3658785495536
+      },
+      {
+        "cycle": 167,
+        "true_rul": 23.0,
+        "predicted_rul": 26.017802324035074
+      },
+      {
+        "cycle": 168,
+        "true_rul": 22.0,
+        "predicted_rul": 29.51458484282739
+      },
+      {
+        "cycle": 169,
+        "true_rul": 21.0,
+        "predicted_rul": 24.742600660209064
+      },
+      {
+        "cycle": 170,
+        "true_rul": 20.0,
+        "predicted_rul": 14.858136269564056
+      },
+      {
+        "cycle": 171,
+        "true_rul": 19.0,
+        "predicted_rul": 18.866396319497653
+      },
+      {
+        "cycle": 172,
+        "true_rul": 18.0,
+        "predicted_rul": 21.240757290415786
+      },
+      {
+        "cycle": 173,
+        "true_rul": 17.0,
+        "predicted_rul": 26.311281461392355
+      },
+      {
+        "cycle": 174,
+        "true_rul": 16.0,
+        "predicted_rul": 13.364555375741475
+      },
+      {
+        "cycle": 175,
+        "true_rul": 15.0,
+        "predicted_rul": 9.002803896157275
+      },
+      {
+        "cycle": 176,
+        "true_rul": 14.0,
+        "predicted_rul": 9.781852681351666
+      },
+      {
+        "cycle": 177,
+        "true_rul": 13.0,
+        "predicted_rul": 10.358369321409555
+      },
+      {
+        "cycle": 178,
+        "true_rul": 12.0,
+        "predicted_rul": 12.181739218180155
+      },
+      {
+        "cycle": 179,
+        "true_rul": 11.0,
+        "predicted_rul": 7.251494167494457
+      },
+      {
+        "cycle": 180,
+        "true_rul": 10.0,
+        "predicted_rul": -7.456263599397062
+      },
+      {
+        "cycle": 181,
+        "true_rul": 9.0,
+        "predicted_rul": -6.088116162431106
+      },
+      {
+        "cycle": 182,
+        "true_rul": 8.0,
+        "predicted_rul": -6.926193772209444
+      },
+      {
+        "cycle": 183,
+        "true_rul": 7.0,
+        "predicted_rul": -21.526167249454375
+      },
+      {
+        "cycle": 184,
+        "true_rul": 6.0,
+        "predicted_rul": -15.101209295395165
+      }
+    ]
+  },
+  {
+    "unit_number": 8,
+    "is_sample": false,
+    "trajectory": [
+      {
+        "cycle": 1,
+        "true_rul": 125.0,
+        "predicted_rul": 140.31876855783958
+      },
+      {
+        "cycle": 2,
+        "true_rul": 125.0,
+        "predicted_rul": 124.84418284636558
+      },
+      {
+        "cycle": 3,
+        "true_rul": 125.0,
+        "predicted_rul": 62.78156183622559
+      },
+      {
+        "cycle": 4,
+        "true_rul": 125.0,
+        "predicted_rul": 85.30443429929073
+      },
+      {
+        "cycle": 5,
+        "true_rul": 125.0,
+        "predicted_rul": 103.00606133451402
+      },
+      {
+        "cycle": 6,
+        "true_rul": 125.0,
+        "predicted_rul": 99.68599445739892
+      },
+      {
+        "cycle": 7,
+        "true_rul": 125.0,
+        "predicted_rul": 103.44370818191601
+      },
+      {
+        "cycle": 8,
+        "true_rul": 125.0,
+        "predicted_rul": 103.67108763265969
+      },
+      {
+        "cycle": 9,
+        "true_rul": 125.0,
+        "predicted_rul": 104.00595067813447
+      },
+      {
+        "cycle": 10,
+        "true_rul": 125.0,
+        "predicted_rul": 105.05381011277314
+      },
+      {
+        "cycle": 11,
+        "true_rul": 125.0,
+        "predicted_rul": 114.87689146808589
+      },
+      {
+        "cycle": 12,
+        "true_rul": 125.0,
+        "predicted_rul": 112.58872278456693
+      },
+      {
+        "cycle": 13,
+        "true_rul": 125.0,
+        "predicted_rul": 108.5236681333954
+      },
+      {
+        "cycle": 14,
+        "true_rul": 125.0,
+        "predicted_rul": 103.26254055854224
+      },
+      {
+        "cycle": 15,
+        "true_rul": 125.0,
+        "predicted_rul": 107.43786365223241
+      },
+      {
+        "cycle": 16,
+        "true_rul": 125.0,
+        "predicted_rul": 107.40985746886872
+      },
+      {
+        "cycle": 17,
+        "true_rul": 125.0,
+        "predicted_rul": 111.56735641885462
+      },
+      {
+        "cycle": 18,
+        "true_rul": 125.0,
+        "predicted_rul": 109.48751017870018
+      },
+      {
+        "cycle": 19,
+        "true_rul": 125.0,
+        "predicted_rul": 110.04141652751787
+      },
+      {
+        "cycle": 20,
+        "true_rul": 125.0,
+        "predicted_rul": 104.67970590779805
+      },
+      {
+        "cycle": 21,
+        "true_rul": 125.0,
+        "predicted_rul": 106.75646323267938
+      },
+      {
+        "cycle": 22,
+        "true_rul": 125.0,
+        "predicted_rul": 105.32473494486112
+      },
+      {
+        "cycle": 23,
+        "true_rul": 125.0,
+        "predicted_rul": 114.8896347645732
+      },
+      {
+        "cycle": 24,
+        "true_rul": 125.0,
+        "predicted_rul": 113.89702391174797
+      },
+      {
+        "cycle": 25,
+        "true_rul": 125.0,
+        "predicted_rul": 113.3755522465326
+      },
+      {
+        "cycle": 26,
+        "true_rul": 125.0,
+        "predicted_rul": 111.04121794358798
+      },
+      {
+        "cycle": 27,
+        "true_rul": 125.0,
+        "predicted_rul": 112.48408095752711
+      },
+      {
+        "cycle": 28,
+        "true_rul": 125.0,
+        "predicted_rul": 113.98593056351092
+      },
+      {
+        "cycle": 29,
+        "true_rul": 125.0,
+        "predicted_rul": 117.0748482047311
+      },
+      {
+        "cycle": 30,
+        "true_rul": 125.0,
+        "predicted_rul": 113.40614736570569
+      },
+      {
+        "cycle": 31,
+        "true_rul": 125.0,
+        "predicted_rul": 112.73674685035257
+      },
+      {
+        "cycle": 32,
+        "true_rul": 125.0,
+        "predicted_rul": 115.82485591003933
+      },
+      {
+        "cycle": 33,
+        "true_rul": 125.0,
+        "predicted_rul": 113.90271559319444
+      },
+      {
+        "cycle": 34,
+        "true_rul": 125.0,
+        "predicted_rul": 123.58319779553676
+      },
+      {
+        "cycle": 35,
+        "true_rul": 125.0,
+        "predicted_rul": 111.55170596565767
+      },
+      {
+        "cycle": 36,
+        "true_rul": 125.0,
+        "predicted_rul": 116.59721560455728
+      },
+      {
+        "cycle": 37,
+        "true_rul": 125.0,
+        "predicted_rul": 107.17808786576097
+      },
+      {
+        "cycle": 38,
+        "true_rul": 125.0,
+        "predicted_rul": 113.63088782116938
+      },
+      {
+        "cycle": 39,
+        "true_rul": 125.0,
+        "predicted_rul": 109.24818561561369
+      },
+      {
+        "cycle": 40,
+        "true_rul": 125.0,
+        "predicted_rul": 100.52612099576618
+      },
+      {
+        "cycle": 41,
+        "true_rul": 125.0,
+        "predicted_rul": 102.88328208468374
+      },
+      {
+        "cycle": 42,
+        "true_rul": 125.0,
+        "predicted_rul": 108.69778172105543
+      },
+      {
+        "cycle": 43,
+        "true_rul": 125.0,
+        "predicted_rul": 111.92798740296712
+      },
+      {
+        "cycle": 44,
+        "true_rul": 125.0,
+        "predicted_rul": 108.04402860815753
+      },
+      {
+        "cycle": 45,
+        "true_rul": 125.0,
+        "predicted_rul": 106.91374368180368
+      },
+      {
+        "cycle": 46,
+        "true_rul": 125.0,
+        "predicted_rul": 111.66352451938292
+      },
+      {
+        "cycle": 47,
+        "true_rul": 125.0,
+        "predicted_rul": 108.85389775213116
+      },
+      {
+        "cycle": 48,
+        "true_rul": 125.0,
+        "predicted_rul": 111.48932058406353
+      },
+      {
+        "cycle": 49,
+        "true_rul": 125.0,
+        "predicted_rul": 109.11428211432212
+      },
+      {
+        "cycle": 50,
+        "true_rul": 125.0,
+        "predicted_rul": 113.64906297922789
+      },
+      {
+        "cycle": 51,
+        "true_rul": 125.0,
+        "predicted_rul": 114.43649746648953
+      },
+      {
+        "cycle": 52,
+        "true_rul": 125.0,
+        "predicted_rul": 122.27607228236411
+      },
+      {
+        "cycle": 53,
+        "true_rul": 125.0,
+        "predicted_rul": 117.33705728835776
+      },
+      {
+        "cycle": 54,
+        "true_rul": 125.0,
+        "predicted_rul": 117.87990894273753
+      },
+      {
+        "cycle": 55,
+        "true_rul": 125.0,
+        "predicted_rul": 122.31526765877243
+      },
+      {
+        "cycle": 56,
+        "true_rul": 125.0,
+        "predicted_rul": 124.53460953398098
+      },
+      {
+        "cycle": 57,
+        "true_rul": 125.0,
+        "predicted_rul": 119.83058289189466
+      },
+      {
+        "cycle": 58,
+        "true_rul": 125.0,
+        "predicted_rul": 121.11579718828034
+      },
+      {
+        "cycle": 59,
+        "true_rul": 125.0,
+        "predicted_rul": 117.49300813814625
+      },
+      {
+        "cycle": 60,
+        "true_rul": 125.0,
+        "predicted_rul": 107.51577684513359
+      },
+      {
+        "cycle": 61,
+        "true_rul": 125.0,
+        "predicted_rul": 115.14525183443038
+      },
+      {
+        "cycle": 62,
+        "true_rul": 125.0,
+        "predicted_rul": 114.38243901043643
+      },
+      {
+        "cycle": 63,
+        "true_rul": 125.0,
+        "predicted_rul": 112.74128465479407
+      },
+      {
+        "cycle": 64,
+        "true_rul": 125.0,
+        "predicted_rul": 118.36720637276449
+      },
+      {
+        "cycle": 65,
+        "true_rul": 125.0,
+        "predicted_rul": 117.96071872515495
+      },
+      {
+        "cycle": 66,
+        "true_rul": 125.0,
+        "predicted_rul": 111.28099682370521
+      },
+      {
+        "cycle": 67,
+        "true_rul": 125.0,
+        "predicted_rul": 108.97560250466631
+      },
+      {
+        "cycle": 68,
+        "true_rul": 125.0,
+        "predicted_rul": 107.18688939493404
+      },
+      {
+        "cycle": 69,
+        "true_rul": 125.0,
+        "predicted_rul": 99.81835288819093
+      },
+      {
+        "cycle": 70,
+        "true_rul": 125.0,
+        "predicted_rul": 95.69554449252973
+      },
+      {
+        "cycle": 71,
+        "true_rul": 125.0,
+        "predicted_rul": 97.79029849517428
+      },
+      {
+        "cycle": 72,
+        "true_rul": 125.0,
+        "predicted_rul": 97.02628793699478
+      },
+      {
+        "cycle": 73,
+        "true_rul": 125.0,
+        "predicted_rul": 98.43404196087067
+      },
+      {
+        "cycle": 74,
+        "true_rul": 125.0,
+        "predicted_rul": 100.37746783172406
+      },
+      {
+        "cycle": 75,
+        "true_rul": 125.0,
+        "predicted_rul": 105.71052488721034
+      },
+      {
+        "cycle": 76,
+        "true_rul": 125.0,
+        "predicted_rul": 110.79605473310221
+      },
+      {
+        "cycle": 77,
+        "true_rul": 125.0,
+        "predicted_rul": 112.07381127642839
+      },
+      {
+        "cycle": 78,
+        "true_rul": 125.0,
+        "predicted_rul": 109.70907954347786
+      },
+      {
+        "cycle": 79,
+        "true_rul": 125.0,
+        "predicted_rul": 109.3234710106899
+      },
+      {
+        "cycle": 80,
+        "true_rul": 125.0,
+        "predicted_rul": 101.5788181881544
+      },
+      {
+        "cycle": 81,
+        "true_rul": 125.0,
+        "predicted_rul": 98.05243299527137
+      },
+      {
+        "cycle": 82,
+        "true_rul": 125.0,
+        "predicted_rul": 98.59184427472064
+      },
+      {
+        "cycle": 83,
+        "true_rul": 125.0,
+        "predicted_rul": 100.38568482190203
+      },
+      {
+        "cycle": 84,
+        "true_rul": 125.0,
+        "predicted_rul": 99.55161313821736
+      },
+      {
+        "cycle": 85,
+        "true_rul": 125.0,
+        "predicted_rul": 105.45527621407382
+      },
+      {
+        "cycle": 86,
+        "true_rul": 125.0,
+        "predicted_rul": 98.76547007834415
+      },
+      {
+        "cycle": 87,
+        "true_rul": 125.0,
+        "predicted_rul": 99.65032670420442
+      },
+      {
+        "cycle": 88,
+        "true_rul": 125.0,
+        "predicted_rul": 97.57245397012412
+      },
+      {
+        "cycle": 89,
+        "true_rul": 125.0,
+        "predicted_rul": 94.47501325441954
+      },
+      {
+        "cycle": 90,
+        "true_rul": 125.0,
+        "predicted_rul": 96.87172798385836
+      },
+      {
+        "cycle": 91,
+        "true_rul": 125.0,
+        "predicted_rul": 96.38123782849289
+      },
+      {
+        "cycle": 92,
+        "true_rul": 125.0,
+        "predicted_rul": 99.39283559410433
+      },
+      {
+        "cycle": 93,
+        "true_rul": 125.0,
+        "predicted_rul": 95.48473934510912
+      },
+      {
+        "cycle": 94,
+        "true_rul": 125.0,
+        "predicted_rul": 98.72158154543649
+      },
+      {
+        "cycle": 95,
+        "true_rul": 125.0,
+        "predicted_rul": 98.03972924396658
+      },
+      {
+        "cycle": 96,
+        "true_rul": 125.0,
+        "predicted_rul": 91.29971005873631
+      },
+      {
+        "cycle": 97,
+        "true_rul": 125.0,
+        "predicted_rul": 93.92802985779053
+      },
+      {
+        "cycle": 98,
+        "true_rul": 125.0,
+        "predicted_rul": 102.31149008317152
+      },
+      {
+        "cycle": 99,
+        "true_rul": 125.0,
+        "predicted_rul": 103.71761039990815
+      },
+      {
+        "cycle": 100,
+        "true_rul": 125.0,
+        "predicted_rul": 105.30543013178794
+      },
+      {
+        "cycle": 101,
+        "true_rul": 125.0,
+        "predicted_rul": 108.36926090321322
+      },
+      {
+        "cycle": 102,
+        "true_rul": 125.0,
+        "predicted_rul": 107.25030075931863
+      },
+      {
+        "cycle": 103,
+        "true_rul": 125.0,
+        "predicted_rul": 124.53713782930936
+      },
+      {
+        "cycle": 104,
+        "true_rul": 125.0,
+        "predicted_rul": 119.53424136764443
+      },
+      {
+        "cycle": 105,
+        "true_rul": 125.0,
+        "predicted_rul": 125.20272973155261
+      },
+      {
+        "cycle": 106,
+        "true_rul": 125.0,
+        "predicted_rul": 125.11926994713212
+      },
+      {
+        "cycle": 107,
+        "true_rul": 125.0,
+        "predicted_rul": 125.20322882155779
+      },
+      {
+        "cycle": 108,
+        "true_rul": 125.0,
+        "predicted_rul": 125.09203093269025
+      },
+      {
+        "cycle": 109,
+        "true_rul": 125.0,
+        "predicted_rul": 128.1899599415956
+      },
+      {
+        "cycle": 110,
+        "true_rul": 125.0,
+        "predicted_rul": 119.37923403750028
+      },
+      {
+        "cycle": 111,
+        "true_rul": 125.0,
+        "predicted_rul": 116.96666567522516
+      },
+      {
+        "cycle": 112,
+        "true_rul": 125.0,
+        "predicted_rul": 116.04149883820719
+      },
+      {
+        "cycle": 113,
+        "true_rul": 125.0,
+        "predicted_rul": 109.11632176095372
+      },
+      {
+        "cycle": 114,
+        "true_rul": 125.0,
+        "predicted_rul": 112.14714207008547
+      },
+      {
+        "cycle": 115,
+        "true_rul": 125.0,
+        "predicted_rul": 107.35212201384275
+      },
+      {
+        "cycle": 116,
+        "true_rul": 125.0,
+        "predicted_rul": 105.35706213229605
+      },
+      {
+        "cycle": 117,
+        "true_rul": 125.0,
+        "predicted_rul": 100.9659550641536
+      },
+      {
+        "cycle": 118,
+        "true_rul": 125.0,
+        "predicted_rul": 98.56330033726044
+      },
+      {
+        "cycle": 119,
+        "true_rul": 125.0,
+        "predicted_rul": 101.87665486604601
+      },
+      {
+        "cycle": 120,
+        "true_rul": 125.0,
+        "predicted_rul": 94.80985422896447
+      },
+      {
+        "cycle": 121,
+        "true_rul": 125.0,
+        "predicted_rul": 101.74793417703768
+      },
+      {
+        "cycle": 122,
+        "true_rul": 125.0,
+        "predicted_rul": 109.02735786276207
+      },
+      {
+        "cycle": 123,
+        "true_rul": 125.0,
+        "predicted_rul": 111.25506054223843
+      },
+      {
+        "cycle": 124,
+        "true_rul": 125.0,
+        "predicted_rul": 113.98981527724027
+      },
+      {
+        "cycle": 125,
+        "true_rul": 125.0,
+        "predicted_rul": 106.46437239738952
+      },
+      {
+        "cycle": 126,
+        "true_rul": 125.0,
+        "predicted_rul": 98.0875538813616
+      },
+      {
+        "cycle": 127,
+        "true_rul": 125.0,
+        "predicted_rul": 99.630114564814
+      },
+      {
+        "cycle": 128,
+        "true_rul": 125.0,
+        "predicted_rul": 94.88894502289804
+      },
+      {
+        "cycle": 129,
+        "true_rul": 125.0,
+        "predicted_rul": 90.39557838259316
+      },
+      {
+        "cycle": 130,
+        "true_rul": 125.0,
+        "predicted_rul": 88.12155539160267
+      },
+      {
+        "cycle": 131,
+        "true_rul": 125.0,
+        "predicted_rul": 83.2582981041287
+      },
+      {
+        "cycle": 132,
+        "true_rul": 125.0,
+        "predicted_rul": 92.43257398630885
+      },
+      {
+        "cycle": 133,
+        "true_rul": 125.0,
+        "predicted_rul": 86.42481898975893
+      },
+      {
+        "cycle": 134,
+        "true_rul": 125.0,
+        "predicted_rul": 93.71330199323347
+      },
+      {
+        "cycle": 135,
+        "true_rul": 125.0,
+        "predicted_rul": 90.95336489654983
+      },
+      {
+        "cycle": 136,
+        "true_rul": 125.0,
+        "predicted_rul": 97.47569324152573
+      },
+      {
+        "cycle": 137,
+        "true_rul": 125.0,
+        "predicted_rul": 101.13484011148466
+      },
+      {
+        "cycle": 138,
+        "true_rul": 125.0,
+        "predicted_rul": 100.52757516412203
+      },
+      {
+        "cycle": 139,
+        "true_rul": 124.0,
+        "predicted_rul": 96.65820594959769
+      },
+      {
+        "cycle": 140,
+        "true_rul": 123.0,
+        "predicted_rul": 89.84767145125079
+      },
+      {
+        "cycle": 141,
+        "true_rul": 122.0,
+        "predicted_rul": 92.06680962473001
+      },
+      {
+        "cycle": 142,
+        "true_rul": 121.0,
+        "predicted_rul": 85.43178919289858
+      },
+      {
+        "cycle": 143,
+        "true_rul": 120.0,
+        "predicted_rul": 74.7713901764073
+      },
+      {
+        "cycle": 144,
+        "true_rul": 119.0,
+        "predicted_rul": 72.08489577044747
+      },
+      {
+        "cycle": 145,
+        "true_rul": 118.0,
+        "predicted_rul": 68.66210716629939
+      },
+      {
+        "cycle": 146,
+        "true_rul": 117.0,
+        "predicted_rul": 79.6014874391858
+      },
+      {
+        "cycle": 147,
+        "true_rul": 116.0,
+        "predicted_rul": 86.86663575204693
+      },
+      {
+        "cycle": 148,
+        "true_rul": 115.0,
+        "predicted_rul": 83.14821149305499
+      },
+      {
+        "cycle": 149,
+        "true_rul": 114.0,
+        "predicted_rul": 80.02304498320336
+      },
+      {
+        "cycle": 150,
+        "true_rul": 113.0,
+        "predicted_rul": 78.72653459460162
+      },
+      {
+        "cycle": 151,
+        "true_rul": 112.0,
+        "predicted_rul": 83.10356112929912
+      },
+      {
+        "cycle": 152,
+        "true_rul": 111.0,
+        "predicted_rul": 84.26790918446022
+      },
+      {
+        "cycle": 153,
+        "true_rul": 110.0,
+        "predicted_rul": 85.25213102942871
+      },
+      {
+        "cycle": 154,
+        "true_rul": 109.0,
+        "predicted_rul": 82.2350470031779
+      },
+      {
+        "cycle": 155,
+        "true_rul": 108.0,
+        "predicted_rul": 81.91855881370248
+      },
+      {
+        "cycle": 156,
+        "true_rul": 107.0,
+        "predicted_rul": 80.77204659727613
+      },
+      {
+        "cycle": 157,
+        "true_rul": 106.0,
+        "predicted_rul": 76.21889139961422
+      },
+      {
+        "cycle": 158,
+        "true_rul": 105.0,
+        "predicted_rul": 72.59500884141198
+      },
+      {
+        "cycle": 159,
+        "true_rul": 104.0,
+        "predicted_rul": 71.56678468426071
+      },
+      {
+        "cycle": 160,
+        "true_rul": 103.0,
+        "predicted_rul": 72.96461800124234
+      },
+      {
+        "cycle": 161,
+        "true_rul": 102.0,
+        "predicted_rul": 73.17880979948495
+      },
+      {
+        "cycle": 162,
+        "true_rul": 101.0,
+        "predicted_rul": 72.62128896084505
+      },
+      {
+        "cycle": 163,
+        "true_rul": 100.0,
+        "predicted_rul": 72.54803833377082
+      },
+      {
+        "cycle": 164,
+        "true_rul": 99.0,
+        "predicted_rul": 71.84156696338687
+      },
+      {
+        "cycle": 165,
+        "true_rul": 98.0,
+        "predicted_rul": 77.63174576470556
+      },
+      {
+        "cycle": 166,
+        "true_rul": 97.0,
+        "predicted_rul": 79.82102003396176
+      },
+      {
+        "cycle": 167,
+        "true_rul": 96.0,
+        "predicted_rul": 81.05154244551159
+      },
+      {
+        "cycle": 168,
+        "true_rul": 95.0,
+        "predicted_rul": 80.48645535506876
+      },
+      {
+        "cycle": 169,
+        "true_rul": 94.0,
+        "predicted_rul": 90.49339366320419
+      },
+      {
+        "cycle": 170,
+        "true_rul": 93.0,
+        "predicted_rul": 91.69728432550801
+      },
+      {
+        "cycle": 171,
+        "true_rul": 92.0,
+        "predicted_rul": 91.5542735002764
+      },
+      {
+        "cycle": 172,
+        "true_rul": 91.0,
+        "predicted_rul": 83.054296425742
+      },
+      {
+        "cycle": 173,
+        "true_rul": 90.0,
+        "predicted_rul": 79.08364943136439
+      }
+    ]
+  }
+]

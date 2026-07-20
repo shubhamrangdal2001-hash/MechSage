@@ -2,7 +2,7 @@
 
 Project root: `D:\Capstone\MechSage`
 
-Main ML codebase: `NASA_CMAPSS_RUL_Project`
+Main ML codebase: `ML`
 
 This guide explains the machine learning decisions, the theory behind them, and the code flow function by function. It is written for a student who needs to understand and present the capstone project clearly.
 
@@ -23,22 +23,22 @@ Machine learning is suitable because turbofan degradation is visible through pat
 
 | File | Main responsibility |
 |---|---|
-| `NASA_CMAPSS_RUL_Project/main.py` | CLI entrypoint. Parses arguments and starts the pipeline. |
-| `NASA_CMAPSS_RUL_Project/configs/default.yaml` | Default runtime, data, feature, tuning, and model settings. |
-| `NASA_CMAPSS_RUL_Project/src/config.py` | Loads YAML config into typed dataclasses. |
-| `NASA_CMAPSS_RUL_Project/src/data_loader.py` | Loads raw C-MAPSS files and creates RUL/anomaly labels. |
-| `NASA_CMAPSS_RUL_Project/src/preprocessing.py` | Keeps useful sensors, removes target columns from features, provides scaling helper. |
-| `NASA_CMAPSS_RUL_Project/src/feature_engineering.py` | Builds causal rolling, delta, expanding, flat, and sequence features. |
-| `NASA_CMAPSS_RUL_Project/src/pipeline.py` | Main orchestration: prepare data, train, evaluate, log, save reports. |
-| `NASA_CMAPSS_RUL_Project/src/train_rul_models.py` | Extra RUL model definitions and helper trainers. Some are not always used by `pipeline.py`. |
-| `NASA_CMAPSS_RUL_Project/src/train_anomaly_models.py` | Extra anomaly model definitions and helper trainers. Some are not always used by `pipeline.py`. |
-| `NASA_CMAPSS_RUL_Project/src/hyperparameter_tuning.py` | GridSearchCV, RandomizedSearchCV, Optuna with GroupKFold leakage protection. |
-| `NASA_CMAPSS_RUL_Project/src/evaluate.py` | Regression and classification metric functions. |
-| `NASA_CMAPSS_RUL_Project/src/mlflow_tracking.py` | Logs params, metrics, artifacts, models, and tuning trials to MLflow. |
-| `NASA_CMAPSS_RUL_Project/src/model_registry.py` | Creates model version metadata/model cards. |
-| `NASA_CMAPSS_RUL_Project/src/inference.py` | Loads saved `.joblib` models and predicts from matrices or CSVs. |
-| `NASA_CMAPSS_RUL_Project/src/data_validation.py` | Validates rows, schema, missing values, duplicates, outliers, and target sanity. |
-| `NASA_CMAPSS_RUL_Project/tests/` | Unit, integration, leakage-prevention, tuning, inference, and config tests. |
+| `ML/main.py` | CLI entrypoint. Parses arguments and starts the pipeline. |
+| `ML/configs/default.yaml` | Default runtime, data, feature, tuning, and model settings. |
+| `ML/src/config.py` | Loads YAML config into typed dataclasses. |
+| `ML/src/data_loader.py` | Loads raw C-MAPSS files and creates RUL/anomaly labels. |
+| `ML/src/preprocessing.py` | Keeps useful sensors, removes target columns from features, provides scaling helper. |
+| `ML/src/feature_engineering.py` | Builds causal rolling, delta, expanding, flat, and sequence features. |
+| `ML/src/pipeline.py` | Main orchestration: prepare data, train, evaluate, log, save reports. |
+| `ML/src/train_rul_models.py` | Extra RUL model definitions and helper trainers. Some are not always used by `pipeline.py`. |
+| `ML/src/train_anomaly_models.py` | Extra anomaly model definitions and helper trainers. Some are not always used by `pipeline.py`. |
+| `ML/src/hyperparameter_tuning.py` | GridSearchCV, RandomizedSearchCV, Optuna with GroupKFold leakage protection. |
+| `ML/src/evaluate.py` | Regression and classification metric functions. |
+| `ML/src/mlflow_tracking.py` | Logs params, metrics, artifacts, models, and tuning trials to MLflow. |
+| `ML/src/model_registry.py` | Creates model version metadata/model cards. |
+| `ML/src/inference.py` | Loads saved `.joblib` models and predicts from matrices or CSVs. |
+| `ML/src/data_validation.py` | Validates rows, schema, missing values, duplicates, outliers, and target sanity. |
+| `ML/tests/` | Unit, integration, leakage-prevention, tuning, inference, and config tests. |
 
 ## 3. ML Decisions Taken
 

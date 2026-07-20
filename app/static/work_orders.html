@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MechSage — Work Order Console</title>
+  <meta name="description" content="Human-in-the-loop review console for AI-generated maintenance work orders. Review, approve, and schedule technician dispatch." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg-deep:#04060f; --bg-card:#0b0f1e; --bg-glass:rgba(255,255,255,0.04); --bg-glass-hover:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.08); --border-accent:rgba(99,179,237,0.35);
+      --amber:#f6a623; --amber-d:#c47d0e; --cyan:#63b3ed; --cyan-d:#2b6cb0;
+      --green:#48bb78; --red:#fc8181; --red-d:#c53030; --purple:#b794f4; --orange:#fc814a;
+      --text-primary:#f0f4ff; --text-secondary:#8896b3; --text-muted:#4a5568;
+      --glow-amber:0 0 24px rgba(246,166,35,0.18); --glow-cyan:0 0 24px rgba(99,179,237,0.15);
+      --glow-red:0 0 24px rgba(252,129,129,0.25); --glow-green:0 0 18px rgba(72,187,120,0.2);
+      --radius-sm:8px; --radius-md:14px; --radius-lg:20px;
+      --speed-fast:150ms; --speed-med:300ms;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg-deep);color:var(--text-primary);min-height:100vh;overflow-x:hidden}
+    body::before{content:'';position:fixed;inset:0;background:
+      radial-gradient(ellipse 80% 50% at 5% 0%,rgba(99,179,237,0.07) 0%,transparent 60%),
+      radial-gradient(ellipse 50% 40% at 95% 100%,rgba(246,166,35,0.05) 0%,transparent 60%),
+      radial-gradient(ellipse 40% 30% at 50% 50%,rgba(183,148,244,0.03) 0%,transparent 60%);
+      pointer-events:none;z-index:0}
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar{width:5px;height:5px}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+    ::-webkit-scrollbar-track{background:transparent}
+
+    /* ── HEADER ── */
+    header{position:sticky;top:0;z-index:200;height:58px;display:flex;align-items:center;
+      justify-content:space-between;padding:0 28px;border-bottom:1px solid var(--border);
+      backdrop-filter:blur(20px);background:rgba(4,6,15,0.85)}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--amber),var(--amber-d));
+      border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;
+      box-shadow:var(--glow-amber);flex-shrink:0}
+    .brand-name{font-size:1rem;font-weight:700;letter-spacing:-0.02em;
+      background:linear-gradient(90deg,#f0f4ff,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .brand-sub{font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em}
+    .header-center{display:flex;flex-direction:column;align-items:center}
+    .header-path{font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.12em}
+    .header-title{font-size:0.95rem;font-weight:700;letter-spacing:-0.01em}
+    nav.header-nav{display:flex;align-items:center;gap:6px}
+    .nav-link{font-size:0.78rem;color:var(--text-secondary);text-decoration:none;padding:5px 12px;
+      border:1px solid var(--border);border-radius:20px;transition:all var(--speed-fast)}
+    .nav-link:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+    .nav-link.active{border-color:var(--amber);color:var(--amber);background:rgba(246,166,35,0.08)}
+    .header-right{display:flex;align-items:center;gap:14px}
+    .live-badge{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:20px;
+      background:rgba(72,187,120,0.1);border:1px solid rgba(72,187,120,0.25)}
+    .live-dot{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 7px var(--green);animation:pulse 2s infinite}
+    .live-text{font-size:0.72rem;font-weight:600;color:var(--green)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+
+    /* ── PAGE WRAPPER ── */
+    .page{position:relative;z-index:1;max-width:1440px;margin:0 auto;padding:32px 28px 60px}
+
+    /* ── PAGE HERO ── */
+    .hero{margin-bottom:32px}
+    .hero-eyebrow{font-size:0.65rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.14em;margin-bottom:8px}
+    .hero-title{font-size:2.4rem;font-weight:800;letter-spacing:-0.03em;line-height:1.1;margin-bottom:10px}
+    .hero-title span{background:linear-gradient(90deg,var(--amber),var(--orange));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .hero-sub{font-size:0.9rem;color:var(--text-secondary);max-width:540px;line-height:1.6}
+
+    /* ── KPI GRID ── */
+    .kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:36px}
+    .kpi-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);
+      padding:20px 22px;position:relative;overflow:hidden;transition:border-color var(--speed-med),transform var(--speed-fast)}
+    .kpi-card:hover{transform:translateY(-2px)}
+    .kpi-card.active-kpi{border-color:var(--amber);box-shadow:var(--glow-amber)}
+    .kpi-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:3px;background:var(--kpi-accent,var(--border));border-radius:0 0 var(--radius-md) var(--radius-md)}
+    .kpi-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:14px}
+    .kpi-label{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted)}
+    .kpi-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+    .kpi-value{font-size:2.4rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1;color:var(--kpi-color,var(--text-primary));margin-bottom:6px;transition:color var(--speed-med)}
+    .kpi-sub{font-size:0.72rem;color:var(--text-muted)}
+
+    /* ── SECTION TITLE ── */
+    .section-header{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+    .section-title{font-size:1.35rem;font-weight:700;letter-spacing:-0.02em}
+    .section-rule{flex:1;height:1px;background:var(--border)}
+
+    /* ── FILTERS BAR ── */
+    .filters-bar{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);
+      padding:14px 18px;display:flex;align-items:center;gap:12px;margin-bottom:16px;flex-wrap:wrap}
+    .filter-icon{color:var(--text-muted);font-size:0.9rem}
+    .filter-label{font-size:0.78rem;color:var(--text-muted)}
+    .filter-select{font-family:inherit;font-size:0.8rem;color:var(--text-primary);
+      background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);
+      padding:6px 10px;outline:none;cursor:pointer;transition:border-color var(--speed-fast);min-width:140px}
+    .filter-select:focus{border-color:var(--border-accent)}
+    .filter-select option{background:#0b0f1e}
+    .filter-spacer{flex:1}
+    .btn-refresh{display:flex;align-items:center;gap:6px;padding:6px 14px;border-radius:var(--radius-sm);
+      font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer;
+      border:1px solid var(--border);background:var(--bg-glass);color:var(--text-secondary);
+      transition:all var(--speed-fast)}
+    .btn-refresh:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+
+    /* ── TABLE ── */
+    .table-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden}
+    table{width:100%;border-collapse:collapse}
+    thead tr{border-bottom:1px solid var(--border);background:rgba(255,255,255,0.02)}
+    thead th{padding:12px 16px;text-align:left;font-size:0.65rem;font-weight:700;
+      text-transform:uppercase;letter-spacing:0.12em;color:var(--text-muted);white-space:nowrap}
+    tbody tr{border-bottom:1px solid var(--border);transition:background var(--speed-fast);cursor:pointer}
+    tbody tr:last-child{border-bottom:none}
+    tbody tr:hover{background:var(--bg-glass)}
+    tbody td{padding:14px 16px;font-size:0.83rem;vertical-align:middle}
+    .td-wo{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--text-muted);font-size:0.78rem}
+    .td-asset{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--cyan);font-size:0.82rem}
+    .td-diag{}
+    .td-diag-title{font-weight:600;margin-bottom:3px}
+    .td-diag-sub{font-size:0.73rem;color:var(--text-muted);max-width:280px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+    .td-dur{font-family:'JetBrains Mono',monospace;white-space:nowrap}
+    .td-created{font-family:'JetBrains Mono',monospace;font-size:0.76rem;color:var(--text-muted)}
+
+    /* priority badges */
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:5px;font-size:0.68rem;font-weight:700;letter-spacing:0.04em;white-space:nowrap}
+    .badge-critical{background:rgba(252,129,129,0.15);border:1px solid rgba(252,129,129,0.4);color:var(--red)}
+    .badge-high{background:rgba(252,129,74,0.15);border:1px solid rgba(252,129,74,0.35);color:var(--orange)}
+    .badge-medium{background:rgba(246,166,35,0.15);border:1px solid rgba(246,166,35,0.35);color:var(--amber)}
+    .badge-low{background:rgba(72,187,120,0.12);border:1px solid rgba(72,187,120,0.3);color:var(--green)}
+
+    /* status badges */
+    .status-badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:5px;font-size:0.68rem;font-weight:700;letter-spacing:0.04em;white-space:nowrap}
+    .status-pending{background:rgba(246,166,35,0.12);border:1px solid rgba(246,166,35,0.35);color:var(--amber)}
+    .status-approved{background:rgba(72,187,120,0.12);border:1px solid rgba(72,187,120,0.3);color:var(--green)}
+    .status-rejected{background:rgba(252,129,129,0.12);border:1px solid rgba(252,129,129,0.3);color:var(--red)}
+    .status-escalated{background:rgba(183,148,244,0.12);border:1px solid rgba(183,148,244,0.3);color:var(--purple)}
+    .td-action-btn{background:var(--bg-glass);border:1px solid var(--border);border-radius:6px;
+      padding:5px 9px;cursor:pointer;color:var(--text-muted);font-size:0.82rem;transition:all var(--speed-fast)}
+    .td-action-btn:hover{background:rgba(99,179,237,0.1);border-color:var(--cyan);color:var(--cyan)}
+
+    /* ── EMPTY STATE ── */
+    .empty-state{padding:60px 0;display:flex;flex-direction:column;align-items:center;gap:12px;color:var(--text-muted)}
+    .empty-icon{font-size:3rem}
+    .empty-title{font-size:1rem;font-weight:600;color:var(--text-secondary)}
+    .empty-sub{font-size:0.82rem}
+
+    /* ── MODAL / DRAWER ── */
+    .modal-overlay{position:fixed;inset:0;background:rgba(4,6,15,0.86);backdrop-filter:blur(10px);
+      z-index:500;display:flex;align-items:center;justify-content:flex-end;
+      opacity:0;pointer-events:none;transition:opacity var(--speed-med)}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .drawer{width:min(680px,96vw);height:100vh;background:var(--bg-card);
+      border-left:1px solid var(--border);display:flex;flex-direction:column;
+      transform:translateX(100%);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);overflow:hidden}
+    .modal-overlay.open .drawer{transform:translateX(0)}
+
+    /* drawer header */
+    .drawer-header{display:flex;align-items:center;gap:12px;padding:18px 24px;
+      border-bottom:1px solid var(--border);flex-shrink:0;background:rgba(255,255,255,0.02)}
+    .drawer-icon{width:36px;height:36px;border-radius:10px;background:rgba(246,166,35,0.15);
+      display:flex;align-items:center;justify-content:center;font-size:17px}
+    .drawer-title{font-size:1.05rem;font-weight:700;letter-spacing:-0.01em;flex:1}
+    .drawer-sub{font-size:0.72rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace}
+    .btn-close{width:30px;height:30px;border-radius:50%;background:var(--bg-glass);
+      border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;
+      justify-content:center;color:var(--text-muted);font-size:0.9rem;transition:all var(--speed-fast)}
+    .btn-close:hover{background:rgba(252,129,129,0.12);color:var(--red)}
+
+    /* drawer body */
+    .drawer-body{flex:1;overflow-y:auto;padding:24px}
+    .drawer-body::-webkit-scrollbar{width:4px}
+    .drawer-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+    /* drawer sections */
+    .d-section{margin-bottom:22px}
+    .d-section-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.12em;
+      color:var(--text-muted);margin-bottom:12px;display:flex;align-items:center;gap:8px}
+    .d-section-title::after{content:'';flex:1;height:1px;background:var(--border)}
+    .d-card{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:12px}
+    .d-card-header{display:flex;align-items:center;gap:9px;padding:11px 16px;
+      border-bottom:1px solid var(--border);background:var(--bg-glass)}
+    .d-card-icon{width:26px;height:26px;border-radius:7px;display:flex;align-items:center;justify-content:center;font-size:13px}
+    .icon-amber{background:rgba(246,166,35,0.15)}
+    .icon-cyan{background:rgba(99,179,237,0.15)}
+    .icon-purple{background:rgba(183,148,244,0.15)}
+    .icon-green{background:rgba(72,187,120,0.15)}
+    .d-card-title{font-size:0.82rem;font-weight:600}
+    .d-card-body{padding:16px}
+
+    /* metrics grid */
+    .metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+    .metric-item{background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);padding:12px}
+    .metric-label{font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:4px}
+    .metric-value{font-size:1.3rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1}
+    .metric-sub{font-size:0.68rem;color:var(--text-muted);margin-top:3px}
+
+    /* conf bar */
+    .conf-wrap{display:flex;align-items:center;gap:8px;margin-top:6px}
+    .conf-bar-bg{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+    .conf-bar-fill{height:100%;border-radius:3px;transition:width 0.6s ease}
+    .conf-pct{font-size:0.75rem;font-family:'JetBrains Mono',monospace;font-weight:600;min-width:36px;text-align:right}
+
+    /* parts */
+    .parts-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:6px}
+    .part-tag{background:rgba(183,148,244,0.1);border:1px solid rgba(183,148,244,0.28);
+      color:var(--purple);padding:3px 8px;border-radius:5px;font-size:0.72rem;font-weight:500}
+    .sensor-tag{background:rgba(99,179,237,0.1);border:1px solid rgba(99,179,237,0.25);
+      color:var(--cyan);padding:3px 8px;border-radius:5px;font-size:0.72rem;font-family:'JetBrains Mono',monospace}
+
+    /* rag snippet */
+    .rag-box{background:rgba(4,6,15,0.6);border:1px solid var(--border);border-radius:var(--radius-sm);
+      padding:12px;font-family:'JetBrains Mono',monospace;font-size:0.74rem;line-height:1.65;
+      color:var(--text-secondary);max-height:100px;overflow-y:auto;white-space:pre-wrap;border-left:3px solid rgba(99,179,237,0.3)}
+
+    /* HITL section */
+    .toggle-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}
+    .toggle-btn{padding:12px;border-radius:var(--radius-sm);font-family:inherit;font-size:0.82rem;font-weight:600;
+      cursor:pointer;border:1px solid var(--border);background:var(--bg-glass);color:var(--text-secondary);
+      display:flex;flex-direction:column;align-items:center;gap:5px;transition:all var(--speed-fast)}
+    .toggle-btn:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+    .toggle-btn.sel-approve{background:rgba(72,187,120,0.12);border-color:var(--green);color:var(--green)}
+    .toggle-btn.sel-reject{background:rgba(252,129,129,0.12);border-color:var(--red);color:var(--red)}
+    .toggle-icon{font-size:1.4rem}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+    .form-group{display:flex;flex-direction:column;gap:5px}
+    .form-label{font-size:0.67rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.06em;font-weight:600}
+    .form-input{width:100%;font-family:inherit;font-size:0.82rem;color:var(--text-primary);
+      background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);
+      padding:9px 11px;outline:none;transition:border-color var(--speed-fast)}
+    .form-input:focus{border-color:var(--border-accent)}
+    .form-textarea{resize:vertical;min-height:80px;font-family:inherit}
+    .btn-submit{margin-top:14px;width:100%;padding:13px;
+      background:linear-gradient(135deg,var(--cyan),var(--cyan-d));
+      border:none;border-radius:var(--radius-sm);color:#04060f;font-weight:700;
+      font-size:0.88rem;font-family:inherit;cursor:pointer;transition:all var(--speed-fast);
+      display:flex;align-items:center;justify-content:center;gap:8px}
+    .btn-submit:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--glow-cyan)}
+    .btn-submit:disabled{opacity:0.45;cursor:not-allowed}
+    .btn-submit .spin{width:14px;height:14px;border:2px solid rgba(4,6,15,0.3);border-top-color:#04060f;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+    .btn-submit.loading .spin{display:block}
+    .btn-submit.loading .btn-text{display:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* proposal details card */
+    .proposal-card{background:rgba(99,179,237,0.04);border:1px solid rgba(99,179,237,0.2);
+      border-radius:var(--radius-md);padding:16px}
+    .proposal-row{display:flex;align-items:center;justify-content:space-between;padding:7px 0;
+      border-bottom:1px solid rgba(255,255,255,0.05);font-size:0.8rem}
+    .proposal-row:last-child{border-bottom:none}
+    .proposal-key{color:var(--text-muted);font-weight:500}
+    .proposal-val{font-weight:600;font-family:'JetBrains Mono',monospace;font-size:0.78rem}
+
+    /* toast */
+    #toast{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+    .toast-msg{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);
+      padding:10px 14px;font-size:0.8rem;color:var(--text-primary);display:flex;align-items:center;gap:9px;
+      animation:toastIn 0.25s ease,toastOut 0.4s ease 2.6s forwards;box-shadow:0 4px 20px rgba(0,0,0,0.5)}
+    @keyframes toastIn{from{transform:translateX(30px);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes toastOut{from{opacity:1}to{opacity:0}}
+
+    /* animations */
+    .fade-up{animation:fadeUp 0.35s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+    .shimmer{background:linear-gradient(90deg,var(--bg-glass) 25%,rgba(255,255,255,0.06) 50%,var(--bg-glass) 75%);background-size:200% 100%;animation:shimmer 1.4s infinite}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+
+    /* mobile */
+    @media(max-width:768px){
+      .kpi-grid{grid-template-columns:repeat(2,1fr)}
+      .page{padding:20px 16px 50px}
+      .hero-title{font-size:1.8rem}
+    }
+  </style>
+</head>
+<body>
+
+<!-- HEADER -->
+<header>
+  <a class="brand" href="/">
+    <div class="brand-icon">⚙️</div>
+    <div>
+      <div class="brand-name">MechSage</div>
+      <div class="brand-sub">Predictive Maintenance AI</div>
+    </div>
+  </a>
+
+  <div class="header-center">
+    <div class="header-path">OPERATIONS CONTROL</div>
+    <div class="header-title">Work orders</div>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:16px">
+    <nav class="header-nav">
+      <a class="nav-link" href="/">🔬 Diagnosis</a>
+      <a class="nav-link" href="/dashboard">📊 Live Dashboard</a>
+      <a class="nav-link active" href="/work-orders">📋 Work Orders</a>
+    </nav>
+    <div class="live-badge">
+      <div class="live-dot"></div>
+      <span class="live-text">LIVE TELEMETRY</span>
+    </div>
+  </div>
+</header>
+
+<!-- PAGE -->
+<main class="page">
+
+  <!-- HERO -->
+  <div class="hero fade-up">
+    <div class="hero-eyebrow">Work Order Console</div>
+    <h1 class="hero-title">Work<span>Order</span> Console</h1>
+    <p class="hero-sub">Review, approve, and assign maintenance schedules generated by the diagnostic agent.</p>
+  </div>
+
+  <!-- KPI GRID -->
+  <div class="kpi-grid fade-up" id="kpiGrid">
+    <div class="kpi-card" style="--kpi-accent:var(--cyan);--kpi-color:var(--cyan)">
+      <div class="kpi-card-header">
+        <div class="kpi-label">Total Requests</div>
+        <div class="kpi-icon icon-cyan">📋</div>
+      </div>
+      <div class="kpi-value" id="kpiTotal">—</div>
+      <div class="kpi-sub">In directory</div>
+    </div>
+    <div class="kpi-card active-kpi" style="--kpi-accent:var(--amber);--kpi-color:var(--amber)">
+      <div class="kpi-card-header">
+        <div class="kpi-label">Pending Approval</div>
+        <div class="kpi-icon icon-amber">⚠️</div>
+      </div>
+      <div class="kpi-value" id="kpiPending">—</div>
+      <div class="kpi-sub">Awaiting HITL action</div>
+    </div>
+    <div class="kpi-card" style="--kpi-accent:var(--green);--kpi-color:var(--green)">
+      <div class="kpi-card-header">
+        <div class="kpi-label">Active Schedules</div>
+        <div class="kpi-icon icon-green">✅</div>
+      </div>
+      <div class="kpi-value" id="kpiActive">—</div>
+      <div class="kpi-sub">Technician dispatched</div>
+    </div>
+    <div class="kpi-card" style="--kpi-accent:var(--red);--kpi-color:var(--red)">
+      <div class="kpi-card-header">
+        <div class="kpi-label">Rejected Logs</div>
+        <div class="kpi-icon" style="background:rgba(252,129,129,0.15)">⊗</div>
+      </div>
+      <div class="kpi-value" id="kpiRejected">—</div>
+      <div class="kpi-sub">De-escalated cases</div>
+    </div>
+  </div>
+
+  <!-- REGISTRY -->
+  <div class="section-header">
+    <h2 class="section-title">Maintenance Records Registry</h2>
+    <div class="section-rule"></div>
+  </div>
+
+  <!-- FILTERS -->
+  <div class="filters-bar">
+    <span class="filter-icon">⚗</span>
+    <span class="filter-label">Filters:</span>
+    <select class="filter-select" id="filterStatus" onchange="applyFilters()">
+      <option value="ALL">All Statuses</option>
+      <option value="PENDING_APPROVAL">Pending Approval</option>
+      <option value="APPROVED">Approved</option>
+      <option value="REJECTED">Rejected</option>
+      <option value="ESCALATED">Escalated</option>
+    </select>
+    <select class="filter-select" id="filterPriority" onchange="applyFilters()">
+      <option value="ALL">All Priorities</option>
+      <option value="high">Critical / High</option>
+      <option value="medium">Medium</option>
+      <option value="low">Low</option>
+    </select>
+    <div class="filter-spacer"></div>
+    <button class="btn-refresh" onclick="loadAll()">↺ Refresh</button>
+  </div>
+
+  <!-- TABLE -->
+  <div class="table-wrap">
+    <table id="woTable">
+      <thead>
+        <tr>
+          <th>WO ID</th>
+          <th>Asset ID</th>
+          <th>Diagnosis</th>
+          <th>Priority</th>
+          <th>Est. Duration</th>
+          <th>Created At</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="woTbody">
+        <tr><td colspan="8"><div class="empty-state shimmer" style="height:80px;border-radius:var(--radius-sm)"></div></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</main><!-- /page -->
+
+<div id="toast"></div>
+
+<!-- REVIEW DRAWER -->
+<div class="modal-overlay" id="drawerOverlay" onclick="closeDrawerOnBackdrop(event)">
+  <div class="drawer" id="reviewDrawer">
+
+    <div class="drawer-header">
+      <div class="drawer-icon">🔧</div>
+      <div>
+        <div class="drawer-title" id="drawerTitle">Work Order Review</div>
+        <div class="drawer-sub" id="drawerSub">ID: —</div>
+      </div>
+      <button class="btn-close" id="drawerCloseBtn" onclick="closeDrawer()">✕</button>
+    </div>
+
+    <div class="drawer-body" id="drawerBody">
+
+      <!-- MAINTENANCE REPORT SUMMARY -->
+      <div class="d-section">
+        <div class="d-section-title">📋 Maintenance Report Summary</div>
+
+        <!-- Failure mode + action -->
+        <div class="d-card">
+          <div class="d-card-header">
+            <div class="d-card-icon icon-amber">⚡</div>
+            <span class="d-card-title">Failure Mode / Diagnosis</span>
+            <span id="dSeverityBadge" style="margin-left:auto"></span>
+          </div>
+          <div class="d-card-body">
+            <div style="font-size:1.05rem;font-weight:700;margin-bottom:8px" id="dFailureMode">—</div>
+            <div style="font-size:0.83rem;color:var(--text-secondary);line-height:1.6;margin-bottom:14px" id="dExplanation">—</div>
+            <div style="font-size:0.67rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;font-weight:600;margin-bottom:6px">Recommended Mitigation Action</div>
+            <div style="background:rgba(246,166,35,0.06);border:1px solid rgba(246,166,35,0.2);border-radius:var(--radius-sm);padding:10px 13px;font-size:0.82rem;line-height:1.55;color:var(--text-primary)" id="dAction">—</div>
+          </div>
+        </div>
+
+        <!-- Metrics grid -->
+        <div class="metrics-grid" style="margin-bottom:12px">
+          <div class="metric-item">
+            <div class="metric-label">RUL Prognosis</div>
+            <div class="metric-value" id="dRUL" style="color:var(--amber)">—</div>
+            <div class="metric-sub">cycles remaining</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label">Anomaly Score</div>
+            <div class="metric-value" id="dAnomalyScore" style="color:var(--red)">—</div>
+            <div class="metric-sub">Z-score based</div>
+          </div>
+          <div class="metric-item" style="grid-column:span 2">
+            <div class="metric-label">Confidence</div>
+            <div class="conf-wrap">
+              <div class="conf-bar-bg"><div class="conf-bar-fill" id="dConfBar" style="width:0%;background:var(--cyan)"></div></div>
+              <span class="conf-pct" id="dConfPct" style="color:var(--cyan)">—</span>
+            </div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label">Severity</div>
+            <div class="metric-value" id="dSeverity" style="font-size:1rem;font-weight:700">—</div>
+          </div>
+          <div class="metric-item">
+            <div class="metric-label">Est. Duration</div>
+            <div class="metric-value" id="dDuration" style="color:var(--cyan)">—</div>
+            <div class="metric-sub">hours</div>
+          </div>
+        </div>
+
+        <!-- Bill of materials -->
+        <div class="d-card">
+          <div class="d-card-header">
+            <div class="d-card-icon icon-purple">🔩</div>
+            <span class="d-card-title">Bill of Materials — Required Spares</span>
+          </div>
+          <div class="d-card-body">
+            <div class="parts-row" id="dParts"><span style="color:var(--text-muted);font-size:0.8rem">No parts listed</span></div>
+          </div>
+        </div>
+
+        <!-- RAG snippet -->
+        <div class="d-card">
+          <div class="d-card-header">
+            <div class="d-card-icon icon-cyan">📖</div>
+            <span class="d-card-title">RAG Technical Manual Retrieval</span>
+          </div>
+          <div class="d-card-body">
+            <div class="rag-box" id="dRAGSnippet">No retrieval snippet available.</div>
+            <div class="parts-row" style="margin-top:10px" id="dSensors"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- HITL REVIEW -->
+      <div class="d-section">
+        <div class="d-section-title">🤖 Human-in-the-loop Review</div>
+
+        <div class="toggle-row">
+          <button class="toggle-btn" id="btnApprove" onclick="selectDecision('approve')">
+            <span class="toggle-icon">✅</span>
+            <span>Approve &amp; Schedule</span>
+          </button>
+          <button class="toggle-btn" id="btnReject" onclick="selectDecision('reject')">
+            <span class="toggle-icon">❌</span>
+            <span>Reject Order</span>
+          </button>
+        </div>
+
+        <div class="form-row">
+          <div class="form-group">
+            <label class="form-label" for="inputTech">Assign Technician</label>
+            <input type="text" id="inputTech" class="form-input" placeholder="e.g. T.Rodriguez" />
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="inputStart">Proposed Start</label>
+            <input type="datetime-local" id="inputStart" class="form-input" />
+          </div>
+        </div>
+
+        <div class="form-group" style="margin-bottom:0">
+          <label class="form-label" for="inputNotes">Approval Notes</label>
+          <textarea id="inputNotes" class="form-input form-textarea" placeholder="Observations, caveats, or escalation context…"></textarea>
+        </div>
+
+        <button class="btn-submit" id="btnSubmit" onclick="submitDecision()" disabled>
+          <div class="spin"></div>
+          <span class="btn-text">Submit Decision</span>
+        </button>
+      </div>
+
+      <!-- PROPOSAL DETAILS CARD -->
+      <div class="d-section">
+        <div class="d-section-title">📄 Proposal Details</div>
+        <div class="proposal-card">
+          <div class="proposal-row"><span class="proposal-key">Work Order ID</span><span class="proposal-val" id="pDetailId">—</span></div>
+          <div class="proposal-row"><span class="proposal-key">Asset ID</span><span class="proposal-val" id="pDetailAsset" style="color:var(--cyan)">—</span></div>
+          <div class="proposal-row"><span class="proposal-key">Priority</span><span id="pDetailPriority">—</span></div>
+          <div class="proposal-row"><span class="proposal-key">Current Status</span><span id="pDetailStatus">—</span></div>
+          <div class="proposal-row"><span class="proposal-key">Estimated Duration</span><span class="proposal-val" id="pDetailDur">—</span></div>
+          <div class="proposal-row"><span class="proposal-key">Created At</span><span class="proposal-val" id="pDetailCreated">—</span></div>
+        </div>
+      </div>
+
+    </div><!-- /drawer-body -->
+  </div><!-- /drawer -->
+</div><!-- /overlay -->
+
+<script>
+const API = 'http://127.0.0.1:8001';
+
+let allWorkOrders = [];
+let currentWO = null;
+let currentDecision = null;
+
+// ── INIT ─────────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', () => {
+  loadAll();
+  // Auto-refresh every 30s
+  setInterval(loadAll, 30000);
+});
+
+// ── DATA LOAD ────────────────────────────────────────────────────────
+async function loadAll() {
+  await Promise.all([loadSummary(), loadTable()]);
+}
+
+async function loadSummary() {
+  try {
+    const r = await fetch(`${API}/api/work-orders/summary`);
+    const d = await r.json();
+    animCount('kpiTotal',   d.total ?? 0);
+    animCount('kpiPending', d.pending ?? 0);
+    animCount('kpiActive',  d.active ?? 0);
+    animCount('kpiRejected',d.rejected ?? 0);
+  } catch(e) {
+    ['kpiTotal','kpiPending','kpiActive','kpiRejected'].forEach(id => {
+      document.getElementById(id).textContent = '—';
+    });
+  }
+}
+
+async function loadTable() {
+  const status   = document.getElementById('filterStatus').value;
+  const priority = document.getElementById('filterPriority').value;
+  let url = `${API}/api/work-orders?status=${status}&priority=${priority}`;
+  try {
+    const r = await fetch(url);
+    const d = await r.json();
+    allWorkOrders = d.work_orders || [];
+    renderTable(allWorkOrders);
+  } catch(e) {
+    renderEmpty('Backend offline — start the server');
+  }
+}
+
+function applyFilters() { loadTable(); }
+
+// ── RENDER TABLE ─────────────────────────────────────────────────────
+function renderTable(rows) {
+  const tbody = document.getElementById('woTbody');
+  if (!rows.length) {
+    renderEmpty('No work orders found for the selected filters');
+    return;
+  }
+  tbody.innerHTML = rows.map((wo, i) => {
+    const shortId = wo.id ? '#' + (i + 1) : '—';
+    const assetId = wo.asset_id || '—';
+    const diagnosis = wo.failure_mode || '—';
+    const subText   = (wo.recommended_action || '').slice(0, 70) + (wo.recommended_action?.length > 70 ? '…' : '');
+    const priority  = wo.priority || 'medium';
+    const dur       = wo.estimated_duration_hrs != null ? `${wo.estimated_duration_hrs} hrs` : '—';
+    const createdAt = wo.created_at ? fmtTime(wo.created_at) : '—';
+    const status    = wo.status || 'PENDING_APPROVAL';
+
+    return `
+      <tr onclick="openDrawer('${escHtml(wo.id)}')">
+        <td class="td-wo">${shortId}</td>
+        <td class="td-asset">${escHtml(assetId)}</td>
+        <td class="td-diag">
+          <div class="td-diag-title">${escHtml(diagnosis)}</div>
+          <div class="td-diag-sub">${escHtml(subText)}</div>
+        </td>
+        <td>${priorityBadge(priority)}</td>
+        <td class="td-dur">${escHtml(dur)}</td>
+        <td class="td-created">${escHtml(createdAt)}</td>
+        <td>${statusBadge(status)}</td>
+        <td><button class="td-action-btn" onclick="event.stopPropagation();openDrawer('${escHtml(wo.id)}')">👁</button></td>
+      </tr>`;
+  }).join('');
+}
+
+function renderEmpty(msg) {
+  document.getElementById('woTbody').innerHTML = `
+    <tr><td colspan="8">
+      <div class="empty-state">
+        <div class="empty-icon">📂</div>
+        <div class="empty-title">${msg}</div>
+        <div class="empty-sub">Run a diagnosis to generate work orders</div>
+      </div>
+    </td></tr>`;
+}
+
+// ── DRAWER ───────────────────────────────────────────────────────────
+async function openDrawer(woId) {
+  currentWO = null;
+  currentDecision = null;
+  resetForm();
+
+  // Show overlay immediately
+  document.getElementById('drawerOverlay').classList.add('open');
+
+  try {
+    const r = await fetch(`${API}/api/work-orders/${woId}`);
+    if (!r.ok) throw new Error('not found');
+    currentWO = await r.json();
+    populateDrawer(currentWO);
+  } catch(e) {
+    // Try from local cache
+    currentWO = allWorkOrders.find(w => w.id === woId);
+    if (currentWO) populateDrawer(currentWO);
+    else toast('Work order not found', '❌');
+  }
+}
+
+function populateDrawer(wo) {
+  document.getElementById('drawerTitle').textContent = wo.failure_mode || 'Work Order Review';
+  document.getElementById('drawerSub').textContent   = `ID: ${wo.id?.slice(0,8)}…`;
+
+  // Failure mode card
+  document.getElementById('dFailureMode').textContent   = wo.failure_mode || '—';
+  document.getElementById('dExplanation').textContent   = wo.explanation  || '—';
+  document.getElementById('dAction').textContent        = wo.recommended_action || '—';
+  document.getElementById('dSeverityBadge').innerHTML   = priorityBadge(wo.severity || 'medium');
+
+  // Metrics
+  document.getElementById('dRUL').textContent    = wo.rul_estimate_cycles != null ? wo.rul_estimate_cycles : '—';
+  document.getElementById('dAnomalyScore').textContent = wo.anomaly_score != null ? wo.anomaly_score.toFixed(3) : '—';
+  document.getElementById('dSeverity').textContent = (wo.severity || '—').toUpperCase();
+  document.getElementById('dDuration').textContent = wo.estimated_duration_hrs != null ? wo.estimated_duration_hrs : '—';
+
+  // Confidence bar
+  const conf = wo.confidence != null ? wo.confidence : null;
+  if (conf != null) {
+    const pct = Math.round(conf * 100);
+    document.getElementById('dConfBar').style.width = `${pct}%`;
+    document.getElementById('dConfBar').style.background = conf > 0.7 ? 'var(--green)' : conf > 0.4 ? 'var(--amber)' : 'var(--red)';
+    document.getElementById('dConfPct').textContent = `${pct}%`;
+    document.getElementById('dConfPct').style.color = conf > 0.7 ? 'var(--green)' : conf > 0.4 ? 'var(--amber)' : 'var(--red)';
+  } else {
+    document.getElementById('dConfBar').style.width = '0%';
+    document.getElementById('dConfPct').textContent = '—';
+  }
+
+  // Parts
+  const partsEl = document.getElementById('dParts');
+  const parts = wo.parts_needed || [];
+  partsEl.innerHTML = parts.length
+    ? parts.map(p => `<span class="part-tag">${escHtml(p)}</span>`).join('')
+    : '<span style="color:var(--text-muted);font-size:0.8rem">No parts listed</span>';
+
+  // RAG snippet
+  document.getElementById('dRAGSnippet').textContent = wo.rag_snippet || 'No retrieval snippet stored.';
+
+  // Evidence sensors
+  const sensorsEl = document.getElementById('dSensors');
+  const sensors = wo.evidence_sensors || [];
+  sensorsEl.innerHTML = sensors.map(s => `<span class="sensor-tag">${escHtml(s)}</span>`).join('');
+
+  // Proposal details
+  document.getElementById('pDetailId').textContent      = wo.id || '—';
+  document.getElementById('pDetailAsset').textContent   = wo.asset_id || '—';
+  document.getElementById('pDetailPriority').innerHTML  = priorityBadge(wo.priority || 'medium');
+  document.getElementById('pDetailStatus').innerHTML    = statusBadge(wo.status || 'PENDING_APPROVAL');
+  document.getElementById('pDetailDur').textContent     = wo.estimated_duration_hrs != null ? `${wo.estimated_duration_hrs} hrs` : '—';
+  document.getElementById('pDetailCreated').textContent = wo.created_at ? fmtTime(wo.created_at) : '—';
+
+  // Pre-fill if already decided
+  if (wo.assigned_technician) document.getElementById('inputTech').value  = wo.assigned_technician;
+  if (wo.proposed_start)      document.getElementById('inputStart').value = wo.proposed_start;
+  if (wo.decision_notes)      document.getElementById('inputNotes').value = wo.decision_notes;
+}
+
+function closeDrawer() { document.getElementById('drawerOverlay').classList.remove('open'); currentWO = null; }
+function closeDrawerOnBackdrop(e) { if (e.target.id === 'drawerOverlay') closeDrawer(); }
+
+// ── HITL FORM ────────────────────────────────────────────────────────
+function resetForm() {
+  currentDecision = null;
+  ['inputTech','inputStart','inputNotes'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('btnApprove').className = 'toggle-btn';
+  document.getElementById('btnReject').className  = 'toggle-btn';
+  document.getElementById('btnSubmit').disabled   = true;
+  document.getElementById('btnSubmit').className  = 'btn-submit';
+  document.getElementById('btnSubmit').querySelector('.btn-text').textContent = 'Submit Decision';
+}
+
+function selectDecision(d) {
+  currentDecision = d;
+  document.getElementById('btnApprove').className = d === 'approve' ? 'toggle-btn sel-approve' : 'toggle-btn';
+  document.getElementById('btnReject').className  = d === 'reject'  ? 'toggle-btn sel-reject'  : 'toggle-btn';
+  document.getElementById('btnSubmit').disabled   = false;
+}
+
+async function submitDecision() {
+  if (!currentWO || !currentDecision) return;
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.classList.add('loading');
+
+  const payload = {
+    decision:             currentDecision,
+    notes:                document.getElementById('inputNotes').value.trim(),
+    assigned_technician:  document.getElementById('inputTech').value.trim(),
+    proposed_start:       document.getElementById('inputStart').value,
+    approved_by:          'HITL Operator',
+  };
+
+  try {
+    const r = await fetch(`${API}/api/diagnose/${currentWO.id}/approve`, {
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(payload),
+    });
+    const d = await r.json();
+    if (r.ok) {
+      toast(d.message || 'Decision recorded', currentDecision === 'approve' ? '✅' : '❌');
+      closeDrawer();
+      loadAll();
+    } else {
+      toast('Server error: ' + (d.detail || 'unknown'), '❌');
+    }
+  } catch(e) {
+    toast('Network error — is the server running?', '❌');
+  } finally {
+    btn.classList.remove('loading');
+    btn.disabled = false;
+  }
+}
+
+// ── UTILS ────────────────────────────────────────────────────────────
+function priorityBadge(p) {
+  const map = {
+    critical: ['badge-critical','CRITICAL'],
+    high:     ['badge-high','HIGH'],
+    medium:   ['badge-medium','MEDIUM'],
+    low:      ['badge-low','LOW'],
+  };
+  const [cls, label] = map[(p||'medium').toLowerCase()] || map.medium;
+  return `<span class="badge ${cls}">${label}</span>`;
+}
+
+function statusBadge(s) {
+  const map = {
+    PENDING_APPROVAL: ['status-pending','⏳ PENDING APPROVAL'],
+    APPROVED:         ['status-approved','✅ APPROVED'],
+    REJECTED:         ['status-rejected','✕ REJECTED'],
+    ESCALATED:        ['status-escalated','↑ ESCALATED'],
+  };
+  const [cls, label] = map[s] || ['status-pending','⏳ PENDING'];
+  return `<span class="status-badge ${cls}">${label}</span>`;
+}
+
+function fmtTime(ts) {
+  if (!ts) return '—';
+  try {
+    const d = new Date(ts.endsWith('Z') ? ts : ts + 'Z');
+    return d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  } catch { return ts.slice(11,19) || ts; }
+}
+
+function escHtml(s) {
+  if (!s) return '';
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function animCount(id, target) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  const from = parseInt(el.textContent) || 0;
+  if (from === target) { el.textContent = target; return; }
+  const steps = 20, step = (target - from) / steps;
+  let cur = from, count = 0;
+  const iv = setInterval(() => {
+    cur += step; count++;
+    el.textContent = Math.round(cur);
+    if (count >= steps) { el.textContent = target; clearInterval(iv); }
+  }, 25);
+}
+
+function toast(msg, icon='ℹ️') {
+  const container = document.getElementById('toast');
+  const el = document.createElement('div');
+  el.className = 'toast-msg';
+  el.innerHTML = `<span>${icon}</span><span>${escHtml(msg)}</span>`;
+  container.appendChild(el);
+  setTimeout(() => el.remove(), 3200);
+}
+</script>
+</body>
+</html>
