@@ -1,0 +1,204 @@
+{
+  "dataset": "FD003",
+  "dataset_version": "bb1be79f3434",
+  "split_details": {
+    "train_rows": 2416,
+    "validation_rows": 659,
+    "test_rows": 1211,
+    "train_units": 8,
+    "validation_units": 2,
+    "test_units": 8,
+    "validation_size": 0.2,
+    "split_strategy": "engine_unit_holdout_validation_plus_official_test",
+    "seed": 42,
+    "max_train_units": 10,
+    "max_test_units": 8
+  },
+  "preprocessing": {
+    "steps": [
+      "select_informative_sensors",
+      "engine_unit_train_validation_split",
+      "minmax_scale_features_fit_on_train_only"
+    ],
+    "informative_sensors": [
+      "sensor_2",
+      "sensor_3",
+      "sensor_4",
+      "sensor_7",
+      "sensor_8",
+      "sensor_9",
+      "sensor_11",
+      "sensor_12",
+      "sensor_13",
+      "sensor_14",
+      "sensor_15",
+      "sensor_17",
+      "sensor_20",
+      "sensor_21"
+    ],
+    "operational_settings": [
+      "op_setting_1",
+      "op_setting_2",
+      "op_setting_3"
+    ],
+    "scaler": "MinMaxScaler",
+    "rul_clip": 125,
+    "anomaly_threshold": 30
+  },
+  "feature_engineering": {
+    "steps": [
+      "rolling_mean",
+      "rolling_std",
+      "sensor_delta",
+      "expanding_mean"
+    ],
+    "rolling_windows": [
+      5,
+      10,
+      20
+    ],
+    "feature_count": 129
+  },
+  "comparison_table": [
+    {
+      "Model name": "LinearRegression",
+      "Best hyperparameters": "{\"copy_X\": true, \"fit_intercept\": true, \"n_jobs\": null, \"positive\": false, \"tol\": 1e-06}",
+      "Train score": 8.642308683192397,
+      "Validation score": 17.880765019413197,
+      "Test score": 16.172716066675704,
+      "Main metric": "RMSE",
+      "Runtime": 0.019680900033563375,
+      "MLflow run ID": "d431d0b27dfd42f1bd5849577798ab9f",
+      "Model artifact path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/d431d0b27dfd42f1bd5849577798ab9f/artifacts/model",
+      "Task": "RUL Regression",
+      "Local model path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\LinearRegression_FD003.joblib"
+    },
+    {
+      "Model name": "RandomForest",
+      "Best hyperparameters": "{\"bootstrap\": true, \"ccp_alpha\": 0.0, \"criterion\": \"squared_error\", \"max_depth\": 5, \"max_features\": 1.0, \"max_leaf_nodes\": null, \"max_samples\": null, \"min_impurity_decrease\": 0.0, \"min_samples_leaf\": 1, \"min_samples_split\": 2, \"min_weight_fraction_leaf\": 0.0, \"monotonic_cst\": null, \"n_estimators\": 25, \"n_jobs\": 1, \"oob_score\": false, \"random_state\": 42, \"verbose\": 0, \"warm_start\": false}",
+      "Train score": 6.200183986084335,
+      "Validation score": 19.432663042538458,
+      "Test score": 15.367971296269602,
+      "Main metric": "RMSE",
+      "Runtime": 2.300156500074081,
+      "MLflow run ID": "26517d6eed1d498bbc487c1748693b93",
+      "Model artifact path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/26517d6eed1d498bbc487c1748693b93/artifacts/model",
+      "Task": "RUL Regression",
+      "Local model path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\RandomForest_FD003.joblib"
+    },
+    {
+      "Model name": "IsolationForest",
+      "Best hyperparameters": "{\"bootstrap\": false, \"contamination\": 0.05, \"fit_data\": \"nominal_train_rows\", \"max_features\": 1.0, \"max_samples\": \"auto\", \"n_estimators\": 100, \"n_jobs\": 1, \"random_state\": 42, \"threshold\": 0.6483689995847156, \"verbose\": 0, \"warm_start\": false}",
+      "Train score": 0.28865979381443296,
+      "Validation score": 0.8521739130434782,
+      "Test score": 0.0,
+      "Main metric": "F1_Score",
+      "Runtime": 0.17253780004102737,
+      "MLflow run ID": "645fc7bc8fdf4ad59908ab7533cb8b9c",
+      "Model artifact path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/645fc7bc8fdf4ad59908ab7533cb8b9c/artifacts/model",
+      "Task": "Anomaly Detection",
+      "Local model path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\IsolationForest_FD003.joblib"
+    },
+    {
+      "Model name": "LightGBM_Anomaly",
+      "Best hyperparameters": "{\"class_weight\": \"balanced\", \"learning_rate\": 0.05, \"max_depth\": 6, \"n_estimators\": 120, \"n_jobs\": 1, \"num_leaves\": 31, \"random_state\": 42, \"threshold\": 0.9836335030265554, \"threshold_source\": \"validation_f1\", \"verbose\": -1}",
+      "Train score": 1.0,
+      "Validation score": 0.8347826086956521,
+      "Test score": 0.0,
+      "Main metric": "F1_Score",
+      "Runtime": 0.5044898999622092,
+      "MLflow run ID": "e296ef8f5d0d4546b7f2612a57a457a6",
+      "Model artifact path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/e296ef8f5d0d4546b7f2612a57a457a6/artifacts/model",
+      "Task": "Anomaly Detection",
+      "Local model path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\LightGBM_Anomaly_FD003.joblib"
+    }
+  ],
+  "best_rul_model": {
+    "model_name": "LinearRegression",
+    "test_score": 16.172716066675704,
+    "main_metric": "RMSE",
+    "mlflow_run_id": "d431d0b27dfd42f1bd5849577798ab9f",
+    "model_artifact_path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/d431d0b27dfd42f1bd5849577798ab9f/artifacts/model"
+  },
+  "best_anomaly_model": {
+    "model_name": "IsolationForest",
+    "test_score": 0.0,
+    "main_metric": "F1_Score",
+    "mlflow_run_id": "645fc7bc8fdf4ad59908ab7533cb8b9c",
+    "model_artifact_path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/645fc7bc8fdf4ad59908ab7533cb8b9c/artifacts/model"
+  },
+  "saved_outputs": {
+    "best_rul": {
+      "params_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_rul_params_FD003.json",
+      "metrics_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_rul_metrics_FD003.json",
+      "model_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_rul_model_FD003.joblib",
+      "model_card_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_rul_model_card_FD003.json",
+      "mlflow_run_id": "a29b5d70013e4abebb5f0960a90396d7",
+      "mlflow_model_artifact_path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/a29b5d70013e4abebb5f0960a90396d7/artifacts/final_model",
+      "top_features": [
+        [
+          "sensor_12_expanding_mean",
+          41.531726874486196
+        ],
+        [
+          "sensor_7_expanding_mean",
+          35.3682698409245
+        ],
+        [
+          "sensor_15_expanding_mean",
+          24.05828285947665
+        ],
+        [
+          "sensor_14_expanding_mean",
+          12.743332397603915
+        ],
+        [
+          "sensor_13_expanding_mean",
+          12.635665643731214
+        ]
+      ],
+      "shap_plots": {
+        "summary_bar": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_summary_bar_FD003.png",
+        "summary_beeswarm": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_summary_beeswarm_FD003.png",
+        "dependence": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_rul_shap_dependence_FD003.png"
+      }
+    },
+    "best_anomaly": {
+      "params_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_params_FD003.json",
+      "metrics_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_metrics_FD003.json",
+      "model_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\models\\best_anomaly_model_FD003.joblib",
+      "model_card_path": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\reports\\best_anomaly_model_card_FD003.json",
+      "mlflow_run_id": "0b8d6e5000da46b5920117fef9ea5434",
+      "mlflow_model_artifact_path": "file:///C:/Sudhanshu%20OG/IIT%20GN/Mech%20Sage/MechSage/NASA_CMAPSS_RUL_Project/mlruns/706136071177237741/0b8d6e5000da46b5920117fef9ea5434/artifacts/final_model",
+      "top_features": [
+        [
+          "sensor_7_roll_mean_10",
+          0.07209892452214847
+        ],
+        [
+          "sensor_7_expanding_mean",
+          0.06342171332847792
+        ],
+        [
+          "sensor_12_roll_mean_10",
+          0.05674833701967
+        ],
+        [
+          "sensor_15_roll_mean_20",
+          0.05184640272441318
+        ],
+        [
+          "sensor_13_roll_mean_20",
+          0.05181716990592105
+        ]
+      ],
+      "shap_plots": {
+        "summary_bar": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_summary_bar_FD003.png",
+        "summary_beeswarm": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_summary_beeswarm_FD003.png",
+        "dependence": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\artifacts\\best_anomaly_shap_dependence_FD003.png"
+      }
+    }
+  },
+  "mlflow_ui_command": "mlflow ui --backend-store-uri ./mlruns",
+  "mlflow_ui_url": "http://127.0.0.1:5000"
+}

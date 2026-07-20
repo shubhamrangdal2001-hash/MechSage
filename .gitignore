@@ -1,0 +1,37 @@
+# Python caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.pytest_tmp/
+
+# Local environments
+.venv/
+venv/
+env/
+
+# Raw/local datasets and packaged binaries
+data/
+*.zip
+
+# ML experiment outputs
+ML/artifacts/
+ML/models/
+ML/mlruns/
+ML/catboost_info/
+ML/data/
+ML/notebooks/
+ML/*.log
+
+# OS/editor noise
+.DS_Store
+Thumbs.db
+
+# RAG vector store (rebuilt automatically by evaluate_rag.py)
+app/core/rag/chroma_db/
+
+# RAG report outputs (generated artifacts)
+# dev/rag/reports/
+
+# Environment variables / secrets — never commit API keys!
+.env
+*.env

@@ -1,0 +1,6 @@
+# DVC pointer (placeholder). After `dvc add data/raw/AI4I`, DVC rewrites this with the real md5.
+outs:
+- md5: 00000000000000000000000000000000
+  size: 0
+  path: raw/AI4I
+  desc: AI4I 2020 Predictive Maintenance (UCI id 601, CC BY 4.0); do not commit raw files

@@ -1,0 +1,126 @@
+{
+  "FD001": {
+    "dataset": "FD001",
+    "anomaly_models": {
+      "IsolationForest": {
+        "ROC_AUC": 0.9625,
+        "PR_AUC": 0.4085,
+        "F1_Score": 0.5,
+        "Precision": 0.516,
+        "Recall": 0.4849
+      },
+      "LightGBM_Anomaly": {
+        "ROC_AUC": 0.9952,
+        "PR_AUC": 0.8548,
+        "F1_Score": 0.7386,
+        "Precision": 0.8391,
+        "Recall": 0.6596
+      }
+    },
+    "rul_models": {
+      "LinearRegression": {
+        "RMSE": 14.6387,
+        "MAE": 11.7064,
+        "R2": 0.7183
+      },
+      "RandomForest": {
+        "RMSE": 13.3705,
+        "MAE": 9.2664,
+        "R2": 0.765
+      }
+    }
+  },
+  "FD002": {
+    "dataset": "FD002",
+    "anomaly_models": {
+      "IsolationForest": {
+        "ROC_AUC": 0.4577,
+        "PR_AUC": 0.027,
+        "F1_Score": 0.0532,
+        "Precision": 0.0283,
+        "Recall": 0.4526
+      },
+      "LightGBM_Anomaly": {
+        "ROC_AUC": 0.9884,
+        "PR_AUC": 0.7999,
+        "F1_Score": 0.7092,
+        "Precision": 0.6384,
+        "Recall": 0.7976
+      }
+    },
+    "rul_models": {
+      "LinearRegression": {
+        "RMSE": 15.3122,
+        "MAE": 12.2707,
+        "R2": 0.7179
+      },
+      "RandomForest": {
+        "RMSE": 18.6861,
+        "MAE": 14.5784,
+        "R2": 0.5798
+      }
+    }
+  },
+  "FD003": {
+    "dataset": "FD003",
+    "anomaly_models": {
+      "IsolationForest": {
+        "ROC_AUC": 0.9492,
+        "PR_AUC": 0.2054,
+        "F1_Score": 0.2513,
+        "Precision": 0.1598,
+        "Recall": 0.5876
+      },
+      "LightGBM_Anomaly": {
+        "ROC_AUC": 0.9982,
+        "PR_AUC": 0.9184,
+        "F1_Score": 0.8079,
+        "Precision": 0.7796,
+        "Recall": 0.8385
+      }
+    },
+    "rul_models": {
+      "LinearRegression": {
+        "RMSE": 13.1143,
+        "MAE": 10.0611,
+        "R2": 0.7212
+      },
+      "RandomForest": {
+        "RMSE": 11.5463,
+        "MAE": 6.9904,
+        "R2": 0.7839
+      }
+    }
+  },
+  "FD004": {
+    "dataset": "FD004",
+    "anomaly_models": {
+      "IsolationForest": {
+        "ROC_AUC": 0.5201,
+        "PR_AUC": 0.0206,
+        "F1_Score": 0.043,
+        "Precision": 0.0224,
+        "Recall": 0.5347
+      },
+      "LightGBM_Anomaly": {
+        "ROC_AUC": 0.9875,
+        "PR_AUC": 0.6931,
+        "F1_Score": 0.6279,
+        "Precision": 0.6194,
+        "Recall": 0.6366
+      }
+    },
+    "rul_models": {
+      "LinearRegression": {
+        "RMSE": 14.988,
+        "MAE": 11.1054,
+        "R2": 0.6536
+      },
+      "RandomForest": {
+        "RMSE": 16.7403,
+        "MAE": 11.5485,
+        "R2": 0.5678
+      }
+    }
+  }
+}

@@ -1,0 +1,97 @@
+[
+  {
+    "id": 1,
+    "query": "How to bake a chocolate chip cookie at home",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 2,
+    "query": "Who won the FIFA World Cup soccer championship in 2022",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 3,
+    "query": "What is the capital of France and its population",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 4,
+    "query": "How to write a python script to parse logs and send email",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 5,
+    "query": "Reset the administrator password on Windows Server active directory",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 6,
+    "query": "What is the current stock price of Apple and Google today",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 7,
+    "query": "Standard operating procedure for sorting warehouse packages and boxes",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 8,
+    "query": "How to fix a flat tire on a mountain bicycle step by step",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 9,
+    "query": "Verify SQL database backup retention policy and schedule",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 10,
+    "query": "Tell me a joke about software developers or engineers",
+    "degrading_sensors": [],
+    "fault_hypothesis": ""
+  },
+  {
+    "id": 11,
+    "query": "What is the maximum torque specification for turbofan engine bolts",
+    "degrading_sensors": [],
+    "fault_hypothesis": "bolt torque specification",
+    "note": "Near-miss: adjacent maintenance domain but not in KB"
+  },
+  {
+    "id": 12,
+    "query": "How often should engine oil be changed in a commercial aircraft",
+    "degrading_sensors": [],
+    "fault_hypothesis": "oil change interval",
+    "note": "Near-miss: engine maintenance but not covered in KB"
+  },
+  {
+    "id": 13,
+    "query": "What certifications are required for aircraft engine maintenance technicians",
+    "degrading_sensors": [],
+    "fault_hypothesis": "maintenance certification",
+    "note": "Near-miss: maintenance adjacent but regulatory, not in KB"
+  },
+  {
+    "id": 14,
+    "query": "How to calculate compressor map and surge line for a new engine design",
+    "degrading_sensors": ["s3", "s7"],
+    "fault_hypothesis": "compressor design",
+    "note": "Near-miss: compressor related but design scope, not diagnostic"
+  },
+  {
+    "id": 15,
+    "query": "What is the price of a replacement HPC blade for CFM56 engine",
+    "degrading_sensors": [],
+    "fault_hypothesis": "part procurement",
+    "note": "Near-miss: mentions HPC blade but procurement, not diagnostic"
+  }
+]

@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MechSage — Live Anomaly Dashboard</title>
+  <meta name="description" content="Real-time turbofan engine anomaly detection dashboard powered by NASA C-MAPSS data and MechSage AI." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.3/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-deep:#04060f; --bg-card:#0b0f1e; --bg-glass:rgba(255,255,255,0.04); --bg-glass-hover:rgba(255,255,255,0.07);
+      --border:rgba(255,255,255,0.08); --border-accent:rgba(99,179,237,0.35);
+      --amber:#f6a623; --amber-d:#c47d0e; --cyan:#63b3ed; --cyan-d:#2b6cb0;
+      --green:#48bb78; --red:#fc8181; --red-d:#c53030; --purple:#b794f4; --orange:#fc814a;
+      --text-primary:#f0f4ff; --text-secondary:#8896b3; --text-muted:#4a5568;
+      --glow-amber:0 0 24px rgba(246,166,35,0.18); --glow-cyan:0 0 24px rgba(99,179,237,0.15);
+      --glow-red:0 0 24px rgba(252,129,129,0.25);
+      --radius-sm:8px; --radius-md:14px; --radius-lg:20px;
+      --speed-fast:150ms; --speed-med:300ms;
+    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+    html{scroll-behavior:smooth}
+    body{font-family:'Inter',sans-serif;background:var(--bg-deep);color:var(--text-primary);min-height:100vh;overflow:hidden}
+    body::before{content:'';position:fixed;inset:0;background:radial-gradient(ellipse 80% 50% at 10% 0%,rgba(99,179,237,0.06) 0%,transparent 60%),radial-gradient(ellipse 60% 40% at 90% 100%,rgba(246,166,35,0.05) 0%,transparent 60%);pointer-events:none;z-index:0}
+    .shell{position:relative;z-index:1;display:flex;flex-direction:column;height:100vh}
+
+    /* HEADER */
+    header{height:58px;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid var(--border);backdrop-filter:blur(20px);background:rgba(4,6,15,0.8);flex-shrink:0;z-index:100}
+    .brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+    .brand-icon{width:32px;height:32px;background:linear-gradient(135deg,var(--amber),var(--amber-d));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;box-shadow:var(--glow-amber)}
+    .brand-name{font-size:1rem;font-weight:700;letter-spacing:-0.02em;background:linear-gradient(90deg,#f0f4ff,var(--amber));-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+    .brand-sub{font-size:0.6rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em}
+    .header-nav{display:flex;align-items:center;gap:6px}
+    .nav-link{font-size:0.78rem;color:var(--text-secondary);text-decoration:none;padding:5px 12px;border:1px solid var(--border);border-radius:20px;transition:all var(--speed-fast)}
+    .nav-link:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+    .nav-link.active{border-color:var(--cyan);color:var(--cyan);background:rgba(99,179,237,0.08)}
+    .header-right{display:flex;align-items:center;gap:12px}
+    .status-dot{width:7px;height:7px;border-radius:50%;background:var(--text-muted)}
+    .status-dot.live{background:var(--green);box-shadow:0 0 7px var(--green);animation:pulse 2s infinite}
+    .status-dot.paused{background:var(--amber)}
+    .status-dot.error{background:var(--red)}
+    @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.4}}
+    .status-text{font-size:0.75rem;color:var(--text-secondary)}
+
+    /* KPI STRIP */
+    .kpi-strip{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;height:82px;flex-shrink:0;background:var(--border);border-bottom:1px solid var(--border)}
+    .kpi-card{background:var(--bg-deep);padding:12px 18px;display:flex;flex-direction:column;justify-content:center;gap:3px;position:relative;overflow:hidden}
+    .kpi-card::after{content:'';position:absolute;bottom:0;left:0;width:100%;height:2px;background:var(--kpi-color,var(--border))}
+    .kpi-label{font-size:0.62rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.1em}
+    .kpi-value{font-size:1.5rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--kpi-color,var(--text-primary));line-height:1;transition:color var(--speed-med)}
+    .kpi-sub{font-size:0.65rem;color:var(--text-muted)}
+
+    /* DASHBOARD GRID */
+    .dashboard-grid{display:grid;grid-template-columns:210px 1fr 290px;flex:1;min-height:0;overflow:hidden}
+
+    /* FLEET SIDEBAR */
+    .fleet-sidebar{border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+    .sidebar-header{padding:12px 14px 10px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .sidebar-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted);margin-bottom:8px}
+    .dataset-select{width:100%;font-family:inherit;font-size:0.8rem;color:var(--text-primary);background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);padding:6px 9px;outline:none;cursor:pointer}
+    .dataset-select:focus{border-color:var(--border-accent)}
+    .dataset-select option{background:#1a202c}
+    .engine-list{flex:1;overflow-y:auto;padding:6px 0}
+    .engine-list::-webkit-scrollbar{width:3px}
+    .engine-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .engine-item{display:flex;align-items:center;gap:9px;padding:7px 14px;cursor:pointer;transition:background var(--speed-fast);border-left:3px solid transparent}
+    .engine-item:hover{background:var(--bg-glass)}
+    .engine-item.active{background:rgba(99,179,237,0.08);border-left-color:var(--cyan)}
+    .engine-item.anomaly-active{border-left-color:var(--red);background:rgba(252,129,129,0.05)}
+    .engine-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--green);transition:background var(--speed-med)}
+    .engine-dot.warn{background:var(--amber);box-shadow:0 0 5px var(--amber)}
+    .engine-dot.danger{background:var(--red);box-shadow:0 0 5px var(--red);animation:pulse 1s infinite}
+    .engine-info{flex:1;min-width:0}
+    .engine-id{font-size:0.75rem;font-weight:600;font-family:'JetBrains Mono',monospace;color:var(--text-primary)}
+    .engine-rul{font-size:0.65rem;color:var(--text-muted)}
+    .engine-badge{font-size:0.62rem;padding:1px 5px;border-radius:8px;background:rgba(252,129,129,0.15);border:1px solid rgba(252,129,129,0.3);color:var(--red);font-weight:600;display:none}
+    .engine-badge.show{display:block}
+
+    /* CHART AREA */
+    .chart-area{display:flex;flex-direction:column;overflow:hidden;background:var(--bg-deep)}
+    .controls-bar{display:flex;align-items:center;gap:10px;padding:8px 18px;border-bottom:1px solid var(--border);background:rgba(11,15,30,0.9);flex-shrink:0;flex-wrap:wrap}
+    .ctrl-group{display:flex;align-items:center;gap:7px}
+    .ctrl-label{font-size:0.65rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.08em}
+    .btn-ctrl{display:flex;align-items:center;gap:5px;padding:6px 12px;border-radius:var(--radius-sm);font-family:inherit;font-size:0.77rem;font-weight:600;cursor:pointer;border:1px solid var(--border);background:var(--bg-glass);color:var(--text-secondary);transition:all var(--speed-fast)}
+    .btn-ctrl:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+    .btn-ctrl.active-play{background:rgba(72,187,120,0.15);border-color:var(--green);color:var(--green)}
+    .ctrl-divider{width:1px;height:20px;background:var(--border);margin:0 2px}
+    .speed-slider{-webkit-appearance:none;width:80px;height:4px;background:var(--border);border-radius:2px;outline:none;cursor:pointer}
+    .speed-slider::-webkit-slider-thumb{-webkit-appearance:none;width:13px;height:13px;border-radius:50%;background:var(--cyan);cursor:pointer;box-shadow:0 0 5px rgba(99,179,237,0.4)}
+    .progress-wrap{flex:1;min-width:120px;display:flex;align-items:center;gap:7px}
+    .progress-bar-bg{flex:1;height:4px;background:var(--border);border-radius:2px;overflow:hidden}
+    .progress-bar-fill{height:100%;background:linear-gradient(90deg,var(--cyan),var(--purple));border-radius:2px;transition:width 0.4s ease}
+    .progress-pct{font-size:0.68rem;color:var(--text-muted);font-family:'JetBrains Mono',monospace;min-width:32px;text-align:right}
+
+    /* CHART SECTION */
+    .chart-section{flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:12px;overflow-y:auto;min-height:0}
+    .chart-section::-webkit-scrollbar{width:4px}
+    .chart-section::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .gauge-row{display:flex;gap:12px;flex-shrink:0}
+    .gauge-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:12px 16px;display:flex;align-items:center;gap:14px;flex-shrink:0;min-width:200px}
+    .gauge-info{flex-shrink:0}
+    .gauge-label{font-size:0.62rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;font-weight:600}
+    .gauge-score{font-size:1.6rem;font-weight:800;font-family:'JetBrains Mono',monospace;line-height:1}
+    .gauge-status{font-size:0.72rem;font-weight:600;margin-top:3px}
+    .score-chart-wrap{flex:1;min-width:0;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 14px}
+    .chart-title{font-size:0.8rem;font-weight:700;color:var(--text-primary);margin-bottom:6px}
+    .chart-subtitle{font-size:0.68rem;color:var(--text-muted)}
+    .main-chart-wrap{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);padding:14px 16px 10px;flex-shrink:0}
+    .main-chart-wrap canvas{max-height:180px}
+    .sensor-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;flex-shrink:0}
+    .sensor-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-md);padding:10px 12px;position:relative;overflow:hidden;transition:border-color var(--speed-fast)}
+    .sensor-card.anomaly{border-color:rgba(252,129,129,0.4);background:rgba(252,129,129,0.04)}
+    .sensor-card.anomaly::after{content:'⚠';position:absolute;top:7px;right:9px;font-size:0.72rem;color:var(--red)}
+    .sensor-card canvas{height:42px!important}
+    .sensor-name{font-size:0.66rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-secondary);text-transform:uppercase;letter-spacing:0.05em}
+    .sensor-value{font-size:1rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--text-primary);line-height:1.2}
+    .sensor-z{font-size:0.62rem;color:var(--text-muted)}
+
+    /* ALERT PANEL */
+    .alert-panel{border-left:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+    .alert-panel-header{padding:12px 14px 10px;border-bottom:1px solid var(--border);flex-shrink:0;display:flex;align-items:center;justify-content:space-between}
+    .alert-panel-title{font-size:0.62rem;font-weight:700;text-transform:uppercase;letter-spacing:0.1em;color:var(--text-muted)}
+    .alert-count-badge{background:rgba(252,129,129,0.15);border:1px solid rgba(252,129,129,0.3);color:var(--red);font-size:0.68rem;font-weight:700;padding:2px 7px;border-radius:8px;transition:all var(--speed-fast)}
+    .alert-count-badge.zero{background:var(--bg-glass);border-color:var(--border);color:var(--text-muted)}
+    .alert-feed{flex:1;overflow-y:auto;padding:6px 0}
+    .alert-feed::-webkit-scrollbar{width:3px}
+    .alert-feed::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    .alert-empty{display:flex;flex-direction:column;align-items:center;justify-content:center;height:160px;gap:8px;color:var(--text-muted);font-size:0.77rem}
+    .alert-empty-icon{font-size:1.8rem}
+    .alert-item{padding:9px 13px;border-bottom:1px solid var(--border);animation:slideIn 0.25s ease}
+    @keyframes slideIn{from{opacity:0;transform:translateX(8px)}to{opacity:1;transform:translateX(0)}}
+    .alert-item-header{display:flex;align-items:center;gap:7px;margin-bottom:5px}
+    .alert-dot{width:6px;height:6px;border-radius:50%;background:var(--red);flex-shrink:0;animation:pulse 1.5s infinite}
+    .alert-engine{font-size:0.72rem;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--red)}
+    .alert-cycle{font-size:0.67rem;color:var(--text-muted);margin-left:auto}
+    .alert-sensors{display:flex;flex-wrap:wrap;gap:3px;margin-bottom:6px}
+    .alert-sensor-tag{font-size:0.65rem;padding:1px 5px;background:rgba(252,129,129,0.12);border:1px solid rgba(252,129,129,0.25);border-radius:3px;color:var(--red);font-family:'JetBrains Mono',monospace}
+    .alert-score-row{display:flex;align-items:center;gap:7px;margin-bottom:7px}
+    .alert-score-bar-bg{flex:1;height:3px;background:var(--border);border-radius:2px;overflow:hidden}
+    .alert-score-bar-fill{height:100%;border-radius:2px;background:linear-gradient(90deg,var(--amber),var(--red))}
+    .alert-score-val{font-size:0.65rem;color:var(--red);font-family:'JetBrains Mono',monospace;font-weight:600;min-width:30px}
+    .btn-diagnose-alert{width:100%;padding:6px;border:1px solid rgba(99,179,237,0.3);border-radius:var(--radius-sm);background:rgba(99,179,237,0.08);color:var(--cyan);font-family:inherit;font-size:0.72rem;font-weight:600;cursor:pointer;transition:all var(--speed-fast);display:flex;align-items:center;justify-content:center;gap:5px}
+    .btn-diagnose-alert:hover{background:rgba(99,179,237,0.15);border-color:var(--cyan)}
+    .rul-panel{border-top:1px solid var(--border);padding:12px 14px;flex-shrink:0}
+    .rul-panel-label{font-size:0.62rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.1em;margin-bottom:6px}
+    .rul-display{font-size:2rem;font-weight:800;font-family:'JetBrains Mono',monospace;color:var(--cyan);line-height:1;text-shadow:0 0 14px rgba(99,179,237,0.2)}
+    .rul-sub{font-size:0.65rem;color:var(--text-muted);margin-top:2px}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(4,6,15,0.88);backdrop-filter:blur(8px);z-index:1000;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity var(--speed-med)}
+    .modal-overlay.open{opacity:1;pointer-events:all}
+    .modal{width:min(760px,96vw);max-height:88vh;background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg) var(--radius-lg) 0 0;display:flex;flex-direction:column;transform:translateY(100%);transition:transform 0.4s cubic-bezier(0.22,1,0.36,1);overflow:hidden}
+    .modal-overlay.open .modal{transform:translateY(0)}
+    .modal-header{display:flex;align-items:center;gap:11px;padding:16px 20px;border-bottom:1px solid var(--border);flex-shrink:0}
+    .modal-title{font-size:0.92rem;font-weight:700}
+    .modal-sub{font-size:0.72rem;color:var(--text-muted);margin-left:auto;font-family:'JetBrains Mono',monospace}
+    .modal-close{width:26px;height:26px;border-radius:50%;background:var(--bg-glass);border:1px solid var(--border);cursor:pointer;display:flex;align-items:center;justify-content:center;color:var(--text-muted);font-size:0.9rem;transition:all var(--speed-fast)}
+    .modal-close:hover{background:rgba(252,129,129,0.12);color:var(--red)}
+    .modal-body{flex:1;overflow-y:auto;padding:18px 20px 24px}
+    .modal-body::-webkit-scrollbar{width:4px}
+    .modal-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+
+    /* Result cards inside modal */
+    .result-card{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:var(--radius-md);overflow:hidden;margin-bottom:14px}
+    .card-header-row{display:flex;align-items:center;gap:9px;padding:11px 16px;border-bottom:1px solid var(--border);background:var(--bg-glass)}
+    .card-icon{width:26px;height:26px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem}
+    .icon-amber{background:rgba(246,166,35,0.15)}
+    .icon-cyan{background:rgba(99,179,237,0.15)}
+    .icon-purple{background:rgba(183,148,244,0.15)}
+    .card-title-text{font-size:0.82rem;font-weight:600}
+    .card-body{padding:14px 16px}
+    .badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:18px;font-size:0.7rem;font-weight:600;letter-spacing:0.02em}
+    .badge-ok{background:rgba(72,187,120,0.15);border:1px solid rgba(72,187,120,0.3);color:var(--green)}
+    .badge-warn{background:rgba(252,129,74,0.15);border:1px solid rgba(252,129,74,0.3);color:var(--orange)}
+    .badge-danger{background:rgba(252,129,129,0.15);border:1px solid rgba(252,129,129,0.3);color:var(--red)}
+    .badge-info{background:rgba(99,179,237,0.12);border:1px solid rgba(99,179,237,0.3);color:var(--cyan)}
+    .badge-purple{background:rgba(183,148,244,0.12);border:1px solid rgba(183,148,244,0.3);color:var(--purple)}
+    .conf-bar-bg{flex:1;height:5px;background:var(--border);border-radius:3px;overflow:hidden}
+    .conf-bar-fill{height:100%;border-radius:3px}
+    .wo-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px;margin-bottom:10px}
+    .wo-field-label{font-size:0.67rem;color:var(--text-muted);font-weight:600;text-transform:uppercase;letter-spacing:0.05em;margin-bottom:3px}
+    .wo-field-value{font-size:0.82rem;color:var(--text-primary);font-weight:500}
+    .parts-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:3px}
+    .part-tag{background:rgba(183,148,244,0.12);border:1px solid rgba(183,148,244,0.3);color:var(--purple);padding:2px 6px;border-radius:4px;font-size:0.71rem}
+    .notes-mono{background:rgba(255,255,255,0.02);border:1px solid var(--border);border-radius:6px;padding:9px 11px;font-family:'JetBrains Mono',monospace;font-size:0.76rem;line-height:1.6;color:var(--text-secondary);white-space:pre-wrap}
+    .modal-input{width:100%;font-family:inherit;font-size:0.82rem;color:var(--text-primary);background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);padding:8px 11px;outline:none;transition:border-color var(--speed-fast)}
+    .modal-input:focus{border-color:var(--border-accent)}
+    .modal-textarea{resize:vertical;min-height:70px}
+    .approval-options{display:grid;grid-template-columns:repeat(3,1fr);gap:9px;margin-bottom:10px}
+    .approval-btn{border:1px solid var(--border);border-radius:var(--radius-sm);background:var(--bg-glass);color:var(--text-secondary);font-family:inherit;font-size:0.78rem;font-weight:600;padding:9px 6px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px;transition:all var(--speed-fast)}
+    .approval-btn:hover{background:var(--bg-glass-hover);color:var(--text-primary)}
+    .approval-btn.sel-approve{background:rgba(72,187,120,0.12);border-color:var(--green);color:var(--green)}
+    .approval-btn.sel-escalate{background:rgba(183,148,244,0.12);border-color:var(--purple);color:var(--purple)}
+    .approval-btn.sel-reject{background:rgba(252,129,129,0.12);border-color:var(--red);color:var(--red)}
+    .btn-submit-decision{margin-top:9px;width:100%;padding:10px;background:linear-gradient(135deg,var(--cyan),var(--cyan-d));border:none;border-radius:var(--radius-sm);color:#04060f;font-weight:700;font-size:0.83rem;font-family:inherit;cursor:pointer;transition:all var(--speed-fast)}
+    .btn-submit-decision:hover:not(:disabled){transform:translateY(-1px);box-shadow:var(--glow-cyan)}
+    .btn-submit-decision:disabled{opacity:0.5;cursor:not-allowed}
+    .modal-diagnose-btn{width:100%;padding:12px;background:linear-gradient(135deg,var(--amber),var(--amber-d));border:none;border-radius:var(--radius-md);font-family:inherit;font-size:0.88rem;font-weight:700;color:#1a0a00;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:var(--glow-amber);transition:all var(--speed-fast)}
+    .modal-diagnose-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 0 30px rgba(246,166,35,0.35)}
+    .modal-diagnose-btn:disabled{opacity:0.5;cursor:not-allowed}
+    .modal-diagnose-btn .spin{width:15px;height:15px;border:2px solid rgba(26,10,0,0.3);border-top-color:#1a0a00;border-radius:50%;animation:spin 0.7s linear infinite;display:none}
+    .modal-diagnose-btn.loading .spin{display:block}
+    .modal-diagnose-btn.loading .btn-text{display:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* MISC */
+    .fade-up{animation:fadeUp 0.35s ease}
+    @keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+    ::-webkit-scrollbar{width:4px;height:4px}
+    ::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+    #toast{position:fixed;bottom:22px;right:22px;z-index:9999;display:flex;flex-direction:column;gap:6px;pointer-events:none}
+    .toast-msg{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-sm);padding:9px 13px;font-size:0.78rem;color:var(--text-primary);display:flex;align-items:center;gap:8px;animation:toastIn 0.25s ease,toastOut 0.4s ease 2.6s forwards;box-shadow:0 4px 18px rgba(0,0,0,0.4)}
+    @keyframes toastIn{from{transform:translateX(28px);opacity:0}to{transform:translateX(0);opacity:1}}
+    @keyframes toastOut{from{opacity:1}to{opacity:0}}
+  </style>
+</head>
+<body>
+<div class="shell">
+
+  <!-- HEADER -->
+  <header>
+    <a class="brand" href="/">
+      <div class="brand-icon">⚙️</div>
+      <div>
+        <div class="brand-name">MechSage</div>
+        <div class="brand-sub">Predictive Maintenance AI</div>
+      </div>
+    </a>
+    <nav class="header-nav">
+      <a class="nav-link" href="/">🔬 Diagnosis</a>
+      <a class="nav-link active" href="/dashboard">📊 Live Dashboard</a>
+      <a class="nav-link" href="/work-orders">📋 Work Orders</a>
+    </nav>
+    <div class="header-right">
+      <div class="status-dot" id="streamDot"></div>
+      <span class="status-text" id="streamStatus">Ready</span>
+    </div>
+  </header>
+
+  <!-- KPI STRIP -->
+  <div class="kpi-strip">
+    <div class="kpi-card" style="--kpi-color:var(--cyan)">
+      <div class="kpi-label">Dataset</div>
+      <div class="kpi-value" id="kpiDataset" style="font-size:1rem;color:var(--cyan)">—</div>
+      <div class="kpi-sub" id="kpiDatasetSub">Select a dataset</div>
+    </div>
+    <div class="kpi-card" style="--kpi-color:var(--green)">
+      <div class="kpi-label">Engine · Cycle</div>
+      <div class="kpi-value" id="kpiUnit" style="font-size:1.1rem">— · —</div>
+      <div class="kpi-sub" id="kpiCycleSub">not started</div>
+    </div>
+    <div class="kpi-card" style="--kpi-color:var(--red)">
+      <div class="kpi-label">Anomalies Detected</div>
+      <div class="kpi-value" id="kpiAnomalies" style="color:var(--text-muted)">0</div>
+      <div class="kpi-sub">in current run</div>
+    </div>
+    <div class="kpi-card" style="--kpi-color:var(--amber)">
+      <div class="kpi-label">Remaining Useful Life</div>
+      <div class="kpi-value" id="kpiRUL" style="color:var(--amber)">—</div>
+      <div class="kpi-sub">cycles estimated</div>
+    </div>
+    <div class="kpi-card" style="--kpi-color:var(--purple)">
+      <div class="kpi-label">Peak Anomaly Score</div>
+      <div class="kpi-value" id="kpiMaxScore" style="color:var(--text-muted)">0.000</div>
+      <div class="kpi-sub">Z-score based</div>
+    </div>
+  </div>
+
+  <!-- DASHBOARD GRID -->
+  <div class="dashboard-grid">
+
+    <!-- FLEET SIDEBAR -->
+    <aside class="fleet-sidebar">
+      <div class="sidebar-header">
+        <div class="sidebar-title">Engine Fleet</div>
+        <select class="dataset-select" id="datasetSelect">
+          <option value="">Loading…</option>
+        </select>
+      </div>
+      <div class="engine-list" id="engineList">
+        <div class="alert-empty">
+          <div class="alert-empty-icon">🛩️</div>
+          <span>Pick a dataset above</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- CHART AREA -->
+    <section class="chart-area">
+      <div class="controls-bar">
+        <div class="ctrl-group">
+          <button class="btn-ctrl" id="btnPlay" onclick="toggleStream()">▶ Start</button>
+          <button class="btn-ctrl" id="btnReset" onclick="resetStream()">↺ Reset</button>
+        </div>
+        <div class="ctrl-divider"></div>
+        <div class="ctrl-group">
+          <span class="ctrl-label">Speed</span>
+          <input type="range" class="speed-slider" id="speedSlider" min="1" max="10" value="3" oninput="updateSpeed(this.value)" />
+          <span class="ctrl-label" id="speedLabel" style="min-width:20px">3x</span>
+        </div>
+        <div class="ctrl-divider"></div>
+        <div class="progress-wrap">
+          <span class="ctrl-label">Progress</span>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
+          </div>
+          <span class="progress-pct" id="progressPct">0%</span>
+        </div>
+      </div>
+
+      <div class="chart-section">
+        <!-- Gauge row -->
+        <div class="gauge-row">
+          <div class="gauge-card">
+            <svg width="64" height="64" viewBox="0 0 64 64">
+              <circle cx="32" cy="32" r="26" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="7"/>
+              <circle id="gaugeArc" cx="32" cy="32" r="26" fill="none" stroke="var(--green)" stroke-width="7"
+                stroke-dasharray="163.4" stroke-dashoffset="163.4" stroke-linecap="round"
+                transform="rotate(-90 32 32)" style="transition:stroke-dashoffset 0.5s ease,stroke 0.5s ease"/>
+              <text id="gaugeText" x="32" y="36" text-anchor="middle"
+                font-family="JetBrains Mono" font-size="10" font-weight="700" fill="var(--text-primary)">0.00</text>
+            </svg>
+            <div class="gauge-info">
+              <div class="gauge-label">Anomaly Score</div>
+              <div class="gauge-score" id="gaugeScore" style="color:var(--green)">0.000</div>
+              <div class="gauge-status" id="gaugeStatus" style="color:var(--green)">● Nominal</div>
+            </div>
+          </div>
+          <div class="score-chart-wrap">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+              <span class="chart-title" style="font-size:0.77rem">Anomaly Score Timeline</span>
+              <span class="chart-subtitle">last 60 cycles</span>
+            </div>
+            <div style="position:relative;height:52px">
+              <canvas id="scoreChart"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main sensor chart -->
+        <div class="main-chart-wrap">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+            <span class="chart-title">📡 Live Sensor Telemetry (Z-Scores)</span>
+            <span class="chart-subtitle" id="chartUnitLabel">No engine selected</span>
+          </div>
+          <canvas id="mainChart"></canvas>
+        </div>
+
+        <!-- Sensor sparkline grid -->
+        <div class="sensor-grid" id="sensorGrid"></div>
+      </div>
+    </section>
+
+    <!-- ALERT PANEL -->
+    <aside class="alert-panel">
+      <div class="alert-panel-header">
+        <span class="alert-panel-title">🔴 Anomaly Feed</span>
+        <span class="alert-count-badge zero" id="alertCountBadge">0</span>
+      </div>
+      <div class="alert-feed" id="alertFeed">
+        <div class="alert-empty" id="alertEmpty">
+          <div class="alert-empty-icon">🟢</div>
+          <span>All nominal</span>
+          <span style="font-size:0.67rem">Alerts appear here live</span>
+        </div>
+      </div>
+      <div class="rul-panel">
+        <div class="rul-panel-label">Remaining Useful Life</div>
+        <div class="rul-display" id="rulDisplay">—</div>
+        <div class="rul-sub" id="rulSub">cycles estimated</div>
+      </div>
+    </aside>
+
+  </div>
+</div><!-- /shell -->
+
+<div id="toast"></div>
+
+<!-- DIAGNOSIS MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModalOnBackdrop(event)">
+  <div class="modal">
+    <div class="modal-header">
+      <span style="font-size:1.05rem">🔬</span>
+      <span class="modal-title">AI Fault Diagnosis</span>
+      <span class="modal-sub" id="modalUnitLabel">Engine —</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modalBody">
+      <div id="diagForm">
+        <div style="margin-bottom:12px">
+          <div class="wo-field-label" style="margin-bottom:5px">Auto-generated Query</div>
+          <textarea id="modalQuery" class="modal-input modal-textarea" rows="3"></textarea>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-bottom:12px">
+          <div>
+            <div class="wo-field-label" style="margin-bottom:4px">Asset ID</div>
+            <input type="text" id="modalAsset" class="modal-input" />
+          </div>
+          <div>
+            <div class="wo-field-label" style="margin-bottom:4px">Fault Hypothesis</div>
+            <input type="text" id="modalHypothesis" class="modal-input" />
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div class="wo-field-label" style="margin-bottom:4px">Flagged Sensors</div>
+          <div id="modalSensorTags" style="display:flex;flex-wrap:wrap;gap:4px;padding:7px 9px;background:var(--bg-glass);border:1px solid var(--border);border-radius:var(--radius-sm);min-height:34px"></div>
+        </div>
+        <button class="modal-diagnose-btn" id="modalDiagnoseBtn" onclick="runModalDiagnosis()">
+          <div class="spin"></div>
+          <span class="btn-text">⚡ Run AI Diagnosis</span>
+        </button>
+      </div>
+      <div id="diagResult" style="display:none"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const API = 'http://127.0.0.1:8001';
+const WINDOW_SIZE = 60;
+
+const SENSOR_COLORS = {
+  sensor_2:'#63b3ed', sensor_3:'#f6a623', sensor_4:'#48bb78',
+  sensor_7:'#b794f4', sensor_8:'#fc8181', sensor_11:'#fc814a',
+  sensor_12:'#76e4f7', sensor_13:'#f0e68c', sensor_14:'#90ee90', sensor_15:'#dda0dd',
+};
+const SENSOR_LABELS = {
+  sensor_2:'T2 Fan Inlet',  sensor_3:'T24 LPC Out', sensor_4:'T30 HPC Out',
+  sensor_7:'P30 Pressure',  sensor_8:'Nf Fan Spd',  sensor_11:'Nc Core Spd',
+  sensor_12:'BPR Bypass',   sensor_13:'farB Fuel-Air', sensor_14:'htBleed', sensor_15:'NfR Corr',
+};
+const DISPLAY_SENSORS = ['sensor_2','sensor_3','sensor_4','sensor_7','sensor_8','sensor_11'];
+const ALL_SENSORS     = Object.keys(SENSOR_COLORS);
+
+let state = {
+  datasetId:null, unitId:null, speed:3, streaming:false,
+  evtSource:null, anomalyCount:0, maxScore:0, currentRUL:null,
+  fleetData:{}, datasets:[], alertData:[], totalAlerts:0,
+  lastCycle:0, // track last received cycle for reconnect-resume
+  wasStreamingBeforeHide:false, // track if we were streaming when tab was hidden
+};
+
+let mainChart=null, scoreChart=null, sparkCharts={};
+let modalAlert=null, modalDecision=null;
+
+// ── INIT ──────────────────────────────────────────────────────────
+window.addEventListener('DOMContentLoaded', async () => {
+  await loadDatasets();
+  initCharts();
+  initSensorGrid();
+  initVisibilityKeepAlive();
+  
+  const saved = sessionStorage.getItem('mechSageState');
+  if (saved) {
+    try {
+      const s = JSON.parse(saved);
+      if (s.datasetId) {
+        document.getElementById('datasetSelect').value = s.datasetId;
+        await selectDataset(s.datasetId); 
+        
+        if (s.unitId) {
+          selectEngine(s.unitId);
+          state.lastCycle = s.lastCycle || 0;
+          state.speed = s.speed || 3;
+          state.maxScore = s.maxScore || 0;
+          state.anomalyCount = s.anomalyCount || 0;
+          state.currentRUL = s.currentRUL || null;
+          
+          document.getElementById('speedSlider').value = state.speed;
+          updateSpeed(state.speed);
+
+          document.getElementById('kpiUnit').textContent = `#${state.unitId} · ${state.lastCycle}`;
+          if (state.currentRUL != null) {
+            document.getElementById('kpiRUL').textContent = state.currentRUL;
+            document.getElementById('rulDisplay').textContent = state.currentRUL;
+          }
+          document.getElementById('kpiAnomalies').textContent = state.anomalyCount;
+          document.getElementById('kpiMaxScore').textContent = state.maxScore.toFixed(3);
+          
+          const tempAlerts = s.alertData || [];
+          state.totalAlerts = Math.max(0, (s.totalAlerts || 0) - tempAlerts.length);
+          tempAlerts.forEach(a => addAlert(a));
+
+          if(mainChart && s.mainLabels) {
+            mainChart.data.labels = s.mainLabels;
+            (s.mainDatasets||[]).forEach((arr, i) => { if(mainChart.data.datasets[i]) mainChart.data.datasets[i].data = arr; });
+            mainChart.update('none');
+          }
+          if(scoreChart && s.scoreLabels) {
+            scoreChart.data.labels = s.scoreLabels;
+            (s.scoreDatasets||[]).forEach((arr, i) => { if(scoreChart.data.datasets[i]) scoreChart.data.datasets[i].data = arr; });
+            scoreChart.update('none');
+          }
+
+          if (s.streaming) startStream();
+        }
+      }
+    } catch(e) { console.error('Restore state error:', e); }
+  }
+});
+
+window.addEventListener('beforeunload', () => {
+  const s = {
+    datasetId: state.datasetId,
+    unitId: state.unitId,
+    lastCycle: state.lastCycle,
+    speed: state.speed,
+    streaming: state.streaming,
+    maxScore: state.maxScore,
+    anomalyCount: state.anomalyCount,
+    currentRUL: state.currentRUL,
+    totalAlerts: state.totalAlerts,
+    alertData: state.alertData,
+    mainLabels: mainChart ? mainChart.data.labels : [],
+    mainDatasets: mainChart ? mainChart.data.datasets.map(d => d.data) : [],
+    scoreLabels: scoreChart ? scoreChart.data.labels : [],
+    scoreDatasets: scoreChart ? scoreChart.data.datasets.map(d => d.data) : []
+  };
+  sessionStorage.setItem('mechSageState', JSON.stringify(s));
+});
+
+// ── VISIBILITY KEEP-ALIVE ─────────────────────────────────────────
+// When the user switches tabs, Chrome throttles/closes SSE connections.
+// We detect visibility changes and reconnect the stream automatically.
+function initVisibilityKeepAlive() {
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden) {
+      // Tab going hidden — note we were streaming
+      state.wasStreamingBeforeHide = state.streaming;
+    } else {
+      // Tab becoming visible again
+      if (state.wasStreamingBeforeHide && state.datasetId && state.unitId) {
+        // Only reconnect if we were streaming and the stream has dropped
+        if (!state.streaming || !state.evtSource || state.evtSource.readyState === EventSource.CLOSED) {
+          toast('Reconnecting stream…', '🔄');
+          startStream();
+        }
+      }
+      state.wasStreamingBeforeHide = false;
+    }
+  });
+}
+
+// ── DATASETS ─────────────────────────────────────────────────────
+async function loadDatasets() {
+  try {
+    const r = await fetch(`${API}/api/datasets`);
+    const d = await r.json();
+    state.datasets = d.datasets;
+    const sel = document.getElementById('datasetSelect');
+    sel.innerHTML = '<option value="">— Choose Dataset —</option>' +
+      d.datasets.map(ds => `<option value="${ds.id}">${ds.id} · ${ds.fault_modes}</option>`).join('');
+    sel.addEventListener('change', e => { if(e.target.value) selectDataset(e.target.value); });
+    updateKPIDataset(`${d.datasets.length} sets`, 'available');
+  } catch(e) { toast('Backend offline','❌'); }
+}
+
+async function selectDataset(dsId) {
+  if(state.streaming) stopStream();
+  state.datasetId=dsId; state.unitId=null; state.fleetData={};
+  const ds = state.datasets.find(d=>d.id===dsId);
+  updateKPIDataset(dsId, ds ? ds.fault_modes : '');
+  try {
+    const r = await fetch(`${API}/api/fleet-summary?dataset_id=${dsId}`);
+    const d = await r.json();
+    renderFleet(d.units);
+    toast(`${d.total} engines loaded from ${dsId}`,'🛩️');
+  } catch(e) { toast('Fleet load failed','❌'); }
+}
+
+function renderFleet(units) {
+  const list = document.getElementById('engineList');
+  list.innerHTML = '';
+  units.forEach(u => {
+    state.fleetData[u.unit_id] = {...u, anomalyCount:0};
+    const hp = u.health_pct||0;
+    const dc = hp>60?'':'warn'; // simplified: all start as warn-or-ok
+    const rul = u.final_rul!=null ? `RUL ${u.final_rul}` : '';
+    const item = document.createElement('div');
+    item.className='engine-item'; item.id=`eng-${u.unit_id}`;
+    item.innerHTML=`
+      <div class="engine-dot ${dc}" id="dot-${u.unit_id}"></div>
+      <div class="engine-info">
+        <div class="engine-id">Unit #${u.unit_id}</div>
+        <div class="engine-rul">${rul} · ${u.max_cycle} cyc</div>
+      </div>
+      <span class="engine-badge" id="badge-${u.unit_id}">0</span>`;
+    item.onclick = ()=>selectEngine(u.unit_id);
+    list.appendChild(item);
+  });
+}
+
+function selectEngine(unitId) {
+  if(!state.datasetId) return;
+  if(state.streaming) stopStream();
+  state.unitId=unitId; state.anomalyCount=0; state.maxScore=0;
+  state.currentRUL=null; state.alertData=[]; state.totalAlerts=0;
+  document.querySelectorAll('.engine-item').forEach(el=>el.classList.remove('active','anomaly-active'));
+  const item=document.getElementById(`eng-${unitId}`);
+  if(item) item.classList.add('active');
+  resetChartData();
+  document.getElementById('alertFeed').innerHTML=`
+    <div class="alert-empty" id="alertEmpty">
+      <div class="alert-empty-icon">🟢</div>
+      <span>All nominal</span>
+      <span style="font-size:0.67rem">Streaming Unit #${unitId}</span>
+    </div>`;
+  document.getElementById('alertCountBadge').textContent='0';
+  document.getElementById('alertCountBadge').className='alert-count-badge zero';
+  document.getElementById('kpiUnit').textContent=`#${unitId} · 0`;
+  document.getElementById('kpiCycleSub').textContent='not started';
+  const frul = state.fleetData[unitId]?.final_rul;
+  if(frul!=null){ document.getElementById('kpiRUL').textContent=frul; document.getElementById('rulDisplay').textContent=frul; }
+  document.getElementById('chartUnitLabel').textContent=`Engine Unit #${unitId} · ${state.datasetId}`;
+  toast(`Unit #${unitId} selected — press Start`,'🎯');
+}
+
+// ── STREAM ────────────────────────────────────────────────────────
+function getSpeedMs() { return Math.round(2000/state.speed); }
+
+function toggleStream() {
+  if(!state.datasetId||!state.unitId){ toast('Select engine first','⚠️'); return; }
+  state.streaming ? stopStream() : startStream();
+}
+
+function startStream() {
+  if(state.evtSource) state.evtSource.close();
+  state.streaming=true;
+  const startCycle = state.lastCycle || 1;
+  const url=`${API}/api/stream?dataset_id=${state.datasetId}&unit_id=${state.unitId}&speed_ms=${getSpeedMs()}&start_cycle=${startCycle}`;
+  state.evtSource=new EventSource(url);
+  state.evtSource.onmessage=e=>handleEvent(JSON.parse(e.data));
+  state.evtSource.onerror=()=>{
+    // Auto-reconnect if we are still supposed to be streaming and tab is visible
+    if(state.streaming){
+      if(!document.hidden){
+        // Transient error — try to reconnect after a short delay
+        setTimeout(()=>{
+          if(state.streaming && state.datasetId && state.unitId){
+            if(state.evtSource) state.evtSource.close();
+            const startCycle = state.lastCycle || 1;
+            const rurl=`${API}/api/stream?dataset_id=${state.datasetId}&unit_id=${state.unitId}&speed_ms=${getSpeedMs()}&start_cycle=${startCycle}`;
+            state.evtSource=new EventSource(rurl);
+            state.evtSource.onmessage=e=>handleEvent(JSON.parse(e.data));
+            state.evtSource.onerror=()=>{ setStreamStatus('error'); state.streaming=false; updatePlayBtn(false); };
+          }
+        }, 1500);
+      } else {
+        // Tab is hidden — mark as needing reconnect on visibility
+        state.wasStreamingBeforeHide=true;
+      }
+    }
+  };
+  setStreamStatus('live');
+  updatePlayBtn(true);
+  toast(`Streaming Engine #${state.unitId}`,'📡');
+}
+
+function updatePlayBtn(isPlaying) {
+  const btn=document.getElementById('btnPlay');
+  btn.textContent=isPlaying?'⏹ Stop':'▶ Start';
+  btn.className=isPlaying?'btn-ctrl active-play':'btn-ctrl';
+}
+
+function stopStream() {
+  if(state.evtSource){ state.evtSource.close(); state.evtSource=null; }
+  state.streaming=false; state.wasStreamingBeforeHide=false;
+  setStreamStatus('paused');
+  updatePlayBtn(false);
+}
+
+function resetStream() {
+  stopStream();
+  if(state.unitId) selectEngine(state.unitId);
+  document.getElementById('progressFill').style.width='0%';
+  document.getElementById('progressPct').textContent='0%';
+  updateGauge(0,false); setStreamStatus('idle');
+}
+
+function updateSpeed(val) {
+  state.speed=parseInt(val);
+  document.getElementById('speedLabel').textContent=`${state.speed}x`;
+  if(state.streaming){ stopStream(); startStream(); }
+}
+
+function setStreamStatus(s) {
+  const dot=document.getElementById('streamDot');
+  const txt=document.getElementById('streamStatus');
+  const m={live:['live','● Live'],paused:['paused','Paused'],error:['error','Error'],idle:['','Ready']};
+  const [cls,label]=m[s]||['','Ready'];
+  dot.className=`status-dot ${cls}`; txt.textContent=label;
+}
+
+// ── EVENT HANDLER ─────────────────────────────────────────────────
+function handleEvent(ev) {
+  if(ev.event==='complete'){
+    stopStream(); setStreamStatus('idle');
+    const btn=document.getElementById('btnPlay');
+    btn.textContent='▶ Replay'; btn.className='btn-ctrl';
+    toast(`Stream complete — Unit #${ev.unit}`,'✅'); return;
+  }
+  const {unit,cycle,sensors,z_scores,anomaly_score,is_anomaly,anomaly_sensors,rul_estimate,progress}=ev;
+  state.currentRUL=rul_estimate;
+  state.lastCycle=cycle;
+  if(anomaly_score>state.maxScore) state.maxScore=anomaly_score;
+  // Progress
+  document.getElementById('progressFill').style.width=`${progress}%`;
+  document.getElementById('progressPct').textContent=`${progress.toFixed(0)}%`;
+  // Charts
+  pushMainChart(cycle,z_scores);
+  pushScoreChart(cycle,anomaly_score,is_anomaly);
+  updateSparklines(sensors,z_scores,anomaly_sensors);
+  // Gauge + KPI
+  updateGauge(anomaly_score,is_anomaly);
+  document.getElementById('kpiUnit').textContent=`#${unit} · ${cycle}`;
+  document.getElementById('kpiCycleSub').textContent=`${state.datasetId}`;
+  document.getElementById('kpiRUL').textContent=rul_estimate;
+  document.getElementById('kpiRUL').style.color=rul_estimate<30?'var(--red)':rul_estimate<60?'var(--orange)':'var(--amber)';
+  document.getElementById('kpiMaxScore').textContent=state.maxScore.toFixed(3);
+  document.getElementById('kpiMaxScore').style.color=state.maxScore>0.6?'var(--red)':state.maxScore>0.3?'var(--amber)':'var(--text-muted)';
+  document.getElementById('rulDisplay').textContent=rul_estimate;
+  document.getElementById('rulSub').textContent=`Engine #${unit} · Cycle ${cycle}`;
+  if(is_anomaly){
+    state.anomalyCount++;
+    document.getElementById('kpiAnomalies').textContent=state.anomalyCount;
+    document.getElementById('kpiAnomalies').style.color='var(--red)';
+    addAlert({unit,cycle,anomaly_sensors,anomaly_score,sensors,z_scores});
+    const dot=document.getElementById(`dot-${unit}`);
+    if(dot) dot.className='engine-dot danger';
+    const item=document.getElementById(`eng-${unit}`);
+    if(item){ item.classList.add('anomaly-active'); item.classList.remove('active'); }
+    if(state.fleetData[unit]){
+      state.fleetData[unit].anomalyCount++;
+      const badge=document.getElementById(`badge-${unit}`);
+      if(badge){ badge.textContent=state.fleetData[unit].anomalyCount; badge.classList.add('show'); }
+    }
+  }
+}
+
+// ── CHARTS ────────────────────────────────────────────────────────
+function initCharts() {
+  const chartDefaults = {
+    responsive:true, maintainAspectRatio:true, animation:false,
+    plugins:{
+      legend:{position:'top',labels:{color:'#8896b3',font:{family:'Inter',size:10},boxWidth:12,padding:8}},
+      tooltip:{mode:'index',backgroundColor:'#0b0f1e',borderColor:'rgba(255,255,255,0.08)',borderWidth:1,titleColor:'#f0f4ff',bodyColor:'#8896b3',titleFont:{family:'JetBrains Mono',size:10}},
+    },
+    scales:{
+      x:{ticks:{color:'#4a5568',font:{size:9},maxRotation:0,maxTicksLimit:7},grid:{color:'rgba(255,255,255,0.04)'}},
+      y:{ticks:{color:'#4a5568',font:{size:9}},grid:{color:'rgba(255,255,255,0.04)'}},
+    }
+  };
+
+  mainChart = new Chart(document.getElementById('mainChart').getContext('2d'),{
+    type:'line',
+    data:{labels:[],datasets:DISPLAY_SENSORS.map(s=>({
+      label:s.replace('sensor_','S'), data:[], borderColor:SENSOR_COLORS[s],
+      backgroundColor:'transparent', borderWidth:1.5, pointRadius:0, tension:0.3,
+    }))},
+    options:{...chartDefaults}
+  });
+
+  scoreChart = new Chart(document.getElementById('scoreChart').getContext('2d'),{
+    type:'line',
+    data:{labels:[],datasets:[
+      {label:'Score',data:[],borderColor:'#63b3ed',backgroundColor:'rgba(99,179,237,0.08)',borderWidth:1.5,fill:true,pointRadius:0,tension:0.4},
+      {label:'Threshold',data:[],borderColor:'rgba(252,129,129,0.5)',borderWidth:1,borderDash:[4,3],pointRadius:0,fill:false},
+    ]},
+    options:{responsive:true,maintainAspectRatio:false,animation:false,
+      plugins:{legend:{display:false},tooltip:{enabled:false}},
+      scales:{x:{display:false},y:{display:false,min:0,max:1}}}
+  });
+}
+
+function pushMainChart(cycle,sensors) {
+  mainChart.data.labels.push(cycle);
+  if(mainChart.data.labels.length>WINDOW_SIZE) mainChart.data.labels.shift();
+  DISPLAY_SENSORS.forEach((s,i)=>{
+    mainChart.data.datasets[i].data.push(sensors[s]??null);
+    if(mainChart.data.datasets[i].data.length>WINDOW_SIZE) mainChart.data.datasets[i].data.shift();
+  });
+  mainChart.update('none');
+}
+
+function pushScoreChart(cycle,score,isAnom) {
+  scoreChart.data.labels.push(cycle);
+  if(scoreChart.data.labels.length>WINDOW_SIZE) scoreChart.data.labels.shift();
+  scoreChart.data.datasets[0].data.push(score);
+  scoreChart.data.datasets[1].data.push(0.4);
+  scoreChart.data.datasets.forEach(ds=>{ if(ds.data.length>WINDOW_SIZE) ds.data.shift(); });
+  scoreChart.data.datasets[0].borderColor=isAnom?'rgba(252,129,129,0.9)':'#63b3ed';
+  scoreChart.data.datasets[0].backgroundColor=isAnom?'rgba(252,129,129,0.08)':'rgba(99,179,237,0.08)';
+  scoreChart.update('none');
+}
+
+function resetChartData() {
+  [mainChart,scoreChart].forEach(c=>{ c.data.labels=[]; c.data.datasets.forEach(d=>d.data=[]); c.update('none'); });
+  Object.values(sparkCharts).forEach(c=>{ c.data.labels=[]; c.data.datasets[0].data=[]; c.update('none'); });
+}
+
+function initSensorGrid() {
+  const grid=document.getElementById('sensorGrid');
+  DISPLAY_SENSORS.forEach(sensor=>{
+    const card=document.createElement('div');
+    card.className='sensor-card'; card.id=`card-${sensor}`;
+    card.innerHTML=`
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:5px">
+        <div>
+          <div class="sensor-name">${sensor.replace('sensor_','S').toUpperCase()}</div>
+          <div style="font-size:0.6rem;color:var(--text-muted)">${SENSOR_LABELS[sensor]||''}</div>
+        </div>
+        <div style="text-align:right">
+          <div class="sensor-value" id="val-${sensor}">—</div>
+          <div class="sensor-z" id="z-${sensor}">z: —</div>
+        </div>
+      </div>
+      <canvas id="spark-${sensor}"></canvas>`;
+    grid.appendChild(card);
+    sparkCharts[sensor]=new Chart(document.getElementById(`spark-${sensor}`).getContext('2d'),{
+      type:'line',
+      data:{labels:[],datasets:[{data:[],borderColor:SENSOR_COLORS[sensor],backgroundColor:`${SENSOR_COLORS[sensor]}18`,borderWidth:1.5,pointRadius:0,fill:true,tension:0.4}]},
+      options:{responsive:true,maintainAspectRatio:false,animation:false,
+        plugins:{legend:{display:false},tooltip:{enabled:false}},
+        scales:{x:{display:false},y:{display:false}}}
+    });
+  });
+}
+
+function updateSparklines(sensors,zScores,anomalySensors) {
+  DISPLAY_SENSORS.forEach(sensor=>{
+    const val=sensors[sensor], z=zScores[sensor], isAnom=anomalySensors.includes(sensor);
+    if(val==null) return;
+    document.getElementById(`val-${sensor}`).textContent=val.toFixed(2);
+    document.getElementById(`val-${sensor}`).style.color=isAnom?'var(--red)':'var(--text-primary)';
+    document.getElementById(`z-${sensor}`).textContent=`z: ${z!=null?z.toFixed(2):'—'}`;
+    document.getElementById(`z-${sensor}`).style.color=isAnom?'var(--red)':'var(--text-muted)';
+    document.getElementById(`card-${sensor}`).classList.toggle('anomaly',isAnom);
+    const c=sparkCharts[sensor];
+    c.data.labels.push('');
+    c.data.datasets[0].data.push(z);
+    if(c.data.labels.length>40){ c.data.labels.shift(); c.data.datasets[0].data.shift(); }
+    c.data.datasets[0].borderColor=isAnom?'rgba(252,129,129,0.9)':SENSOR_COLORS[sensor];
+    c.update('none');
+  });
+}
+
+// ── GAUGE ─────────────────────────────────────────────────────────
+function updateGauge(score,isAnom) {
+  const arc=document.getElementById('gaugeArc');
+  const gtext=document.getElementById('gaugeText');
+  const scoreEl=document.getElementById('gaugeScore');
+  const statusEl=document.getElementById('gaugeStatus');
+  const circum=163.4;
+  arc.style.strokeDashoffset=circum*(1-score);
+  const col=score<0.3?'var(--green)':score<0.6?'var(--amber)':'var(--red)';
+  arc.style.stroke=col;
+  gtext.textContent=score.toFixed(2);
+  scoreEl.textContent=score.toFixed(3); scoreEl.style.color=col;
+  if(isAnom){ statusEl.textContent='🔴 Anomaly!'; statusEl.style.color='var(--red)'; }
+  else if(score>0.4){ statusEl.textContent='⚠️ Elevated'; statusEl.style.color='var(--amber)'; }
+  else { statusEl.textContent='● Nominal'; statusEl.style.color='var(--green)'; }
+}
+
+// ── KPI HELPERS ───────────────────────────────────────────────────
+function updateKPIDataset(val,sub) {
+  document.getElementById('kpiDataset').textContent=val;
+  document.getElementById('kpiDatasetSub').textContent=sub;
+}
+
+// ── ALERT FEED ────────────────────────────────────────────────────
+function addAlert({unit,cycle,anomaly_sensors,anomaly_score,sensors,z_scores}) {
+  state.totalAlerts++;
+  const badge=document.getElementById('alertCountBadge');
+  badge.textContent=state.totalAlerts; badge.className='alert-count-badge';
+  const empty=document.getElementById('alertEmpty'); if(empty) empty.remove();
+  const idx=state.alertData.length;
+  state.alertData.push({unit,cycle,anomaly_sensors,anomaly_score,sensors,z_scores});
+  const feed=document.getElementById('alertFeed');
+  const item=document.createElement('div');
+  item.className='alert-item';
+  const tagsHtml=anomaly_sensors.slice(0,4).map(s=>`<span class="alert-sensor-tag">${s}</span>`).join('');
+  item.innerHTML=`
+    <div class="alert-item-header">
+      <div class="alert-dot"></div>
+      <span class="alert-engine">Engine #${unit}</span>
+      <span class="alert-cycle">Cyc ${cycle}</span>
+    </div>
+    <div class="alert-sensors">${tagsHtml}</div>
+    <div class="alert-score-row">
+      <div class="alert-score-bar-bg"><div class="alert-score-bar-fill" style="width:${Math.round(anomaly_score*100)}%"></div></div>
+      <span class="alert-score-val">${anomaly_score.toFixed(3)}</span>
+    </div>
+    <button class="btn-diagnose-alert" onclick="openDiagModal(${idx})">🔬 Diagnose with AI</button>`;
+  feed.insertBefore(item,feed.firstChild);
+  const items=feed.querySelectorAll('.alert-item');
+  if(items.length>25) items[items.length-1].remove();
+}
+
+// ── DIAGNOSIS MODAL ───────────────────────────────────────────────
+function openDiagModal(alertIdx) {
+  const alert=state.alertData[alertIdx]; if(!alert) return;
+  modalAlert=alert; modalDecision=null;
+  document.getElementById('diagForm').style.display='block';
+  document.getElementById('diagResult').style.display='none';
+  document.getElementById('diagResult').innerHTML='';
+  document.getElementById('modalQuery').value=
+    `Engine Unit #${alert.unit} (${state.datasetId}) detected anomalous sensor readings at cycle ${alert.cycle}. `+
+    `Flagged sensors: ${alert.anomaly_sensors.join(', ')}. Anomaly score: ${alert.anomaly_score.toFixed(3)}. `+
+    `Diagnose the probable fault mode and recommend corrective action.`;
+  document.getElementById('modalAsset').value=`${state.datasetId}-Engine-${alert.unit}`;
+  document.getElementById('modalHypothesis').value=
+    ['FD001','FD002'].includes(state.datasetId)?'HPC degradation':'HPC or fan degradation';
+  document.getElementById('modalSensorTags').innerHTML=
+    alert.anomaly_sensors.map(s=>`<span class="alert-sensor-tag">${s}</span>`).join('');
+  document.getElementById('modalUnitLabel').textContent=`Engine #${alert.unit} · Cycle ${alert.cycle}`;
+  const btn=document.getElementById('modalDiagnoseBtn');
+  btn.disabled=false; btn.classList.remove('loading');
+  document.getElementById('modalOverlay').classList.add('open');
+}
+function closeModal(){ document.getElementById('modalOverlay').classList.remove('open'); }
+function closeModalOnBackdrop(e){ if(e.target===document.getElementById('modalOverlay')) closeModal(); }
+
+async function runModalDiagnosis() {
+  if(!modalAlert) return;
+  const query=document.getElementById('modalQuery').value.trim();
+  const asset=document.getElementById('modalAsset').value.trim();
+  const hypothesis=document.getElementById('modalHypothesis').value.trim();
+  const sensors=modalAlert.anomaly_sensors;
+  const btn=document.getElementById('modalDiagnoseBtn');
+  btn.disabled=true; btn.classList.add('loading');
+  try {
+    const res=await fetch(`${API}/api/diagnose`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({query,asset_id:asset,fault_hypothesis:hypothesis,degrading_sensors:sensors,top_k:3,generate_answer:true})});
+    const data=await res.json();
+    renderModalResult(data);
+    // ── Auto-push anomaly to Work Orders ──────────────────────────
+    // The work order was already persisted to DB by the backend.
+    // Show a toast and offer quick navigation.
+    if(data.status==='ok' && data.diagnosis_id) {
+      setTimeout(()=>{
+        const goBtn = document.createElement('div');
+        goBtn.className='toast-msg';
+        goBtn.style.pointerEvents='all';
+        goBtn.style.cursor='pointer';
+        goBtn.innerHTML=`<span>📋</span><span>Work order created — <u>View Work Orders</u></span>`;
+        goBtn.onclick=()=>{ window.open('/work-orders','_blank'); };
+        document.getElementById('toast').appendChild(goBtn);
+        setTimeout(()=>goBtn.remove(), 6000);
+      }, 800);
+    }
+  } catch(err){ toast(`Diagnosis failed: ${err.message}`,'❌'); btn.disabled=false; btn.classList.remove('loading'); }
+}
+
+function renderModalResult(data) {
+  document.getElementById('diagForm').style.display='none';
+  const resultEl=document.getElementById('diagResult');
+  resultEl.style.display='block';
+  if(data.status!=='ok'||!data.explanation){
+    resultEl.innerHTML=`<div class="alert-empty"><div class="alert-empty-icon">⚠️</div><span>${data.message||'No diagnosis returned.'}</span></div>`;
+    return;
+  }
+  const confPct=Math.round((data.confidence||0)*100);
+  const confColor=confPct>=80?'var(--green)':confPct>=50?'var(--amber)':'var(--red)';
+  const wo=data.work_order;
+  const sevCls=wo?.severity==='high'?'badge-danger':wo?.severity==='medium'?'badge-warn':'badge-ok';
+  const priCls=wo?.priority==='high'?'badge-danger':wo?.priority==='medium'?'badge-warn':'badge-ok';
+  const partsHtml=(wo?.parts_needed||[]).length
+    ? `<div class="parts-row">${wo.parts_needed.map(p=>`<span class="part-tag">${escHtml(p)}</span>`).join('')}</div>`
+    : '<span style="color:var(--text-muted);font-style:italic">None</span>';
+  let approvalHtml='';
+  if(data.diagnosis_id){
+    approvalHtml=`
+    <div class="result-card">
+      <div class="card-header-row"><div class="card-icon icon-purple">👤</div><span class="card-title-text">Human Review</span></div>
+      <div class="card-body" id="modalApprovalBody">
+        <div class="approval-options">
+          <button class="approval-btn" id="mbtn-approve" onclick="selectModalDecision('approve')"><span>✅</span><span>Approve</span></button>
+          <button class="approval-btn" id="mbtn-escalate" onclick="selectModalDecision('escalate')"><span>⚠️</span><span>Escalate</span></button>
+          <button class="approval-btn" id="mbtn-reject" onclick="selectModalDecision('reject')"><span>❌</span><span>Reject</span></button>
+        </div>
+        <textarea class="modal-input modal-textarea" id="modalApprovalNotes" placeholder="Reviewer notes…" style="margin-top:8px"></textarea>
+        <button class="btn-submit-decision" id="submitDecisionBtn" disabled onclick="submitModalDecision('${data.diagnosis_id}')">⚡ Submit Decision</button>
+      </div>
+    </div>`;
+  }
+  resultEl.innerHTML=`
+  <div class="fade-up">
+    <div style="display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px">
+      <span class="badge badge-ok">✅ Diagnosis Complete</span>
+      <span class="badge badge-info">⏱ ${data.retrieval_latency_ms??'—'} ms</span>
+      ${data.generation_latency_ms?`<span class="badge badge-purple">🧠 ${data.generation_latency_ms} ms</span>`:''}
+    </div>
+    <div class="result-card">
+      <div class="card-header-row">
+        <div class="card-icon icon-amber">🧠</div>
+        <span class="card-title-text">Structured Diagnosis</span>
+        <span class="badge ${sevCls}" style="margin-left:auto">Severity: ${escHtml((wo?.severity||'?').toUpperCase())}</span>
+      </div>
+      <div class="card-body">
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:9px">
+          <span class="badge badge-info">Confidence: ${confPct}%</span>
+          ${data.rul_estimate_cycles!=null?`<span class="badge badge-warn">RUL: ${data.rul_estimate_cycles} cycles</span>`:''}
+        </div>
+        <div style="display:flex;align-items:center;gap:9px;margin-bottom:11px">
+          <span style="font-size:0.7rem;color:var(--text-muted)">Certainty</span>
+          <div class="conf-bar-bg"><div class="conf-bar-fill" style="width:${confPct}%;background:${confColor}"></div></div>
+        </div>
+        <p style="font-size:0.84rem;line-height:1.7;color:var(--text-primary)">${escHtml(data.explanation)}</p>
+      </div>
+    </div>
+    ${wo?`
+    <div class="result-card">
+      <div class="card-header-row">
+        <div class="card-icon icon-cyan">🛠️</div>
+        <span class="card-title-text">Work Order</span>
+        <span class="badge ${priCls}" style="margin-left:auto">Priority: ${escHtml((wo.priority||'').toUpperCase())}</span>
+      </div>
+      <div class="card-body">
+        <div class="wo-grid">
+          <div><div class="wo-field-label">Failure Mode</div><div class="wo-field-value" style="color:var(--amber);font-weight:700">${escHtml(wo.failure_mode)}</div></div>
+          <div><div class="wo-field-label">Action</div><div class="wo-field-value">${escHtml(wo.recommended_action)}</div></div>
+          <div><div class="wo-field-label">Duration</div><div class="wo-field-value">⏱️ ${wo.estimated_duration_hrs} hrs</div></div>
+          <div><div class="wo-field-label">Parts</div>${partsHtml}</div>
+        </div>
+        <div class="wo-field-label" style="margin-top:10px;margin-bottom:5px">Technician Notes</div>
+        <div class="notes-mono">${escHtml(wo.technician_notes||'No notes.')}</div>
+      </div>
+    </div>`:''}
+    ${approvalHtml}
+  </div>`;
+}
+
+function selectModalDecision(d) {
+  modalDecision=d;
+  ['approve','escalate','reject'].forEach(x=>{
+    const b=document.getElementById(`mbtn-${x}`);
+    if(b) b.className=`approval-btn${x===d?` sel-${d}`:''}`;
+  });
+  const s=document.getElementById('submitDecisionBtn'); if(s) s.disabled=false;
+}
+
+async function submitModalDecision(diagId) {
+  if(!modalDecision) return;
+  const notes=document.getElementById('modalApprovalNotes').value.trim();
+  const sub=document.getElementById('submitDecisionBtn');
+  sub.disabled=true; sub.textContent='⚙️ Processing…';
+  try {
+    const res=await fetch(`${API}/api/diagnose/${diagId}/approve`,{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({decision:modalDecision,notes})});
+    const data=await res.json();
+    const icons={approve:'✅',escalate:'⚠️',reject:'❌'};
+    document.getElementById('modalApprovalBody').innerHTML=`
+      <div style="text-align:center;padding:16px 0;display:flex;flex-direction:column;align-items:center;gap:8px;animation:fadeUp 0.3s ease">
+        <div style="font-size:1.8rem">${icons[modalDecision]}</div>
+        <div style="font-weight:700">${data.message}</div>
+        <button onclick="window.open('/work-orders','_blank')" style="margin-top:8px;padding:7px 16px;border-radius:8px;border:1px solid var(--cyan);background:rgba(99,179,237,0.1);color:var(--cyan);font-family:inherit;font-size:0.78rem;font-weight:600;cursor:pointer">📋 View in Work Orders</button>
+      </div>`;
+    toast(`Decision: ${modalDecision.toUpperCase()}`,'💼');
+    // Auto-redirect to work orders after 2.5s if approved
+    if(modalDecision==='approve'){
+      setTimeout(()=>{ window.open('/work-orders','_blank'); },2500);
+    }
+  } catch(e){ toast(`Failed: ${e.message}`,'❌'); sub.disabled=false; sub.textContent='⚡ Submit Decision'; }
+}
+
+// ── TOAST & UTILS ─────────────────────────────────────────────────
+function toast(msg,icon='ℹ️') {
+  const c=document.getElementById('toast');
+  const el=document.createElement('div');
+  el.className='toast-msg';
+  el.innerHTML=`<span>${icon}</span><span>${escHtml(msg)}</span>`;
+  c.appendChild(el); setTimeout(()=>el.remove(),3000);
+}
+function escHtml(str) {
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape') closeModal();
+  if(e.key===' '&&!['INPUT','TEXTAREA'].includes(document.activeElement.tagName)){ e.preventDefault(); toggleStream(); }
+});
+</script>
+</body>
+</html>

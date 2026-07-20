@@ -1,0 +1,877 @@
+[
+  {
+    "id": "MAN-HPC-01",
+    "fault_mode": "high pressure compressor degradation",
+    "components": [
+      "HPC"
+    ],
+    "sensor_cues": [
+      "s2",
+      "s3",
+      "s4",
+      "s7",
+      "s11"
+    ],
+    "text": "Rising core temperature (s2, s3, s4) together with increased HPC outlet pressure (s7, s11) and a drop in isentropic efficiency indicates high pressure compressor degradation. Recommended action: borescope inspection of HPC stages, inspect and replace HPC seal kit if clearance is out of limits."
+  },
+  {
+    "id": "MAN-HPC-02",
+    "fault_mode": "high pressure compressor degradation",
+    "components": [
+      "HPC",
+      "seal"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s11",
+      "s14"
+    ],
+    "text": "When HPC outlet temperature (s3) rises by more than 2 standard deviations above the rolling mean while static HPC pressure (s11) simultaneously increases, this is a strong indicator of compressor blade tip clearance loss. Corrected core speed (s14) may also decrease. Inspect HPC seal clearances and blade condition."
+  },
+  {
+    "id": "MAN-HPC-03",
+    "fault_mode": "high pressure compressor degradation",
+    "components": [
+      "HPC",
+      "blade"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s7",
+      "s12"
+    ],
+    "text": "Progressive increase in fuel flow ratio (s12) combined with rising HPC outlet temperature (s3) and HPC outlet pressure (s7) suggests compressor efficiency loss due to blade erosion or fouling. Recommended action: compressor wash if fouling is suspected, or blade inspection if erosion pattern is present."
+  },
+  {
+    "id": "MAN-HPC-04",
+    "fault_mode": "high pressure compressor stall",
+    "components": [
+      "HPC"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s7",
+      "s8",
+      "s9"
+    ],
+    "text": "Sudden spikes in HPC outlet temperature (s3) with simultaneous drops in HPC outlet pressure (s7) and fluctuations in physical fan speed (s8) and core speed (s9) indicate compressor stall. This is a critical condition requiring immediate engine shutdown and inspection of variable stator vanes and bleed valves."
+  },
+  {
+    "id": "MAN-FAN-01",
+    "fault_mode": "fan degradation",
+    "components": [
+      "Fan"
+    ],
+    "sensor_cues": [
+      "s8",
+      "s13",
+      "s15"
+    ],
+    "text": "A sustained decrease in corrected fan speed (s13) and bypass ratio (s15) combined with changes in physical fan speed (s8) indicates fan blade degradation. This may be caused by foreign object damage, leading edge erosion, or blade root cracking. Recommended action: fan blade visual inspection and borescope of fan disk."
+  },
+  {
+    "id": "MAN-FAN-02",
+    "fault_mode": "fan imbalance",
+    "components": [
+      "Fan"
+    ],
+    "sensor_cues": [
+      "s8",
+      "s13",
+      "s15"
+    ],
+    "text": "Periodic vibration synchronous with shaft speed and elevated fan vibration with changes in physical fan speed (s8) and corrected fan speed (s13) suggests fan imbalance. Bypass ratio (s15) may fluctuate. Recommended action: perform vibration survey and apply balance weights. If imbalance persists, inspect for blade damage."
+  },
+  {
+    "id": "MAN-FAN-03",
+    "fault_mode": "fan blade foreign object damage",
+    "components": [
+      "Fan",
+      "blade"
+    ],
+    "sensor_cues": [
+      "s8",
+      "s13",
+      "s15"
+    ],
+    "text": "Sudden change in vibration signature with immediate shifts in fan speed (s8, s13) and bypass ratio (s15) after a noise event suggests foreign object damage to fan blades. Recommended action: immediate engine inspection, fan blade visual examination for nicks, dents, or cracks. Replace damaged blades per damage limits chart."
+  },
+  {
+    "id": "MAN-BRG-01",
+    "fault_mode": "bearing wear",
+    "components": [
+      "bearing",
+      "shaft"
+    ],
+    "sensor_cues": [
+      "s11",
+      "s12"
+    ],
+    "text": "A sustained increase in vibration amplitude (s11) combined with a thermal rise at the bearing housing (s12) is characteristic of bearing wear. This typically develops gradually over hundreds of cycles. Recommended action: schedule bearing assembly replacement and re-lubrication at next maintenance slot."
+  },
+  {
+    "id": "MAN-BRG-02",
+    "fault_mode": "bearing failure imminent",
+    "components": [
+      "bearing"
+    ],
+    "sensor_cues": [
+      "s9",
+      "s11",
+      "s14"
+    ],
+    "text": "Rapid increase in bearing vibration (s11) with changes in physical core speed (s9) and corrected core speed (s14) indicates imminent bearing failure. Metal particles may be present in oil analysis. This is a critical condition requiring immediate scheduling of bearing replacement before catastrophic failure."
+  },
+  {
+    "id": "MAN-LPT-01",
+    "fault_mode": "low pressure turbine degradation",
+    "components": [
+      "LPT"
+    ],
+    "sensor_cues": [
+      "s4",
+      "s20",
+      "s21"
+    ],
+    "text": "Rising LPT outlet temperature (s4) with changes in HPT coolant bleed (s20) and LPT coolant bleed (s21) suggests low pressure turbine blade degradation. This may be caused by thermal fatigue or hot corrosion. Recommended action: borescope inspection of LPT stages, measure blade tip clearances."
+  },
+  {
+    "id": "MAN-LPT-02",
+    "fault_mode": "turbine cooling system degradation",
+    "components": [
+      "LPT",
+      "HPT",
+      "cooling"
+    ],
+    "sensor_cues": [
+      "s4",
+      "s17",
+      "s20",
+      "s21"
+    ],
+    "text": "Abnormal patterns in HPT coolant bleed (s20) and LPT coolant bleed (s21) combined with rising turbine outlet temperature (s4) and changes in bleed enthalpy (s17) indicate turbine cooling system degradation. Blocked cooling passages or damaged seals reduce cooling effectiveness. Recommended action: inspect cooling air passages and replace damaged seals."
+  },
+  {
+    "id": "MAN-COMB-01",
+    "fault_mode": "combustor degradation",
+    "components": [
+      "combustor"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s12",
+      "s17"
+    ],
+    "text": "Increasing fuel flow ratio (s12) with disproportionate rises in HPC outlet temperature (s3) and LPT outlet temperature (s4), accompanied by changes in bleed enthalpy (s17), suggests combustor liner degradation or fuel nozzle coking. Recommended action: combustor visual inspection, fuel nozzle flow check, and liner inspection for hot spots or cracking."
+  },
+  {
+    "id": "MAN-SEN-01",
+    "fault_mode": "sensor fault",
+    "components": [
+      "sensor"
+    ],
+    "sensor_cues": [],
+    "text": "A single channel showing step changes, flat-lining, or extreme spikes while correlated channels remain nominal indicates a sensor fault rather than mechanical degradation. The key diagnostic is disagreement between sensors that normally correlate. Recommended action: replace sensor module and validate harness continuity before trusting the reading."
+  },
+  {
+    "id": "MAN-SEN-02",
+    "fault_mode": "sensor drift",
+    "components": [
+      "sensor"
+    ],
+    "sensor_cues": [],
+    "text": "Gradual divergence of a single sensor reading from its expected correlation with related sensors suggests sensor drift rather than component degradation. Unlike mechanical degradation which affects multiple correlated sensors simultaneously, sensor drift affects only one channel. Recommended action: recalibrate or replace the drifting sensor, cross-reference with redundant measurements."
+  },
+  {
+    "id": "MAN-SEN-03",
+    "fault_mode": "sensor intermittent fault",
+    "components": [
+      "sensor",
+      "wiring"
+    ],
+    "sensor_cues": [],
+    "text": "Intermittent dropouts or noise spikes on a sensor channel that resolve and return to normal suggest wiring or connector issues rather than sensor element failure. These often correlate with vibration or thermal cycling. Recommended action: inspect wiring harness and connectors for chafing, loose pins, or corrosion. Perform continuity test under vibration."
+  },
+  {
+    "id": "MAN-MULTI-01",
+    "fault_mode": "multiple fault interaction",
+    "components": [
+      "HPC",
+      "Fan"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s8",
+      "s11",
+      "s13",
+      "s15"
+    ],
+    "text": "When both HPC temperature indicators (s3, s11) and fan performance indicators (s8, s13, s15) show simultaneous degradation trends, this may indicate coupled failure modes where fan degradation increases HPC loading. Recommended action: inspect both fan and HPC stages, as fixing only one may not resolve the combined degradation pattern."
+  },
+  {
+    "id": "MAN-MULTI-02",
+    "fault_mode": "operating regime effect",
+    "components": [
+      "engine"
+    ],
+    "sensor_cues": [
+      "s2",
+      "s3",
+      "s7",
+      "s9"
+    ],
+    "text": "In multi-condition operation (varying altitude, Mach number, throttle), sensor readings shift between operating regimes. Regime-dependent normalization is required before comparing readings to baseline values. A reading that appears anomalous in one regime may be normal in another. Always normalize by operating condition before triggering alerts."
+  },
+  {
+    "id": "MAN-PERF-01",
+    "fault_mode": "overall engine performance degradation",
+    "components": [
+      "engine"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s9",
+      "s12",
+      "s14"
+    ],
+    "text": "Simultaneous drift across multiple engine performance parameters — rising fuel flow ratio (s12), dropping corrected core speed (s14), rising HPC outlet temperature (s3), and changes in physical core speed (s9) — indicates overall engine performance degradation. This represents cumulative wear across multiple components. Recommended action: comprehensive engine health review and scheduled overhaul assessment."
+  },
+  {
+    "id": "MAN-PERF-02",
+    "fault_mode": "efficiency loss",
+    "components": [
+      "engine",
+      "HPC"
+    ],
+    "sensor_cues": [
+      "s7",
+      "s11",
+      "s12",
+      "s14"
+    ],
+    "text": "Declining HPC outlet pressure (s7) and static HPC pressure (s11) with increasing fuel flow ratio (s12) and decreasing corrected core speed (s14) indicates progressive efficiency loss. The engine requires more fuel to maintain the same power output. Recommended action: plan scheduled maintenance based on RUL estimate, monitor rate of degradation."
+  },
+  {
+    "id": "MAN-BLEED-01",
+    "fault_mode": "bleed system fault",
+    "components": [
+      "bleed",
+      "valve"
+    ],
+    "sensor_cues": [
+      "s17",
+      "s20",
+      "s21"
+    ],
+    "text": "Abnormal bleed enthalpy (s17) combined with erratic HPT coolant bleed (s20) and LPT coolant bleed (s21) values suggests a bleed system fault. This may be a stuck bleed valve or a leak in the bleed air ducting. Recommended action: inspect bleed valve operation and bleed air duct integrity, check for signs of air leaks."
+  },
+  {
+    "id": "MAN-TWF-01",
+    "fault_mode": "tool wear failure",
+    "components": [
+      "tool",
+      "cutting"
+    ],
+    "sensor_cues": [
+      "tool_wear"
+    ],
+    "text": "Tool wear failure (TWF) occurs when the cumulative tool wear time exceeds the manufacturer's rated tool life. The tool fails due to progressive material removal from the cutting edge. Risk increases sharply after 200 minutes of wear time. Recommended action: replace tool at scheduled intervals before rated life is exceeded, inspect workpiece for quality defects."
+  },
+  {
+    "id": "MAN-HDF-01",
+    "fault_mode": "heat dissipation failure",
+    "components": [
+      "cooling",
+      "process"
+    ],
+    "sensor_cues": [
+      "air_temperature",
+      "process_temperature"
+    ],
+    "text": "Heat dissipation failure (HDF) occurs when the temperature difference between the process and ambient air is insufficient for adequate cooling. When the temperature differential drops below the critical threshold while rotational speed is low, heat buildup leads to failure. Recommended action: verify cooling system operation, clean heat exchangers, ensure adequate airflow."
+  },
+  {
+    "id": "MAN-PWF-01",
+    "fault_mode": "power failure",
+    "components": [
+      "motor",
+      "drive"
+    ],
+    "sensor_cues": [
+      "rotational_speed",
+      "torque"
+    ],
+    "text": "Power failure (PWF) occurs when the product of rotational speed and torque falls outside the acceptable operating envelope (below 3500W or above 9000W). Underpowered operation causes insufficient cutting force while overpowered operation causes excessive stress. Recommended action: inspect motor drive system, verify power supply stability, check belt tension and coupling alignment."
+  },
+  {
+    "id": "MAN-OSF-01",
+    "fault_mode": "overstrain failure",
+    "components": [
+      "tool",
+      "workpiece"
+    ],
+    "sensor_cues": [
+      "torque",
+      "tool_wear"
+    ],
+    "text": "Overstrain failure (OSF) occurs when the product of tool wear and torque exceeds the material-specific strain threshold. As tools wear, more force is needed to maintain cutting, creating a compounding failure risk. Recommended action: replace worn tools before overstrain threshold is reached, reduce feed rate if torque is excessive."
+  },
+  {
+    "id": "MAN-RNF-01",
+    "fault_mode": "random failure",
+    "components": [],
+    "sensor_cues": [],
+    "text": "Random failures (RNF) occur independently of identifiable process parameters and represent approximately 0.2% of all failures. These include manufacturing defects, material inclusions, or unforeseen environmental factors. No specific sensor pattern precedes these failures. Recommended action: maintain general inspection protocols, document failure for root cause analysis."
+  },
+  {
+    "id": "MAN-TWF-02",
+    "fault_mode": "tool wear failure",
+    "components": [
+      "tool",
+      "cutting",
+      "spindle"
+    ],
+    "sensor_cues": [
+      "tool_wear",
+      "torque"
+    ],
+    "text": "Tool wear failure (TWF) secondary symptoms: chatter marks, workpiece surface finish deterioration, and increase in spindle torque. Spindle rotational speed fluctuations under load can indicate cutting edge chipping. Recommended action: inspect workpiece surface quality, check cutting edge for micro-chipping, and recalibrate tool offsets."
+  },
+  {
+    "id": "MAN-HDF-02",
+    "fault_mode": "heat dissipation failure",
+    "components": [
+      "cooling",
+      "process",
+      "bearing"
+    ],
+    "sensor_cues": [
+      "air_temperature",
+      "process_temperature",
+      "rotational_speed"
+    ],
+    "text": "Heat dissipation failure (HDF) secondary symptoms: ambient temperature peaks combined with heavy duty operation cycle, causing the difference between process and air temperature to fall below 8 Kelvin. Spindle bearing temperature may spike. Recommended action: halt process, check coolant fluid level and pump pressure, and blow out heat exchanger fins."
+  },
+  {
+    "id": "MAN-PWF-02",
+    "fault_mode": "power failure",
+    "components": [
+      "motor",
+      "drive",
+      "belt"
+    ],
+    "sensor_cues": [
+      "rotational_speed",
+      "torque"
+    ],
+    "text": "Power failure (PWF) secondary symptoms: high mechanical resistance during high-feed milling cycles, causing power draw to spike beyond 9000W, or motor drive under-voltage causing it to drop below 3500W. Recommended action: check spindle drive belt tension, verify motor controller parameters, and inspect power rails for transient voltage drops."
+  },
+  {
+    "id": "MAN-OSF-02",
+    "fault_mode": "overstrain failure",
+    "components": [
+      "tool",
+      "workpiece",
+      "controller"
+    ],
+    "sensor_cues": [
+      "torque",
+      "tool_wear"
+    ],
+    "text": "Overstrain failure (OSF) secondary symptoms: milling tough alloys with high tool wear state, leading to axial force spikes and deflection. Compounding load causes tool fracture. Recommended action: immediately reduce program feed override, check tool wear level, and verify that material hardness matches feed parameters."
+  },
+  {
+    "id": "MAN-GUIDE-01",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "General maintenance guidance: confirm trends across multiple correlated sensors over at least five cycles before escalating. Prefer the least intrusive inspection that can confirm the suspected fault mode. Always verify that sensor anomalies are not caused by operating regime changes before attributing them to component degradation."
+  },
+  {
+    "id": "MAN-GUIDE-02",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "When multiple fault hypotheses are possible, prioritize by severity: compressor stall and bearing failure are critical and require immediate action, while gradual degradation modes (efficiency loss, blade erosion) can be scheduled during planned maintenance windows. Always err on the side of safety for critical failure modes."
+  },
+  {
+    "id": "MAN-GUIDE-03",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "RUL estimation should be interpreted as a planning tool, not an exact prediction. Always apply a safety margin: if the model predicts 30 cycles remaining, plan maintenance within the next 20 cycles. Early predictions (overestimating RUL) carry lower risk than late predictions (underestimating RUL) because late predictions may result in unplanned failure."
+  },
+  {
+    "id": "MAN-GUIDE-04",
+    "fault_mode": "general",
+    "components": [
+      "HPC",
+      "Fan",
+      "LPT"
+    ],
+    "sensor_cues": [
+      "s2",
+      "s3",
+      "s4",
+      "s7",
+      "s8",
+      "s9",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s15",
+      "s17",
+      "s20",
+      "s21"
+    ],
+    "text": "The 14 informative sensors for degradation monitoring are: s2 (LPC outlet temp), s3 (HPC outlet temp), s4 (LPT outlet temp), s7 (HPC outlet pressure), s8 (fan speed), s9 (core speed), s11 (static HPC pressure), s12 (fuel flow ratio), s13 (corrected fan speed), s14 (corrected core speed), s15 (bypass ratio), s17 (bleed enthalpy), s20 (HPT coolant bleed), s21 (LPT coolant bleed). Sensors s1, s5, s6, s10, s16, s18, s19 are near-constant and can be excluded from anomaly analysis."
+  },
+  {
+    "id": "MAN-GUIDE-05",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "For work order drafting: every work order must include the suspected fault mode, affected component, evidence (which sensors triggered the alert and their trend direction), recommended inspection or repair procedure, required parts and tools, estimated duration, and safety precautions. Work orders missing any of these elements should be rejected and regenerated."
+  },
+  {
+    "id": "MAN-GUIDE-06",
+    "fault_mode": "general",
+    "components": [
+      "tool",
+      "spindle",
+      "cooling",
+      "motor"
+    ],
+    "sensor_cues": [
+      "air_temperature",
+      "process_temperature",
+      "rotational_speed",
+      "torque",
+      "tool_wear"
+    ],
+    "text": "AI4I Milling Machine Diagnostic Guide: AI4I operates on 5 process variables: air temperature, process temperature, rotational speed, torque, and tool wear. TWF is driven purely by tool wear time. HDF is driven by process-to-air delta. PWF is driven by the speed-torque power product. OSF is driven by combined torque and tool wear. RNF is random and has no sensor cues. Always cross-reference the machine alert with these variable combinations before starting a repair."
+  },
+  {
+    "id": "ISM-CMR-004-PROFILE",
+    "fault_mode": "bearing fatigue",
+    "components": [
+      "rotors",
+      "air-end bearings",
+      "inlet valve"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s7",
+      "s20",
+      "s21"
+    ],
+    "text": "## Machine Identification\n\n| Field | Value |\n|---|---|\n| **Machine ID** | ISM-CMR-004 |\n| **Machine Name** | Compressor Unit (Rotary Screw) |\n| **Manufacturer** | Atlas Copco |\n| **Model** | GA 90+ VSD |\n| **Year of Installation** | 2020 |\n| **Location** | Utility Room U2, Plant 3 — Heavy Components Division, Ironside Manufacturing, Pune |\n| **Criticality** | High (supplies pneumatic power to 6 downstream workstations) |\n\n## Critical Sub-Components and Wear Indicators\n\n| Sub-Component | Wear Indicator | Sensor Signal | Normal Range | Alert Threshold |\n|---|---|---|---|---|\n| **Air-End Bearings (male + female rotor)** | Vibration, bearing temperature | s11 (vibration), s3 (bearing temp) | s11 < 2.0 mm/s, s3 < 90°C | s11 > 3.5 mm/s OR s3 > 100°C |\n| **Rotor Profile (screw)** | Discharge pressure, volumetric efficiency | s7 (discharge pressure), s4 (discharge temp) | s7 > 7.2 bar, s4 < 95°C | s7 < 6.8 bar OR s4 > 105°C |\n| **Inlet Valve** | Pressure pulsation, unloader response | s7 (pressure stability) | ±0.2 bar variation | > ±0.5 bar variation |\n| **Intercooler / Aftercooler** | Cooling air flow, outlet temperature | s20 (intercooler outlet), s21 (aftercooler outlet) | s20 < 50°C,",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ISM-CNC-001-PROFILE",
+    "fault_mode": "bearing wear",
+    "components": [
+      "spindle bearings",
+      "ball screws",
+      "coolant pump"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s8",
+      "s11",
+      "s12"
+    ],
+    "text": "## Machine Identification\n\n| Field | Value |\n|---|---|\n| **Machine ID** | ISM-CNC-001 |\n| **Machine Name** | 5-Axis CNC Machining Center |\n| **Manufacturer** | DMG Mori |\n| **Model** | DMU 65 monoBLOCK |\n| **Year of Installation** | 2019 |\n| **Location** | Bay A3, Plant 3 — Heavy Components Division, Ironside Manufacturing, Pune |\n| **Criticality** | High (single-piece flow for precision gears) |\n\n## Critical Sub-Components and Wear Indicators\n\n| Sub-Component | Wear Indicator | Sensor Signal | Normal Range | Alert Threshold |\n|---|---|---|---|---|\n| **Spindle Bearings (front + rear)** | Vibration RMS, housing temperature | s11 (vibration), s3 (temp) | s11 < 2.5 mm/s, s3 < 55°C | s11 > 4.0 mm/s OR s3 > 65°C |\n| **X/Y/Z Ball Screws** | Backlash (µm), motor current spike | s12 (current draw) | s12 < 1.15× baseline | s12 > 1.30× baseline |\n| **Coolant Pump** | Flow rate, pump outlet pressure | s2 (outlet temp), s15 (flow ratio) | s2 < 28°C, s15 > 0.92 | s2 > 35°C OR s15 < 0.80 |\n| **Spindle Motor** | Load percentage, thermal rise | s8 (motor RPM), s12 (current) | s8 deviation < 1%, s12 < 1.20× | s8 deviation > 3% OR s12 > 1.40× |\n\n## RUL Thresholds and Actions\n\n| RUL Band | Severity |",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ISM-CVY-005-PROFILE",
+    "fault_mode": "bearing wear",
+    "components": [
+      "drive motor bearings",
+      "chain links",
+      "tensioner"
+    ],
+    "sensor_cues": [
+      "s8",
+      "s9",
+      "s12",
+      "s13"
+    ],
+    "text": "## Machine Identification\n\n| Field | Value |\n|---|---|\n| **Machine ID** | ISM-CVY-005 |\n| **Machine Name** | Heavy-Duty Conveyor |\n| **Manufacturer** | Rexnord |\n| **Model** | FlatTop 2500-HD |\n| **Year of Installation** | 2016 |\n| **Location** | Bay D1–D4, Plant 3 — Heavy Components Division, Ironside Manufacturing, Pune |\n| **Criticality** | High (primary inter-bay material movement; impacts all upstream machines) |\n\n## Critical Sub-Components and Wear Indicators\n\n| Sub-Component | Wear Indicator | Sensor Signal | Normal Range | Alert Threshold |\n|---|---|---|---|---|\n| **Drive Motor Bearings** | Motor vibration, motor housing temperature | s11 (vibration), s3 (motor temp) | s11 < 3.5 mm/s, s3 < 80°C | s11 > 5.5 mm/s OR s3 > 90°C |\n| **Chain Links (elongation)** | Chain elongation %, catenary sag | s13 (corrected chain speed) | s13 deviation < 1.5% | s13 deviation > 3.0% |\n| **Drive Sprocket** | Pitch wear, hook formation on teeth | s9 (drive shaft speed), s12 (motor current) | s12 < 1.25× baseline | s12 > 1.50× baseline |\n| **Take-Up Tensioner** | Tensioner position, chain sag | s13 (load-corrected belt speed) | Tensioner in mid-travel | Tensioner at travel limit |\n| **Return Ro",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ISM-GBX-003-PROFILE",
+    "fault_mode": "gear pitting",
+    "components": [
+      "gear teeth",
+      "output shaft bearings",
+      "lubrication system"
+    ],
+    "sensor_cues": [
+      "s4",
+      "s9",
+      "s11",
+      "s12",
+      "s14"
+    ],
+    "text": "## Machine Identification\n\n| Field | Value |\n|---|---|\n| **Machine ID** | ISM-GBX-003 |\n| **Machine Name** | Helical Gearbox (Drive Train) |\n| **Manufacturer** | Flender (Siemens) |\n| **Model** | B3SH-400 |\n| **Year of Installation** | 2017 |\n| **Location** | Bay C2, Plant 3 — Heavy Components Division, Ironside Manufacturing, Pune |\n| **Criticality** | Critical (drives the main production conveyor and forming station) |\n\n## Critical Sub-Components and Wear Indicators\n\n| Sub-Component | Wear Indicator | Sensor Signal | Normal Range | Alert Threshold |\n|---|---|---|---|---|\n| **Helical Gear Teeth (Stage 1+2)** | Vibration frequency signature (gear mesh freq.) | s11 (vibration), s9 (shaft speed) | s11 < 3.0 mm/s at rated load | s11 > 5.0 mm/s OR sidebands appear |\n| **Output Shaft Bearings** | Bearing vibration, oil temperature | s11 (bearing vibration), s4 (oil temp) | s11 < 2.8 mm/s, s4 < 70°C | s11 > 4.5 mm/s OR s4 > 80°C |\n| **Lubrication System** | Oil pressure, viscosity index, particle count | s4 (oil temp), s17 (oil pressure) | s4 < 70°C, particles < 18/mL ISO 4406 | s4 > 80°C OR ISO class > 20 |\n| **Input Shaft Coupling** | Misalignment vibration (1× and 2× RPM) | s14 (corre",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ISM-HYD-002-PROFILE",
+    "fault_mode": "seal degradation",
+    "components": [
+      "hydraulic seals",
+      "hydraulic pump",
+      "cylinder rods"
+    ],
+    "sensor_cues": [
+      "s7",
+      "s15",
+      "s17",
+      "s2"
+    ],
+    "text": "## Machine Identification\n\n| Field | Value |\n|---|---|\n| **Machine ID** | ISM-HYD-002 |\n| **Machine Name** | Hydraulic Press (500 Tonne) |\n| **Manufacturer** | Schuler AG |\n| **Model** | MGP-500 |\n| **Year of Installation** | 2018 |\n| **Location** | Bay B1, Plant 3 — Heavy Components Division, Ironside Manufacturing, Pune |\n| **Criticality** | Critical (only press line for shaft forgings) |\n\n## Critical Sub-Components and Wear Indicators\n\n| Sub-Component | Wear Indicator | Sensor Signal | Normal Range | Alert Threshold |\n|---|---|---|---|---|\n| **Main Cylinder Seals** | Oil leakage rate, pressure drop under load | s7 (system pressure), s15 (flow ratio) | s7 > 420 bar at peak, s15 > 0.95 | s7 < 390 bar at peak OR s15 < 0.85 |\n| **Hydraulic Pump** | Pump outlet pressure, cavitation noise (dB) | s7 (pressure), s2 (oil temp) | s7 steady ±5 bar, s2 < 60°C | s7 fluctuation > ±15 bar OR s2 > 70°C |\n| **Cylinder Rods** | Surface scoring, seal bypass leakage | s15 (return flow) | s15 deviation < 5% | s15 deviation > 12% |\n| **Return Line Filter** | Differential pressure across filter | s17 (return line pressure) | s17 < 3.5 bar differential | s17 > 5.0 bar differential |\n\n## RUL Thresholds",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "HIST-FAILURE-LOG",
+    "fault_mode": "general",
+    "components": [
+      "spindle bearings",
+      "hydraulic seals",
+      "gear teeth",
+      "air-end bearings",
+      "chain links"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s7",
+      "s9",
+      "s11",
+      "s12",
+      "s13",
+      "s15"
+    ],
+    "text": "*Covers failure events from January 2022 to December 2025. Synthetic data consistent with machine profiles.*\n\n| Event ID | Date | Machine | Failure Mode | RUL at Detection | Days Downtime | Root Cause | Corrective Action | Cost (INR) |\n|---|---|---|---|---|---|---|---|---|\n| EVT-001 | 2022-02-14 | ISM-CNC-001 | Spindle front bearing spall | Not monitored | 2.5 | Bearing overloaded — exceeded recommended axial load limit | Replaced front bearing pair (FAG B7013). Reviewed tool path programs. | ₹45,000 |\n| EVT-002 | 2022-04-08 | ISM-CVY-005 | Chain jump-off | Not monitored | 1.0 | Chain elongation > 4% — lubrication interval missed by 3 weeks | Emergency chain replacement (48 m). Reinstated weekly lubrication log. | ₹28,000 |\n| EVT-003 | 2022-06-22 | ISM-HYD-002 | Main cylinder rod seal failure | Not monitored | 1.5 | Oil contamination accelerated seal hardening | Seal replacement (SOP-PM-002). Oil flush and refill. Installed 10-micron filter. | ₹62,000 |\n| EVT-004 | 2022-09-11 | ISM-GBX-003 | Stage 1 gear pitting (early stage) | Not monitored | 3.0 | Oil change interval exceeded (5 months, limit is 3 months) | Stage 1 gear set replacement. Oil change. Added monthly oil sampling. | ₹",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ANOMALY-BEARING-WEAR",
+    "fault_mode": "bearing wear",
+    "components": [
+      "spindle bearings",
+      "output shaft bearings",
+      "drive motor bearings",
+      "air-end bearings"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s11",
+      "s12"
+    ],
+    "text": "## Anomaly Signature\nRising vibration amplitude (s11) combined with thermal rise at the bearing housing (s3). Motor current (s12) increases as friction load grows. This typically develops gradually over 80–150 cycles. The vibration rise precedes the temperature rise by 30–60 cycles.\n\nKey signature: s11 rising > 1 mm/s over 20 cycles while s3 rises > 5°C over same period.\n\n## Affected Machines\n- **ISM-CNC-001** — Spindle front/rear bearings (highest risk on this machine)\n- **ISM-GBX-003** — Output shaft bearings\n- **ISM-CMR-004** — Air-end bearings (drive end + non-drive end)\n- **ISM-CVY-005** — Drive motor bearings\n\n## Immediate Actions (on alert)\n1. Acknowledge MechSage alert in dashboard.\n2. Dispatch technician for vibration walkdown (SOP-PM-004) within 2 hours.\n3. Do not increase machine load during anomaly — friction is compounding degradation.\n4. Cross-reference with RUL value: if RUL < 20, escalate to Warning protocol immediately.\n\n## Diagnostic Steps\n1. **Vibration spectrum analysis** (Fluke 810): check for bearing defect frequencies (BPFO, BPFI, BSF) above 3× noise floor.\n2. **Temperature trend**: confirm s3 is rising monotonically (not a transient spike).\n3. **Oil analysis",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ANOMALY-CAVITATION",
+    "fault_mode": "pump cavitation",
+    "components": [
+      "hydraulic pump",
+      "coolant pump"
+    ],
+    "sensor_cues": [
+      "s7",
+      "s15",
+      "s2"
+    ],
+    "text": "## Anomaly Signature\nPressure oscillation pattern — s7 (pump discharge pressure) fluctuating erratically (> ±15 bar cycle-to-cycle) rather than holding steady. s15 (flow ratio) also fluctuates as the pump alternately delivers and collapses vapor bubbles. Audible as a characteristic rattling or gravel-like noise from the pump housing.\n\nKey signature: s7 fluctuation amplitude > ±15 bar over 3 consecutive cycles combined with s15 instability.\n\n## Affected Machines\n- **ISM-HYD-002** — Hydraulic pump (most susceptible: high-pressure system with rapid load changes)\n- **ISM-CNC-001** — Coolant pump (if coolant tank level low or inlet strainer blocked)\n\n## Immediate Actions (on alert)\n1. Acknowledge MechSage alert.\n2. Immediately reduce pump demand: for ISM-HYD-002, reduce press stroke rate by 50%.\n3. Check hydraulic oil level (ISM-HYD-002) or coolant tank level (ISM-CNC-001). Low level = primary cause.\n4. Listen for audible rattling from pump — confirms cavitation vs. pressure sensor fault.\n5. If level is normal and noise persists: inspect inlet strainer for blockage.\n\n## Diagnostic Steps\n1. **Fluid level check**: low oil/coolant level allows air entrainment into pump inlet — top up immed",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ANOMALY-GEAR-PITTING",
+    "fault_mode": "gear pitting",
+    "components": [
+      "gear teeth",
+      "output shaft bearings"
+    ],
+    "sensor_cues": [
+      "s9",
+      "s11",
+      "s14"
+    ],
+    "text": "## Anomaly Signature\nVibration frequency signature shift — the gear mesh frequency (f_mesh = shaft RPM/60 × tooth count) develops sidebands at ±1× shaft frequency, indicating pitch-line pitting. Unlike bearing wear which raises broadband vibration, gear pitting produces discrete frequency peaks. The corrected shaft speed (s14) may show slight deviation as the pitted gear tooth creates micro-impulses.\n\nKey signature: s11 vibration spectrum shows sidebands at gear mesh frequency ± 1× shaft frequency with amplitude > 30% of the mesh fundamental.\n\n## Affected Machines\n- **ISM-GBX-003** — Stage 1 and Stage 2 helical gears (primary; highest load)\n\n## Immediate Actions (on alert)\n1. Acknowledge MechSage alert.\n2. Dispatch Reliability Engineer for vibration spectrum analysis (SOP-PM-004) within 4 hours.\n3. Submit oil sample to SGS for particle analysis (SOP-PM-003) — metal particle count confirms pitting severity.\n4. Reduce gearbox load to 70% maximum until diagnosis is complete.\n5. If s11 > 7.0 mm/s: initiate controlled shutdown. Gear failure is imminent.\n\n## Diagnostic Steps\n1. **Spectrum analysis (Fluke 810)**: collect vibration spectrum at rated load. Identify gear mesh frequency (f_me",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ANOMALY-OIL-STARVATION",
+    "fault_mode": "oil starvation",
+    "components": [
+      "lubrication system",
+      "gearbox oil",
+      "hydraulic seals"
+    ],
+    "sensor_cues": [
+      "s4",
+      "s17",
+      "s7"
+    ],
+    "text": "## Anomaly Signature\nSudden oil pressure drop (s7 or s17 dropping) combined with rapid temperature spike (s4 rising sharply). Unlike bearing wear which develops slowly, oil starvation can produce failure within 5–10 cycles of onset. The temperature spike (s4) may precede the pressure drop by 1–3 cycles as heat builds before pressure drops.\n\nKey signature: s17 (return line pressure) dropping while s4 (oil temp) rises sharply > 10°C within 5 cycles.\n\n## Affected Machines\n- **ISM-GBX-003** — Gearbox lubrication system (oil pump failure, clogged filter, or leak)\n- **ISM-HYD-002** — Hydraulic oil (seal bypass causing return flow imbalance)\n- **ISM-CMR-004** — Air-end oil injection system\n\n## Immediate Actions (on alert)\n1. Acknowledge MechSage alert. This is a HIGH PRIORITY — oil starvation failure is rapid and catastrophic.\n2. Immediately reduce machine load to minimum or idle while diagnosis is performed.\n3. Check oil level on sight glass/dipstick. If level is low: top up with correct grade immediately.\n4. If oil level is normal but temperature is rising: suspect blocked filter or pump failure — stop machine.\n5. If s4 > 80°C (gearbox) or s4 > 105°C (compressor): initiate emergency shu",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "ANOMALY-THERMAL-OVERLOAD",
+    "fault_mode": "thermal overload",
+    "components": [
+      "spindle bearings",
+      "coolant pump",
+      "compressor discharge"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s2"
+    ],
+    "text": "## Anomaly Signature\nA cluster of temperature sensors (s2, s3, s4) rising simultaneously above their individual baselines. Unlike a single-sensor spike (which may indicate a sensor fault), a cluster rise indicates a genuine thermal event — coolant system failure, insufficient heat rejection, or mechanical overload generating excess heat.\n\nKey signature: s3 > 65°C AND s2 > 35°C simultaneously, or s4 > 80°C with s3 > 70°C.\n\n## Affected Machines\n- **ISM-CNC-001** — Spindle thermal overload (coolant pump failure, high ambient temp in summer, or excessive cut depth)\n- **ISM-CMR-004** — Compressor thermal trip (blocked cooler fins, high ambient, or aftercooler failure)\n\n## Immediate Actions (on alert)\n1. Acknowledge MechSage alert.\n2. Check ambient temperature in the bay — if ambient > 40°C (Pune summer), additional ventilation may be needed.\n3. For ISM-CNC-001: immediately reduce spindle speed by 20% and check coolant flow at nozzle.\n4. For ISM-CMR-004: activate additional ventilation around compressor enclosure.\n5. If temperatures continue rising after 5 minutes of reduced load: initiate controlled shutdown per SOP-PM-005.\n\n## Diagnostic Steps\n1. **Coolant system check (ISM-CNC-001)**:",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "RUL-DECISION-MATRIX",
+    "fault_mode": "general",
+    "components": [
+      "spindle bearings",
+      "hydraulic seals",
+      "gear teeth",
+      "air-end bearings",
+      "chain links"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s7",
+      "s8",
+      "s9",
+      "s11",
+      "s12",
+      "s13",
+      "s15",
+      "s17",
+      "s20",
+      "s21"
+    ],
+    "text": "## Overview\nThis matrix defines the mandatory response action for every machine at every RUL band. When MechSage predicts a RUL value, this matrix determines who is responsible, what they must do, and how quickly. No action may be deferred beyond the maximum response time listed.\n\n## Universal RUL Band Definitions\n\n| RUL Band | Severity Label | Sensor Context | Max Response Time | Escalation Path |\n|---|---|---|---|---|\n| **RUL > 100 cycles** | 🟢 Normal | All sensors within baseline | Next scheduled shift | Shift Technician |\n| **50 < RUL ≤ 100** | 🟡 Advisory | One or more sensors showing drift (s11↑, s3↑) | Within 48 hours | Reliability Engineer |\n| **20 < RUL ≤ 50** | 🟠 Warning | Clear degradation trend across multiple sensors (s11↑↑, s3↑, s12↑) | Within 24 hours | Reliability Engineer + Plant Manager |\n| **5 < RUL ≤ 20** | 🔴 Critical | Sensors approaching alert threshold; imminent failure risk | Within 4 hours | All Hands |\n| **RUL ≤ 5** | 🚨 EMERGENCY | One or more sensor thresholds breached; anomaly = 1 | Immediately | Plant Manager (final authority) |\n\n## Machine-Specific Decision Tables\n\n### ISM-CNC-001 — 5-Axis CNC Machining Center\n\n| RUL Band | Required Action | Responsible",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-001",
+    "fault_mode": "bearing wear",
+    "components": [
+      "spindle bearings"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s11"
+    ],
+    "text": "## Purpose\nReplace the front and rear spindle bearings on ISM-CNC-001 when MechSage issues a bearing wear alert (anomaly detected, s11 rising vibration amplitude, s3 rising bearing housing temperature, or RUL < 50 cycles). Prevents unplanned spindle failure and workpiece scrap.\n\n## Scope\nApplies to ISM-CNC-001 (DMG Mori DMU 65 monoBLOCK). Spindle bearing set: FAG B7013-C-T-P4S-UL (front, matched pair) + FAG 6013-C3 (rear).\n\n## Tools Required\n- Bearing puller set (hydraulic, 5T)\n- Induction bearing heater (PRESTO E-200)\n- Digital torque wrench (0–200 Nm)\n- Dial gauge + magnetic stand\n- Vibration meter (Fluke 810)\n- Spindle run-out gauge (0.001 mm resolution)\n- ISI-approved bearing grease (Shell Alvania EP2)\n- Nitrile gloves, safety glasses, lockout-tagout (LOTO) kit\n\n## Safety Notes\n\n> ⚠️ LOTO MANDATORY: De-energize ISM-CNC-001 at MCC panel before any spindle access. Tag out with personal lock. Verify zero-energy state.\n> ⚠️ Induction heater use: Do not heat bearing above 120°C. Use pyrometer to confirm temperature.\n> ⚠️ Do not strike bearings with a hammer. Use press or heater only.\n\n## Step-by-Step Instructions\n\n**Phase 1 — Preparation (30 min)**\n1. Raise WO in CMMS: WO-YYYY-NNNN,",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-002",
+    "fault_mode": "seal degradation",
+    "components": [
+      "hydraulic seals",
+      "cylinder rods"
+    ],
+    "sensor_cues": [
+      "s7",
+      "s15"
+    ],
+    "text": "## Purpose\nInspect and replace cylinder rod seals on ISM-HYD-002 when MechSage detects seal degradation (s15 return flow ratio rising, s7 peak pressure dropping below 390 bar at full stroke, or RUL < 50 cycles). Prevents cylinder bypass, oil spillage, and uncontrolled press ram movement.\n\n## Scope\nApplies to ISM-HYD-002 (Schuler MGP-500). Main cylinder seal kit: Parker G2JN-380 (rod seal) + HALLITE 200/380 (piston seal). Check valve seal: Parker 11C series.\n\n## Tools Required\n- Hydraulic pressure bleed valve (3/4\" BSP)\n- Seal pick set (brass tip)\n- Torque wrench (100–800 Nm)\n- Caliper (0.01 mm resolution)\n- Clean oil drip tray (minimum 50-litre capacity)\n- Nitrile gloves, face shield, chemical-resistant apron\n- Oil absorbent mats (minimum 10)\n- LOTO kit\n\n## Safety Notes\n\n> ⚠️ LOTO MANDATORY: De-energize pump motor at MCC. Hydraulic stored energy is lethal. Bleed system pressure to zero before cracking any fitting.\n> ⚠️ Press ram must be fully extended (down position) and supported on mechanical stops before any cylinder access.\n> ⚠️ Hydraulic oil (ISO VG 46) is a skin irritant. Wear chemical-resistant gloves and face shield.\n\n## Step-by-Step Instructions\n\n**Phase 1 — Preparation (3",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-003",
+    "fault_mode": "oil starvation",
+    "components": [
+      "lubrication system",
+      "gearbox oil"
+    ],
+    "sensor_cues": [
+      "s4",
+      "s17"
+    ],
+    "text": "## Purpose\nCollect and submit oil samples from ISM-GBX-003 for tribology analysis when MechSage detects oil starvation risk (s4 gearbox oil temperature rising, s17 oil pressure dropping, or RUL < 100 cycles). Early detection of metallic particle contamination prevents catastrophic gear and bearing failure.\n\n## Scope\nApplies to ISM-GBX-003. Oil sample sent to SGS India Pune Lab (TAT: 3 working days). Oil type: Mobil SHC Gear 220.\n\n## Tools Required\n- Vacuum oil sampling pump (Minimess kit)\n- Sampling bottle (60 mL, pre-cleaned, labelled)\n- Sample request form (Ironside Form PM-OIL-01)\n- Nitrile gloves\n- Sample shipment box (SGS courier label pre-printed)\n\n## Safety Notes\n\n> ⚠️ Do NOT sample oil from a cold machine. Oil must be at operating temperature (s4 > 50°C) for a representative sample.\n> ⚠️ Avoid contaminating sample with external dirt — keep sampling port clean before inserting Minimess probe.\n> ⚠️ Dispose of used oil wipes in designated oily waste bin only.\n\n## Step-by-Step Instructions\n\n**Phase 1 — Preparation (10 min)**\n1. Confirm machine is at operating temperature (s4 reading > 50°C, typically 30 min of operation).\n2. Clean the Minimess sampling port on ISM-GBX-003 oil c",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-004",
+    "fault_mode": "bearing wear",
+    "components": [
+      "spindle bearings",
+      "drive motor bearings",
+      "output shaft bearings",
+      "air-end bearings"
+    ],
+    "sensor_cues": [
+      "s11",
+      "s8",
+      "s9"
+    ],
+    "text": "## Purpose\nConduct a structured vibration measurement walkdown of all 5 ISM machines when MechSage issues a vibration-related advisory (rising s11 vibration amplitude) or as a scheduled weekly check. Provides ground truth to confirm or refute sensor-based alerts before dispatching a work order.\n\n## Scope\nAll 5 machines: ISM-CNC-001, ISM-HYD-002, ISM-GBX-003, ISM-CMR-004, ISM-CVY-005.\n\n## Tools Required\n- Fluke 810 Vibration Analyzer (with ISM-Ironside route file loaded)\n- Magnetic accelerometer probes (×2, ICP type)\n- Measurement route sheet (Form PM-VIB-01)\n- Earplugs (85 dB zones: ISM-GBX-003, ISM-CVY-005)\n- Safety glasses\n\n## Safety Notes\n\n> ⚠️ Machines must be running at normal operating condition during measurement — do not measure during start-up transient or cool-down.\n> ⚠️ Mount accelerometer on bearing housing, not on covers or guards.\n> ⚠️ Keep hands and tools clear of all rotating parts while machine is running.\n\n## Step-by-Step Instructions\n\n**Phase 1 — ISM-CNC-001 (Spindle Bearing Vibration)**\n1. Machine must be in cycle (running at rated speed). Request operator to hold a standard 5-minute cutting cycle.\n2. Mount accelerometer on spindle front bearing housing (radial",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-005",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [],
+    "text": "## Purpose\nDefine the immediate response steps when MechSage fires an EMERGENCY anomaly alert (anomaly = 1, RUL ≤ 5 cycles, or any Critical/EMERGENCY severity classification). Protects personnel, prevents equipment damage, and preserves evidence for root cause analysis.\n\n## Scope\nAll 5 machines: ISM-CNC-001, ISM-HYD-002, ISM-GBX-003, ISM-CMR-004, ISM-CVY-005.\n\n## Tools Required\n- MechSage dashboard access (any terminal or mobile)\n- CMMS access (to raise emergency WO)\n- Radio (to contact Plant Manager and Reliability Engineer)\n- LOTO kit (one per responding technician)\n\n## Safety Notes\n\n> ⚠️ PERSONNEL SAFETY FIRST. Do not approach the machine until operator has initiated controlled stop and motion has ceased.\n> ⚠️ NEVER cut power abruptly on ISM-HYD-002 while press ram is mid-stroke — risk of uncontrolled ram drop.\n> ⚠️ NEVER restart a machine after EMERGENCY shutdown without written clearance from Plant Manager.\n\n## Step-by-Step Instructions\n\n**Immediate Response (0–5 minutes)**\n1. MechSage EMERGENCY alert received (Severity: EMERGENCY, RUL ≤ 5, anomaly = 1).\n2. Shift Technician on duty notifies operator and Reliability Engineer via radio immediately.\n3. Operator initiates a **cont",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-006",
+    "fault_mode": "bearing fatigue",
+    "components": [
+      "air-end bearings",
+      "rotors",
+      "inlet valve"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s4",
+      "s7",
+      "s20",
+      "s21"
+    ],
+    "text": "## Purpose\nOverhaul the rotary screw air-end of ISM-CMR-004 when MechSage detects bearing fatigue (s3 air-end bearing temp > 100°C, s7 discharge pressure < 6.8 bar, s11 vibration > 3.5 mm/s, or RUL < 50 cycles). Prevents catastrophic rotor seizure and unplanned plant-wide pneumatic supply loss.\n\n## Scope\nApplies to ISM-CMR-004 (Atlas Copco GA 90+ VSD). Air-end model: Atlas Copco Z-rotor 90. Bearing set: SKF 6316/C3 (drive end) + SKF 6214/C3 (non-drive end).\n\n## Tools Required\n- Air-end overhaul toolkit (Atlas Copco Recommended: ACOT-90-KIT)\n- Torque wrench set (20–500 Nm)\n- Bearing puller and press (hydraulic, 5T)\n- Induction bearing heater\n- Compressor oil (Atlas Copco Roto-Inject Fluid, 20 L)\n- LOTO kit\n- Dust masks (N95) — compressed air residue\n\n## Safety Notes\n\n> ⚠️ LOTO MANDATORY: Isolate at MCC. Vent compressed air in all lines downstream before opening any fitting — stored pressure is lethal.\n> ⚠️ Rotor tip clearances are factory-set. Do NOT attempt to adjust rotor timing unless an Atlas Copco-certified engineer is present.\n> ⚠️ Allow air-end to cool to ambient temperature before disassembly — rotors retain heat for up to 2 hours.\n\n## Step-by-Step Instructions\n\n**Phase 1 —",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-007",
+    "fault_mode": "chain elongation",
+    "components": [
+      "chain links",
+      "tensioner",
+      "drive sprocket"
+    ],
+    "sensor_cues": [
+      "s9",
+      "s12",
+      "s13"
+    ],
+    "text": "## Purpose\nLubricate and tension the drive chain of ISM-CVY-005 when MechSage detects chain elongation (s13 corrected chain speed deviation > 2%, s12 motor current rising, or RUL < 100 cycles). Prevents chain jump-off, belt misalignment, and drive motor bearing overload.\n\n## Scope\nApplies to ISM-CVY-005 (Rexnord FlatTop 2500-HD). Chain: Rexnord 2500HD, pitch 25.4 mm. Lubricant: Shell Tonna S3 M 68 (chain and rail lubricant).\n\n## Tools Required\n- Chain elongation gauge (Rexnord P/N: CG-25HD)\n- Chain lubrication spray (Shell Tonna S3 M 68 in pressure applicator)\n- Tensioner adjustment wrench (30 mm hex, 600 mm handle)\n- Dial gauge + magnetic stand (for catenary measurement)\n- Torque wrench (0–200 Nm)\n- Safety barrier cones (minimum 8)\n\n## Safety Notes\n\n> ⚠️ NEVER apply lubricant to a running conveyor using a manual applicator — use automated spray system only while conveyor is running.\n> ⚠️ For tensioner adjustment and elongation measurement: STOP conveyor and apply LOTO before accessing chain.\n> ⚠️ Wear steel-toed boots — chain links are heavy and can cause crush injuries if dropped.\n\n## Step-by-Step Instructions\n\n**Phase 1 — Running Lubrication (Routine, without stop)**\n1. Confirm",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SOP-PM-008",
+    "fault_mode": "general",
+    "components": [],
+    "sensor_cues": [
+      "s3",
+      "s11"
+    ],
+    "text": "## Purpose\nDefine the standard run-in procedure and acceptance criteria for any machine returning to production after a maintenance intervention. Ensures that sensor readings (s3, s11, s7, s12) return to within normal operating bands before the machine is released to the production team.\n\n## Scope\nAll 5 machines: ISM-CNC-001, ISM-HYD-002, ISM-GBX-003, ISM-CMR-004, ISM-CVY-005.\n\n## Tools Required\n- Vibration meter (Fluke 810 or equivalent)\n- Temperature probe / infrared thermometer\n- CMMS access (to update WO status to \"Under Run-In\")\n- MechSage dashboard (to monitor live sensor trends during run-in)\n\n## Safety Notes\n\n> ⚠️ Run-in must be performed with qualified technician present — do NOT leave the machine unattended during the first 30 minutes post-maintenance.\n> ⚠️ If any sensor exceeds its Alert Threshold during run-in: immediately stop, do not force through, escalate to Reliability Engineer.\n\n## Step-by-Step Instructions\n\n**Phase 1 — Pre-Start Verification (10 min)**\n1. Confirm WO maintenance tasks are all complete and signed off.\n2. Check that all covers, guards, and safety interlocks are reinstalled and functional.\n3. Verify fluid levels (oil, coolant, hydraulic) are within n",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "SPARE-PARTS-CATALOG",
+    "fault_mode": "general",
+    "components": [
+      "spindle bearings",
+      "hydraulic seals",
+      "gear teeth",
+      "air-end bearings",
+      "chain links",
+      "drive belts"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s7",
+      "s11",
+      "s12",
+      "s13",
+      "s15"
+    ],
+    "text": "*Minimum stock levels and pre-stock triggers as of December 2025.*\n*`[PRE-STOCK TRIGGER]` = must be in stores when RUL of the associated machine drops below 50 cycles.*\n\n## ISM-CNC-001 — 5-Axis CNC Machining Center\n\n| Part Number | Part Name | Machine | Criticality | Min Stock | Lead Time (days) | Supplier | Unit Cost (INR) | Pre-Stock? |\n|---|---|---|---|---|---|---|---|---|\n| FAG-B7013-DB | FAG B7013-C-T-P4S-UL Angular Contact Bearing (DB pair) | ISM-CNC-001 | A | 1 set | 3–5 | SKF India, Pune | ₹12,500 | `[PRE-STOCK TRIGGER]` |\n| FAG-6013-C3 | FAG 6013-C3 Deep Groove Bearing (rear spindle) | ISM-CNC-001 | A | 1 | 3–5 | SKF India, Pune | ₹3,200 | `[PRE-STOCK TRIGGER]` |\n| CP-CNC001-SK | Coolant Pump Seal Kit | ISM-CNC-001 | B | 1 | 2–3 | OEM spares, Aurangabad | ₹2,800 | |\n| ALVANIA-EP2-1KG | Shell Alvania EP2 Grease (1 kg) | ISM-CNC-001 | C | 2 kg | Same day | Shell India, Pune | ₹850/kg | |\n| STR-CNC001-C | Coolant Tank Strainer Element | ISM-CNC-001 | B | 2 | 1–2 | DMG Mori service | ₹1,200 | |\n\n## ISM-HYD-002 — Hydraulic Press (500T)\n\n| Part Number | Part Name | Machine | Criticality | Min Stock | Lead Time (days) | Supplier | Unit Cost (INR) | Pre-Stock? |\n|---|---|---|---|-",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "WO-CMR-004-TEMPLATE",
+    "fault_mode": "bearing fatigue",
+    "components": [
+      "air-end bearings",
+      "rotors"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s7",
+      "s11"
+    ],
+    "text": "```\nWORK ORDER: WO-2025-0134\nGenerated by: MechSage PdM System (Automated)\nTrigger: RUL = 28 cycles / Anomaly Detected (anomaly_score = 0.85)\nMachine: ISM-CMR-004 — Compressor Unit (Rotary Screw)\nPriority: WARNING\nGenerated: 2025-12-10 08:45 IST\n---\nPROBLEM STATEMENT:\nMechSage has detected progressive air-end bearing fatigue on ISM-CMR-004.\nAir-end bearing temperature (s3) has risen to 97°C (alert threshold: 100°C — approaching).\nDischarge pressure (s7) has dropped to 6.92 bar (normal: > 7.2 bar) indicating rotor tip\nclearance loss as bearings degrade.\nVibration amplitude at air-end housing (s11) is 3.2 mm/s (threshold: 3.5 mm/s — approaching).\nAt RUL = 28 cycles (~1.6 days at current load), the air-end requires overhaul.\n\nRECOMMENDED ACTIONS:\n1. Activate backup portable compressor (Atlas Copco QAS 40) to reduce load on ISM-CMR-004.\n2. Reduce ISM-CMR-004 to 70% load maximum immediately.\n3. Schedule air-end overhaul within the next 24–36 hours (SOP-PM-006).\n4. Replace drive-end bearing (SKF 6316/C3) and non-drive-end bearing (SKF 6214/C3).\n5. Inspect rotor tip clearances per Atlas Copco service manual (tolerance: 0.10–0.18 mm).\n6. Drain and refill oil sump with fresh Atlas Copco Rot",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "WO-CNC-001-TEMPLATE",
+    "fault_mode": "bearing wear",
+    "components": [
+      "spindle bearings"
+    ],
+    "sensor_cues": [
+      "s3",
+      "s11"
+    ],
+    "text": "```\nWORK ORDER: WO-2025-0087\nGenerated by: MechSage PdM System (Automated)\nTrigger: RUL = 34 cycles / Anomaly Detected (anomaly_score = 0.82)\nMachine: ISM-CNC-001 — 5-Axis CNC Machining Center\nPriority: WARNING\nGenerated: 2025-11-14 14:32 IST\n---\nPROBLEM STATEMENT:\nMechSage has detected progressive spindle bearing degradation on ISM-CNC-001.\nSpindle front bearing housing temperature (s3) has risen to 61°C (alert threshold: 65°C).\nVibration amplitude (s11) is 4.2 mm/s (alert threshold: 4.0 mm/s — EXCEEDED).\nMotor current draw (s12) is elevated at 1.29× baseline.\nAt the current degradation rate, remaining useful life is estimated at 34 operational cycles\n(approximately 1.9 days at current throughput). The spindle bearing is in the WARNING band.\n\nRECOMMENDED ACTIONS:\n1. Schedule ISM-CNC-001 for a 6-hour controlled shutdown within the next 24 hours.\n2. Execute SOP-PM-001 (Bearing Replacement Procedure — CNC Spindle).\n3. Replace front bearing set (FAG B7013-C-T-P4S-UL, matched pair DB arrangement).\n4. Replace rear bearing (FAG 6013-C3) as a precautionary measure (same shutdown).\n5. After reassembly, execute SOP-PM-008 (Post-Maintenance Run-In) before returning to production.\n6. Verify s",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "WO-CVY-005-TEMPLATE",
+    "fault_mode": "chain elongation",
+    "components": [
+      "chain links",
+      "tensioner",
+      "drive motor bearings"
+    ],
+    "sensor_cues": [
+      "s12",
+      "s13"
+    ],
+    "text": "```\nWORK ORDER: WO-2025-0151\nGenerated by: MechSage PdM System (Automated)\nTrigger: RUL = 12 cycles / Anomaly Detected (anomaly_score = 0.89)\nMachine: ISM-CVY-005 — Heavy-Duty Conveyor\nPriority: CRITICAL\nGenerated: 2025-12-17 15:22 IST\n---\nPROBLEM STATEMENT:\nMechSage has detected critical chain elongation on ISM-CVY-005.\nCorrected chain speed signal (s13) deviation has reached 2.8% (threshold: 1.5% — EXCEEDED).\nDrive motor current draw (s12) is at 1.43× baseline (threshold: 1.25× — EXCEEDED).\nManual chain elongation measurement (SOP-PM-007, 2025-12-16) confirms 312.5 mm over 12 links\n(standard: 304.8 mm; 2.5% elongation — in the WARNING/CRITICAL boundary).\nAt RUL = 12 cycles (~16 hours), chain jump-off risk is imminent.\n\nRECOMMENDED ACTIONS:\n1. RESTRICT ISM-CVY-005 to 50% rated load IMMEDIATELY.\n2. Do NOT run unattended — chain jump-off creates personnel safety hazard.\n3. Execute SOP-PM-007 (Chain Lubrication & Tensioning) within the next shift.\n4. Measure full-chain elongation — if any 12-link span exceeds 311 mm, schedule chain replacement within 24 hours.\n5. Order Rexnord 2500HD replacement chain (full conveyor length, 48 m) immediately.\n6. Schedule 4-hour chain replacement shut",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "WO-GBX-003-TEMPLATE",
+    "fault_mode": "gear pitting",
+    "components": [
+      "gear teeth",
+      "output shaft bearings"
+    ],
+    "sensor_cues": [
+      "s9",
+      "s11",
+      "s14"
+    ],
+    "text": "```\nWORK ORDER: WO-2025-0118\nGenerated by: MechSage PdM System (Automated)\nTrigger: RUL = 47 cycles / Anomaly Detected (anomaly_score = 0.78)\nMachine: ISM-GBX-003 — Helical Gearbox (Drive Train)\nPriority: WARNING\nGenerated: 2025-12-03 11:08 IST\n---\nPROBLEM STATEMENT:\nMechSage has detected incipient gear pitting on ISM-GBX-003.\nVibration amplitude (s11) at the output shaft bearing housing has risen to 5.8 mm/s\n(alert threshold: 5.0 mm/s — EXCEEDED).\nVibration spectrum analysis (from SOP-PM-004 walkdown on 2025-12-02) confirms sidebands\nat the gear mesh frequency (f_mesh = 182 Hz) at ±1× shaft frequency amplitude of 38%\nof the mesh fundamental — consistent with Stage 2 gear tooth pitting.\nGearbox oil temperature (s4) is 74°C (threshold: 80°C — approaching).\nOil sample from 2025-11-28 shows Fe particle count of 87 ppm (advisory threshold: 50 ppm).\nAt RUL = 47 cycles, maintenance is required within 2.6 days.\n\nRECOMMENDED ACTIONS:\n1. Immediately reduce gearbox load to 70% maximum.\n2. Submit URGENT oil sample to SGS within 24 hours (SOP-PM-003).\n   If Fe particles > 100 ppm: escalate to CRITICAL, pre-order Stage 2 gear set.\n3. Pre-order Stage 2 gear set (GBX003-S2-GEAR) TODAY — 10–14 day",
+    "asset_type": "ironside"
+  },
+  {
+    "id": "WO-HYD-002-TEMPLATE",
+    "fault_mode": "seal degradation",
+    "components": [
+      "hydraulic seals",
+      "cylinder rods"
+    ],
+    "sensor_cues": [
+      "s7",
+      "s15"
+    ],
+    "text": "```\nWORK ORDER: WO-2025-0102\nGenerated by: MechSage PdM System (Automated)\nTrigger: RUL = 18 cycles / Anomaly Detected (anomaly_score = 0.91)\nMachine: ISM-HYD-002 — Hydraulic Press (500T)\nPriority: CRITICAL\nGenerated: 2025-11-21 09:15 IST\n---\nPROBLEM STATEMENT:\nMechSage has detected critical hydraulic seal degradation on ISM-HYD-002.\nSystem pressure under peak load (s7) has dropped to 388 bar (threshold: 390 bar — EXCEEDED).\nReturn line flow ratio (s15) has risen to 0.91 (threshold: 0.85 — EXCEEDED).\nThese are the definitive indicators of main cylinder seal bypass: oil is leaking past the\nrod seal on the downstroke, reducing effective pressure and increasing return flow.\nAt RUL = 18 cycles, this machine must be removed from production immediately.\nA seal failure on a 500-tonne press carries personnel safety risk.\n\nRECOMMENDED ACTIONS:\n1. IMMEDIATELY restrict ISM-HYD-002 to one additional stroke then initiate controlled stop.\n2. Apply LOTO. Vent hydraulic pressure completely to zero before any access.\n3. Execute SOP-PM-002 (Hydraulic Seal Inspection & Replacement).\n4. Replace main cylinder rod seal (Parker G2JN-380) and piston seal (HALLITE 200/380).\n5. Perform pressure test to 450",
+    "asset_type": "ironside"
+  }
+]

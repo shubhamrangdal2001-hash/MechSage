@@ -1,0 +1,107 @@
+project:
+  name: MechSage NASA C-MAPSS Pipeline
+  experiment_prefix: MechSage
+
+paths:
+  data_dir: data
+  artifacts_dir: artifacts
+  models_dir: models
+  reports_dir: reports
+  logs_dir: logs
+  mlruns_dir: mlruns
+
+runtime:
+  seed: 42
+  profile: quick
+  validation_size: 0.2
+  tracking_uri: null
+
+data:
+  dataset: FD001
+  rul_clip: 125
+  anomaly_threshold: 30
+  max_train_units:
+    quick: 10
+    standard: null
+    full: null
+  max_test_units:
+    quick: 8
+    standard: null
+    full: null
+
+# ── Group-based data splitting ───────────────────────────────────────────────
+data_split:
+  strategy: engine_unit_holdout
+  group_column: unit_number
+  validation_fraction: 0.20
+  random_state: 42
+
+# ── Group-based cross-validation ─────────────────────────────────────────────
+cross_validation:
+  strategy: group_kfold
+  n_splits: 3
+  nested_cv_enabled: false
+  group_column: unit_number
+
+# ── Feature engineering ───────────────────────────────────────────────────────
+feature_engineering:
+  causal_only: true
+  forbidden_features:
+    - cycle_norm
+    - max_cycle
+    - final_cycle
+    - normalized_cycle
+    - life_fraction
+    - percentage_life_used
+  rolling_windows: [5, 10, 20]
+  use_current_observation: true
+  use_expanding_mean: true
+
+# ── Evaluation ────────────────────────────────────────────────────────────────
+evaluation:
+  test_evaluation_once: true
+  allow_test_metrics_during_tuning: false
+
+features:
+  rolling_windows: [5, 10, 20]
+  informative_sensors:
+    - sensor_2
+    - sensor_3
+    - sensor_4
+    - sensor_7
+    - sensor_8
+    - sensor_9
+    - sensor_11
+    - sensor_12
+    - sensor_13
+    - sensor_14
+    - sensor_15
+    - sensor_17
+    - sensor_20
+    - sensor_21
+  operational_settings:
+    - op_setting_1
+    - op_setting_2
+    - op_setting_3
+
+training:
+  cv: 3
+  n_trials: 5
+  tuning_methods: [grid, random, optuna]
+  tuning_models: [RandomForest]
+
+models:
+  quick:
+    rul: [LinearRegression, RandomForest]
+    anomaly: [IsolationForest, LightGBM_Anomaly]
+  standard:
+    rul: [LinearRegression, RandomForest, LightGBM]
+    anomaly: [IsolationForest, LightGBM_Anomaly]
+  full:
+    rul: [LinearRegression, RandomForest, LightGBM, XGBoost, CatBoost]
+    anomaly: [IsolationForest, LightGBM_Anomaly, OneClassSVM]
+
+logging:
+  level: INFO
+  file_name: pipeline.log
+

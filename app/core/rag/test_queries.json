@@ -1,0 +1,212 @@
+[
+  {
+    "id": 1,
+    "query": "compressor running hot and showing signs of efficiency loss",
+    "degrading_sensors": ["s3"],
+    "fault_hypothesis": "high pressure compressor degradation",
+    "expected_id": "MAN-HPC-01"
+  },
+  {
+    "id": 2,
+    "query": "clearance between blades and casing is failing in HPC",
+    "degrading_sensors": ["s3", "s11"],
+    "fault_hypothesis": "high pressure compressor degradation",
+    "expected_id": "MAN-HPC-02"
+  },
+  {
+    "id": 3,
+    "query": "blades wearing down due to dirt and needing a clean wash",
+    "degrading_sensors": ["s3", "s12"],
+    "fault_hypothesis": "high pressure compressor degradation",
+    "expected_id": "MAN-HPC-03"
+  },
+  {
+    "id": 4,
+    "query": "surge or aerodynamic block in HPC requiring engine cut",
+    "degrading_sensors": ["s3", "s7", "s8", "s9"],
+    "fault_hypothesis": "high pressure compressor stall",
+    "expected_id": "MAN-HPC-04"
+  },
+  {
+    "id": 5,
+    "query": "slow fan speed reading and air bypass ratio drops",
+    "degrading_sensors": ["s13", "s15"],
+    "fault_hypothesis": "fan degradation",
+    "expected_id": "MAN-FAN-01"
+  },
+  {
+    "id": 6,
+    "query": "vibrations matching rotational frequency of the fan",
+    "degrading_sensors": ["s8", "s13"],
+    "fault_hypothesis": "fan imbalance",
+    "expected_id": "MAN-FAN-02"
+  },
+  {
+    "id": 7,
+    "query": "bird strike or debris hitting front engine blades",
+    "degrading_sensors": ["s8", "s15"],
+    "fault_hypothesis": "fan blade foreign object damage",
+    "expected_id": "MAN-FAN-03"
+  },
+  {
+    "id": 8,
+    "query": "shaft friction and housing heating up over cycles",
+    "degrading_sensors": ["s11", "s12"],
+    "fault_hypothesis": "bearing wear",
+    "expected_id": "MAN-BRG-01"
+  },
+  {
+    "id": 9,
+    "query": "metal fragments found in lubrication system check",
+    "degrading_sensors": ["s11", "s14"],
+    "fault_hypothesis": "bearing failure imminent",
+    "expected_id": "MAN-BRG-02"
+  },
+  {
+    "id": 10,
+    "query": "borescope inspection of the lower turbine stages tip clearance",
+    "degrading_sensors": ["s4", "s20"],
+    "fault_hypothesis": "low pressure turbine degradation",
+    "expected_id": "MAN-LPT-01"
+  },
+  {
+    "id": 11,
+    "query": "cooling passages clogged or blocked in turbine section",
+    "degrading_sensors": ["s4", "s21"],
+    "fault_hypothesis": "turbine cooling system degradation",
+    "expected_id": "MAN-LPT-02"
+  },
+  {
+    "id": 12,
+    "query": "nozzle soot and combustion chamber liner cracks",
+    "degrading_sensors": ["s3", "s4", "s12"],
+    "fault_hypothesis": "combustor degradation",
+    "expected_id": "MAN-COMB-01"
+  },
+  {
+    "id": 13,
+    "query": "abrupt flatline output while redundant channels match normal",
+    "degrading_sensors": ["s3"],
+    "fault_hypothesis": "sensor fault",
+    "expected_id": "MAN-SEN-01"
+  },
+  {
+    "id": 14,
+    "query": "gradual offset in measurement channel over time",
+    "degrading_sensors": ["s11"],
+    "fault_hypothesis": "sensor drift",
+    "expected_id": "MAN-SEN-02"
+  },
+  {
+    "id": 15,
+    "query": "loose wiring or connectors causing sporadic signal loss",
+    "degrading_sensors": ["s15"],
+    "fault_hypothesis": "sensor intermittent fault",
+    "expected_id": "MAN-SEN-03"
+  },
+  {
+    "id": 16,
+    "query": "interacting degradation of the front fan and compressor stage",
+    "degrading_sensors": ["s3", "s11", "s13", "s15"],
+    "fault_hypothesis": "multiple fault interaction",
+    "expected_id": "MAN-MULTI-01"
+  },
+  {
+    "id": 17,
+    "query": "correcting readings based on altitude or flight conditions",
+    "degrading_sensors": ["s2", "s7"],
+    "fault_hypothesis": "operating regime effect",
+    "expected_id": "MAN-MULTI-02"
+  },
+  {
+    "id": 18,
+    "query": "cumulative wear across the whole engine fleet fuel flow increase",
+    "degrading_sensors": ["s12", "s14"],
+    "fault_hypothesis": "overall engine performance degradation",
+    "expected_id": "MAN-PERF-01"
+  },
+  {
+    "id": 19,
+    "query": "high fuel consumption required to maintain baseline power",
+    "degrading_sensors": ["s7", "s12"],
+    "fault_hypothesis": "efficiency loss",
+    "expected_id": "MAN-PERF-02"
+  },
+  {
+    "id": 20,
+    "query": "air duct leak or failure in the bleed control valve",
+    "degrading_sensors": ["s17", "s20"],
+    "fault_hypothesis": "bleed system fault",
+    "expected_id": "MAN-BLEED-01"
+  },
+  {
+    "id": 21,
+    "query": "exceeding tool operational time threshold on factory line",
+    "degrading_sensors": ["tool_wear"],
+    "fault_hypothesis": "tool wear failure",
+    "expected_id": "MAN-TWF-01"
+  },
+  {
+    "id": 22,
+    "query": "insufficient temperature delta between ambient and process cooling",
+    "degrading_sensors": ["air_temperature", "process_temperature"],
+    "fault_hypothesis": "heat dissipation failure",
+    "expected_id": "MAN-HDF-01"
+  },
+  {
+    "id": 23,
+    "query": "workpiece processing torque exceeds electrical threshold bounds",
+    "degrading_sensors": ["torque", "rotational_speed"],
+    "fault_hypothesis": "power failure",
+    "expected_id": "MAN-PWF-01"
+  },
+  {
+    "id": 24,
+    "query": "worn cutting edge causing excessive motor load",
+    "degrading_sensors": ["torque", "tool_wear"],
+    "fault_hypothesis": "overstrain failure",
+    "expected_id": "MAN-OSF-01"
+  },
+  {
+    "id": 25,
+    "query": "defect in manufacturing materials that cannot be predicted by speed",
+    "degrading_sensors": [],
+    "fault_hypothesis": "random failure",
+    "expected_id": "MAN-RNF-01"
+  },
+  {
+    "id": 26,
+    "query": "monitoring sensor patterns over multiple operations cycles before trigger",
+    "degrading_sensors": [],
+    "fault_hypothesis": "general",
+    "expected_id": "MAN-GUIDE-01"
+  },
+  {
+    "id": 27,
+    "query": "ranking maintenance priorities critical vs non-critical failure risks",
+    "degrading_sensors": [],
+    "fault_hypothesis": "general",
+    "expected_id": "MAN-GUIDE-02"
+  },
+  {
+    "id": 28,
+    "query": "safety margin for remaining useful life prediction planning maintenance schedule",
+    "degrading_sensors": [],
+    "fault_hypothesis": "RUL safety margin",
+    "expected_id": "MAN-GUIDE-03"
+  },
+  {
+    "id": 29,
+    "query": "which variables are useful for health monitoring of jet engines",
+    "degrading_sensors": [],
+    "fault_hypothesis": "general",
+    "expected_id": "MAN-GUIDE-04"
+  },
+  {
+    "id": 30,
+    "query": "validation criteria for work orders generated by our agent pipeline",
+    "degrading_sensors": [],
+    "fault_hypothesis": "general",
+    "expected_id": "MAN-GUIDE-05"
+  }
+]

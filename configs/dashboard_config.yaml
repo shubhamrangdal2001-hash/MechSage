@@ -1,0 +1,21 @@
+# dashboard_config.yaml
+# ─────────────────────────────────────────────────────────────────────────────
+# Thresholds and settings for the MechSage ML Monitoring Dashboard
+# ─────────────────────────────────────────────────────────────────────────────
+
+thresholds:
+  drift:
+    psi_warning: 0.1          # PSI > 0.1 means minor drift
+    psi_critical: 0.2         # PSI > 0.2 means significant covariate shift
+  
+  latency:
+    p99_warning_ms: 100       # Inference taking > 100ms
+    p99_critical_ms: 500      # Inference taking > 500ms
+
+  rul:
+    alert_cycles: 30          # RUL < 30 -> Critical
+    emergency_cycles: 5       # RUL < 5 -> Emergency
+
+data:
+  live_logs_dir: "inference/logs"
+  refresh_rate_seconds: 2     # How often the dashboard polls for new data

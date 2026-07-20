@@ -1,0 +1,7 @@
+[
+  {"id": "MAN-HPC-12", "fault_mode": "high pressure compressor degradation", "text": "Rising core temperature (s2, s3, s4) together with increased HPC outlet pressure and a drop in isentropic efficiency indicates high pressure compressor degradation. Recommended action: borescope inspection of HPC stages, inspect and replace HPC seal kit if clearance is out of limits."},
+  {"id": "MAN-BRG-04", "fault_mode": "bearing wear", "text": "A sustained increase in vibration amplitude (s11) combined with a thermal rise at the bearing housing (s12) is characteristic of bearing wear. Recommended action: schedule bearing assembly replacement and re-lubrication at next maintenance slot."},
+  {"id": "MAN-FAN-07", "fault_mode": "fan imbalance", "text": "Periodic vibration synchronous with shaft speed and elevated fan vibration (s15) suggests fan imbalance. Recommended action: perform vibration survey and apply balance weights."},
+  {"id": "MAN-SEN-02", "fault_mode": "sensor fault", "text": "A single channel showing step changes or flatlining while correlated channels remain nominal indicates a sensor fault rather than mechanical degradation. Recommended action: replace sensor module and validate harness continuity before trusting the reading."},
+  {"id": "MAN-GEN-01", "fault_mode": "general", "text": "General maintenance guidance: confirm trends across multiple correlated sensors over at least five cycles before escalating, and prefer the least intrusive inspection that can confirm the suspected fault mode."}
+]

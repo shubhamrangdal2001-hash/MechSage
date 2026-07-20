@@ -1,0 +1,20 @@
+{
+  "Accuracy": 1.0,
+  "Precision": 0.0,
+  "Recall": 0.0,
+  "F1_Score": 0.0,
+  "ROC_AUC": null,
+  "PR_AUC": null,
+  "False_Positive_Rate": 0.0,
+  "False_Negative_Rate": 0.0,
+  "Confusion_Matrix": [
+    [
+      841,
+      0
+    ],
+    [
+      0,
+      0
+    ]
+  ]
+}
