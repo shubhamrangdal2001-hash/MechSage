@@ -50,17 +50,17 @@ jobs:
 
       - name: Lint with ruff
         run: |
-          ruff check app/ dev/rag/ --select E,F,W --ignore E501,F401
+          ruff check app/ scripts/ tests/ --select E,F,W --ignore E501,F401
         continue-on-error: true
 
       - name: Verify Python imports are clean
         run: |
           python -c "from app.db import init_db; init_db(); print('✓ DB module OK')"
-          python -c "from dev.rag.config import RAGConfig; RAGConfig(); print('✓ RAG config OK')"
+          python -c "from app.core.rag.config import RAGConfig; RAGConfig(); print('✓ RAG config OK')"
 
       - name: Run unit tests
         run: |
-          pytest tests/ -v --tb=short --ignore=tests/e2e/ 2>/dev/null || echo "No tests found — skipping."
+          python -m pytest tests/ -v --tb=short --ignore=tests/e2e_test.py 2>/dev/null || echo "No tests found — skipping."
         env:
           OPENROUTER_API_KEY: ${{ secrets.OPENROUTER_API_KEY }}
 
