@@ -32,18 +32,9 @@ COPY --from=builder /install /usr/local
 
 # Copy application source code
 COPY app/              ./app/
-COPY dev/              ./dev/
-COPY NASA_CMAPSS_RUL_Project/ ./NASA_CMAPSS_RUL_Project/
-COPY inference/        ./inference/
-
-# Copy pre-built ChromaDB vector index (avoid re-indexing in container)
-COPY dev/rag/chroma_db/ ./dev/rag/chroma_db/
-
-# Copy pre-built knowledge base
-COPY dev/rag/knowledge_base/ ./dev/rag/knowledge_base/
-
-# Copy ML model artifacts
-COPY models/           ./models/
+COPY ML/               ./ML/
+COPY serve_models/     ./serve_models/
+COPY configs/          ./configs/
 
 # Environment defaults (Cloud Run overrides PORT at runtime)
 ENV PORT=8080 \
