@@ -121,7 +121,6 @@ jobs:
             ${{ steps.tag.outputs.image }}
             ${{ steps.tag.outputs.image_latest }}
           cache-from: type=gha
-          outputs: image=${{ steps.tag.outputs.image }}
 
       - name: Output image digest
         run: |
@@ -148,13 +147,22 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
 
+      - name: Reconstruct Image Tag
+        id: tag
+        run: |
+          SHORT_SHA=${GITHUB_SHA::8}
+          PROJECT_ID=$(echo "${{ env.GCP_PROJECT_ID }}" | tr -d '\n\r ')
+          REGION=$(echo "${{ env.GCP_REGION }}" | tr -d '\n\r ')
+          IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
+          echo "image=${IMAGE}:${SHORT_SHA}" >> "$GITHUB_OUTPUT"
+
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
         with:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.GCP_REGION }}
-          image: ${{ needs.build.outputs.image }}
+          image: ${{ steps.tag.outputs.image }}
 
           # Resource limits: ChromaDB + sentence-transformers need ~1.5GB RAM
           flags: >-
