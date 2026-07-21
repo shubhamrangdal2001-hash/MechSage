@@ -21,6 +21,9 @@
 
 <!-- LIVE BADGES -->
 <p>
+  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🚀_Live_Demo-Access_App-2EE6D6?style=for-the-badge&labelColor=0F2027" alt="Live Demo"/>
+  </a>
   <img src="https://img.shields.io/badge/Status-Complete-2EE6D6?style=for-the-badge&labelColor=0F2027"/>
   <img src="https://img.shields.io/badge/Stage-8%20of%208-2EE6D6?style=for-the-badge&labelColor=0F2027"/>
   <img src="https://img.shields.io/badge/Client-Ironside%20Manufacturing-2C5364?style=for-the-badge&labelColor=0F2027"/>
