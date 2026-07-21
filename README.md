@@ -19,11 +19,20 @@
 <!-- GLOWING NEON DIVIDER -->
 <img src="https://user-images.githubusercontent.com/74038190/212284100-561aa473-3905-4a80-b561-0d28506553ee.gif" width="100%"/>
 
+<!-- PROMINENT LIVE DEMO CALLOUT -->
+<br/>
+<p align="center">
+  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank">
+    <img src="https://img.shields.io/badge/🌐_LIVE_APPLICATION-LAUNCH_MECH_SAGE_DASHBOARD-00E676?style=for-the-badge&logo=googlecloud&logoColor=white&labelColor=0F2027" height="45" alt="Launch MechSage Live Dashboard"/>
+  </a>
+</p>
+<p align="center">
+  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank"><b>👉 https://mechsage-api-ffnjatyswa-el.a.run.app 👈</b></a>
+</p>
+<br/>
+
 <!-- LIVE BADGES -->
 <p>
-  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank">
-    <img src="https://img.shields.io/badge/🚀_Live_Demo-Access_App-2EE6D6?style=for-the-badge&labelColor=0F2027" alt="Live Demo"/>
-  </a>
   <img src="https://img.shields.io/badge/Status-Complete-2EE6D6?style=for-the-badge&labelColor=0F2027"/>
   <img src="https://img.shields.io/badge/Stage-8%20of%208-2EE6D6?style=for-the-badge&labelColor=0F2027"/>
   <img src="https://img.shields.io/badge/Client-Ironside%20Manufacturing-2C5364?style=for-the-badge&labelColor=0F2027"/>
