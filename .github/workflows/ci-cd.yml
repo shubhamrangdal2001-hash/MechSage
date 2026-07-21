@@ -175,7 +175,7 @@ jobs:
             --allow-unauthenticated
             --port=8080
             --set-secrets=OPENROUTER_API_KEY=OPENROUTER_API_KEY:latest,GOOGLE_API_KEY=GOOGLE_API_KEY:latest
-            --set-env-vars=ENVIRONMENT=production,PORT=8080
+            --set-env-vars=ENVIRONMENT=production
 
       - name: Output deployed URL
         run: |
