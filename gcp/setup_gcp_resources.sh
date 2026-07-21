@@ -112,6 +112,15 @@ for ROLE in "${ROLES[@]}"; do
     echo "  ✓ Granted: $ROLE"
 done
 
+# Grant Cloud Run default compute service account access to Secret Manager
+PROJECT_NUMBER=$(gcloud projects describe "$PROJECT_ID" --format="value(projectNumber)")
+COMPUTE_SA="${PROJECT_NUMBER}-compute@developer.gserviceaccount.com"
+gcloud projects add-iam-policy-binding "$PROJECT_ID" \
+    --member="serviceAccount:$COMPUTE_SA" \
+    --role="roles/secretmanager.secretAccessor" \
+    --quiet
+echo "  ✓ Granted Secret Accessor to Compute SA: $COMPUTE_SA"
+
 # ── Step 7: Setup Workload Identity Federation ─────────────────────────────────
 echo ""
 echo "[7/8] Setting up Workload Identity Federation for keyless GitHub Actions auth..."
