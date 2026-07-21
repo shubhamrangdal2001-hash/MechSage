@@ -73,6 +73,7 @@ class MechSageGenerator:
         self._client = OpenAI(
             base_url=base_url,
             api_key=api_key,
+            timeout=30.0,
             default_headers={
                 "HTTP-Referer": "https://github.com/MechSage",
                 "X-Title": "MechSage",
@@ -87,7 +88,7 @@ class MechSageGenerator:
         max_tokens: int = 256,
         temperature: float = 0.0,
     ) -> str:
-        """Call OpenRouter with exponential backoff on 429 rate-limit errors."""
+        """Call OpenRouter with exponential backoff on rate-limit, connection, and timeout errors."""
         for attempt in range(self.MAX_RETRIES + 1):
             try:
                 response = self._client.chat.completions.create(
@@ -103,15 +104,27 @@ class MechSageGenerator:
                     f"    [OpenRouter Debug] Attempt {attempt+1} failed: "
                     f"{type(exc).__name__}: {err_str}"
                 )
-                if "429" in err_str or "rate" in err_str.lower():
-                    wait = self.INITIAL_BACKOFF_SECS * (2 ** attempt)
+                is_transient = (
+                    "429" in err_str
+                    or "rate" in err_str.lower()
+                    or "connection error" in err_str.lower()
+                    or "timeout" in err_str.lower()
+                    or "connect" in err_str.lower()
+                )
+                if is_transient and attempt < self.MAX_RETRIES:
+                    wait = min(self.INITIAL_BACKOFF_SECS * (2 ** attempt), 10)
                     print(
-                        f"    [OpenRouter] Rate limited (attempt {attempt+1}/"
-                        f"{self.MAX_RETRIES+1}). Waiting {wait}s..."
+                        f"    [OpenRouter] Transient issue ({type(exc).__name__}: {err_str}) "
+                        f"(attempt {attempt+1}/{self.MAX_RETRIES+1}). Waiting {wait}s before retry..."
                     )
                     time.sleep(wait)
                     continue
-                raise  # Re-raise non-rate-limit errors
+                if "connection error" in err_str.lower() or "connect" in err_str.lower():
+                    raise RuntimeError(
+                        f"Connection error reaching OpenRouter API (https://openrouter.ai/api/v1). "
+                        f"Please check network connection and OPENROUTER_API_KEY. Details: {err_str}"
+                    ) from exc
+                raise  # Re-raise non-transient errors
         return f"[RateLimitError] Exceeded {self.MAX_RETRIES} retries"
 
     # ------------------------------------------------------------------
