@@ -156,18 +156,6 @@ jobs:
           IMAGE="${REGION}-docker.pkg.dev/${PROJECT_ID}/${{ env.REPO_NAME }}/${{ env.IMAGE_NAME }}"
           echo "image=${IMAGE}:${SHORT_SHA}" >> "$GITHUB_OUTPUT"
 
-      - name: Sync secrets to GCP Secret Manager
-        run: |
-          PROJECT_ID=$(echo "${{ env.GCP_PROJECT_ID }}" | tr -d '\n\r ')
-          gcloud secrets create OPENROUTER_API_KEY --replication-policy="automatic" --project="$PROJECT_ID" 2>/dev/null || true
-          gcloud secrets create GOOGLE_API_KEY --replication-policy="automatic" --project="$PROJECT_ID" 2>/dev/null || true
-          if [ -n "${{ secrets.OPENROUTER_API_KEY }}" ]; then
-            printf "%s" "${{ secrets.OPENROUTER_API_KEY }}" | gcloud secrets versions add OPENROUTER_API_KEY --project="$PROJECT_ID" --data-file=-
-          fi
-          if [ -n "${{ secrets.GOOGLE_API_KEY }}" ]; then
-            printf "%s" "${{ secrets.GOOGLE_API_KEY }}" | gcloud secrets versions add GOOGLE_API_KEY --project="$PROJECT_ID" --data-file=-
-          fi
-
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v2
@@ -175,11 +163,6 @@ jobs:
           service: ${{ env.SERVICE_NAME }}
           region: ${{ env.GCP_REGION }}
           image: ${{ steps.tag.outputs.image }}
-          env_vars: |
-            ENVIRONMENT=production
-          secrets: |
-            OPENROUTER_API_KEY=OPENROUTER_API_KEY:latest
-            GOOGLE_API_KEY=GOOGLE_API_KEY:latest
 
           # Resource limits: ChromaDB + sentence-transformers need ~1.5GB RAM
           flags: >-
@@ -191,6 +174,8 @@ jobs:
             --timeout=300s
             --allow-unauthenticated
             --port=8080
+            --clear-secrets
+            --set-env-vars=ENVIRONMENT=production,OPENROUTER_API_KEY=${{ secrets.OPENROUTER_API_KEY }},GOOGLE_API_KEY=${{ secrets.GOOGLE_API_KEY }}
 
       - name: Output deployed URL
         run: |
