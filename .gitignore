@@ -18,7 +18,6 @@ ML/artifacts/
 ML/models/
 ML/mlruns/
 ML/catboost_info/
-ML/data/
 ML/notebooks/
 ML/*.log
 
