@@ -406,8 +406,19 @@ async def diagnose(req: DiagnoseRequest):
 
         except Exception as exc:
             answer = f"[GenerationError] {exc}"
-            explanation = answer
-
+            explanation = f"Automated diagnosis fallback: {req.fault_hypothesis or 'Inspection required'}. Details: {exc}"
+            confidence = 0.60
+            rul_estimate = 30
+            work_order = WorkOrderOut(
+                failure_mode=req.fault_hypothesis or "Degradation Flagged",
+                severity="medium",
+                priority="medium",
+                recommended_action=passages_out[0].text[:150] if passages_out else "Perform manual inspection.",
+                parts_needed=[],
+                estimated_duration_hrs=2.0,
+                technician_notes="Created via RAG retrieval fallback.",
+                evidence_sensors=req.degrading_sensors,
+            )
 
     diag_id = str(uuid.uuid4()) if req.generate_answer else None
 

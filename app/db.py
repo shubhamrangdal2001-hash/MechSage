@@ -135,6 +135,52 @@ def init_db() -> None:
                 cursor.execute(f"ALTER TABLE work_orders ADD COLUMN {col} {col_type}")
 
     conn.commit()
+
+    # Seed initial sample work orders if table is empty
+    try:
+        if _USE_POSTGRES:
+            cursor.execute("SELECT COUNT(*) FROM work_orders")
+            count = cursor.fetchone()['count']
+        else:
+            cursor.execute("SELECT COUNT(*) FROM work_orders")
+            count = cursor.fetchone()[0]
+
+        if count == 0:
+            sample_wos = [
+                ("wo-seed-001", "Unit-01", "High Pressure Compressor Degradation", "high", "high", 
+                 "Perform borescope inspection of HPC rotor assembly and check clearance on stage 4-7 blades.", 
+                 "Sensor telemetry indicates thermal divergence in HPC outlet temperature (T30) and severe pressure ratio decay.",
+                 json.dumps(["HPC Seal Kit (PN-HPC-991)", "Stage 4 Vane Ring"]), 4.5, "Inspect VSV actuator linkage.", 
+                 json.dumps(["sensor_2", "sensor_3", "sensor_7"]), 0.88, 24, 0.762, 
+                 "MAN-HPC-01: Rising core temperature (s2, s3, s4) together with increased HPC outlet pressure indicates HPC degradation.", "PENDING_APPROVAL"),
+                
+                ("wo-seed-002", "Unit-14", "Fan & LPC Airfoil Erosion", "medium", "medium", 
+                 "Clean LPC inlet guide vanes and replace secondary bypass duct gasket.", 
+                 "Vibration amplitude spikes detected in Fan speed (Nf) accompanied by steady flow instability at cruise.",
+                 json.dumps(["Bypass Gasket Set", "Fan Blade Retainer Pin"]), 2.5, "Measure tip clearance after cleaning.", 
+                 json.dumps(["sensor_8", "sensor_12"]), 0.92, 48, 0.485, 
+                 "MAN-FAN-02: Fan speed fluctuations (s8) and bypass duct ratio drift indicate intake flow distortion.", "PENDING_APPROVAL"),
+                
+                ("wo-seed-003", "Unit-08", "Combustor Liner Thermal Fatigue", "high", "high", 
+                 "Schedule combustor sector replacement during upcoming maintenance window.", 
+                 "Exhaust Gas Temperature (EGT) spread exceeded 45°C limit across thermocouple harness.",
+                 json.dumps(["Combustor Fuel Nozzle Set", "Thermal Barrier Tile"]), 6.0, "Verify fuel nozzle spray patterns.", 
+                 json.dumps(["sensor_4", "sensor_14", "sensor_15"]), 0.81, 15, 0.890, 
+                 "MAN-COMB-05: High EGT spread and thermal sensor variances indicate localized liner burn-through.", "APPROVED")
+            ]
+            for s in sample_wos:
+                cursor.execute(f"""
+                    INSERT INTO work_orders (
+                        id, asset_id, failure_mode, severity, priority, recommended_action,
+                        explanation, parts_needed, estimated_duration_hrs, technician_notes,
+                        evidence_sensors, confidence, rul_estimate_cycles, anomaly_score,
+                        rag_snippet, status
+                    ) VALUES ({_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()},{_placeholder()})
+                """, s)
+            conn.commit()
+    except Exception as seed_err:
+        print(f"[DB] Seeding error: {seed_err}")
+
     conn.close()
 
 
