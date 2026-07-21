@@ -19,7 +19,6 @@ Usage (from MechSage root):
 
 from __future__ import annotations
 
-import os
 import sys
 import time
 from pathlib import Path
@@ -40,10 +39,8 @@ if str(_CMAPSS_ROOT) not in sys.path:
     sys.path.insert(0, str(_CMAPSS_ROOT))
 
 from src.data_loader import load_cmapss_data  # noqa: E402
-from src.feature_engineering import engineer_features, get_flat_features  # noqa: E402
+from src.feature_engineering import engineer_features  # noqa: E402
 from src.preprocessing import (  # noqa: E402
-    INFORMATIVE_SENSORS,
-    OP_SETTINGS,
     get_feature_columns,
     normalize_per_unit,
     select_informative_sensors,
@@ -194,7 +191,7 @@ def run_backtest() -> None:
     p90_lead = float(np.percentile(lead_times, 90))
     early_warning_rate = detected_early / len(units) * 100
 
-    print(f"\n[BackTest] Results Summary:")
+    print("\n[BackTest] Results Summary:")
     print(f"  Mean Lead Time:          {mean_lead:.1f} cycles")
     print(f"  Median Lead Time:        {median_lead:.1f} cycles")
     print(f"  P10 Lead Time:           {p10_lead:.1f} cycles")

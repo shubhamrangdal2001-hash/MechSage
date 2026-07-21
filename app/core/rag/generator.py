@@ -16,7 +16,6 @@ import os
 import textwrap
 import time
 from pathlib import Path
-from typing import Optional
 
 # Load .env from project root if present (fallback for local dev)
 try:

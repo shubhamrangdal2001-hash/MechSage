@@ -6,7 +6,6 @@ failures, extracts actual telemetry conditions, generates natural language queri
 and retrieves the matching maintenance manual recommendations using asset-scoped filtering.
 """
 
-import json
 import pandas as pd
 from app.core.rag.rag_pipeline import manual_retrieval_rag
 
@@ -93,7 +92,7 @@ def simulate_e2e_rag() -> None:
 
         print(f"\n[TRIGGER] DIAGNOSTIC ESCALATION (UDI: {udi}, Product ID: {product_id})")
         print(f"  * Failure Mode:  {info['name']} ({code})")
-        print(f"  * Sensor Telemetry:")
+        print("  * Sensor Telemetry:")
         print(f"    - Air Temp:         {air_temp} K")
         print(f"    - Process Temp:     {proc_temp} K  (Delta: {round(proc_temp - air_temp, 2)} K)")
         print(f"    - Spindle Speed:    {speed} rpm")
@@ -122,12 +121,12 @@ def simulate_e2e_rag() -> None:
         )
 
         # Print RAG outcomes
-        print(f"  * RAG Retrieval Output:")
+        print("  * RAG Retrieval Output:")
         if "error_code" in result:
             print(f"    [ABSTAIN] RAG ABSTAINED: {result['error_code']} - {result['message']}")
         else:
             print(f"    Latency: {result['retrieval_latency_ms']} ms")
-            print(f"    Matches found (top-1 match displayed):")
+            print("    Matches found (top-1 match displayed):")
             passage = result["retrieved_passages"][0]
             print(f"      - Doc Reference:   {passage['doc_ref']}")
             print(f"      - Relevance Score: {passage['relevance_score']:.4f}")

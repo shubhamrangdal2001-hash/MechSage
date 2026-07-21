@@ -1,6 +1,5 @@
 """Tool wrappers that connect the agentic layer to the existing ML and RAG pipelines."""
 
-import os
 import sys
 from pathlib import Path
 
@@ -54,7 +53,6 @@ def ml_predict(asset_id: str, raw_telemetry: dict, dataset_id: str = "FD001") ->
     # -- REAL ML PIPELINE PATH --
     # Lazy imports: only loaded when actually running real ML inference
     import pandas as pd
-    import numpy as np
     from src.inference import load_model, predict
     from src.preprocessing import select_informative_sensors
 

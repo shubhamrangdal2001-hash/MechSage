@@ -14,7 +14,6 @@ from __future__ import annotations
 import json
 import math
 from pathlib import Path
-from types import SimpleNamespace
 from unittest.mock import MagicMock, patch
 
 import numpy as np
@@ -465,7 +464,6 @@ class TestRerankerScoreFloor:
         """Candidates scoring below min_reranker_score must be excluded from output."""
         from app.core.rag.config import RAGConfig
         from app.core.rag.reranker import CrossEncoderReranker
-        from app.core.rag.chunking import Chunk
 
         config = RAGConfig()
         config.min_reranker_score = 0.0  # strict floor for this test
@@ -526,7 +524,6 @@ class TestKBValidation:
 
     def test_missing_id_raises_value_error(self, tmp_path):
         """KB entry missing 'id' field must raise ValueError with clear message."""
-        import json
         from app.core.rag.chunking import chunk_knowledge_base
 
         bad_kb = [{"text": "some text", "fault_mode": "degradation"}]  # missing 'id'
@@ -538,7 +535,6 @@ class TestKBValidation:
 
     def test_missing_text_raises_value_error(self, tmp_path):
         """KB entry missing 'text' field must raise ValueError with clear message."""
-        import json
         from app.core.rag.chunking import chunk_knowledge_base
 
         bad_kb = [{"id": "TEST-01", "fault_mode": "degradation"}]  # missing 'text'
@@ -558,7 +554,6 @@ class TestKBValidation:
 
     def test_valid_entry_with_optional_fields_is_accepted(self, tmp_path):
         """A valid KB entry (required + optional fields) must not raise any exception."""
-        import json
         from app.core.rag.chunking import chunk_knowledge_base
 
         valid_kb = [{

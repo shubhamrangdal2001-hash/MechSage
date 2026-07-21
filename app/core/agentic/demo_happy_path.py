@@ -91,7 +91,7 @@ def main():
     print(f"📖 Citation:        {final_state.get('citation')}")
     print(f"✅ Approval Status: {final_state.get('approval_status')}")
 
-    print(f"\n--- DIAGNOSIS ---")
+    print("\n--- DIAGNOSIS ---")
     print(final_state.get("diagnosis", "(none)"))
 
     wo = final_state.get("work_order", {})
@@ -101,7 +101,7 @@ def main():
 
     sched = final_state.get("schedule_proposal", "")
     if sched:
-        print(f"\n--- SCHEDULE PROPOSAL ---")
+        print("\n--- SCHEDULE PROPOSAL ---")
         print(sched)
 
     print(f"\n--- MESSAGE LOG ({len(final_state.get('messages', []))} entries) ---")

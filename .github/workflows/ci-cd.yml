@@ -121,7 +121,6 @@ jobs:
             ${{ steps.tag.outputs.image }}
             ${{ steps.tag.outputs.image_latest }}
           cache-from: type=gha
-          cache-to: type=gha,mode=max
           outputs: image=${{ steps.tag.outputs.image }}
 
       - name: Output image digest

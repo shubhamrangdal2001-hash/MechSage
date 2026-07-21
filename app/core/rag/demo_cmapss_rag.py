@@ -101,7 +101,7 @@ def simulate_e2e_cmapss_rag() -> None:
         
         print(f"\n[TRIGGER] DIAGNOSTIC ESCALATION (Engine ID: {engine_id}, Cycle: {cycle})")
         print(f"  * Scenario:      {sc['name']}")
-        print(f"  * Sensor Telemetry:")
+        print("  * Sensor Telemetry:")
         print(f"    - LPC temp (s2):   {sensors['s2']:.2f}")
         print(f"    - HPC temp (s3):   {sensors['s3']:.2f}")
         print(f"    - HPC press (s7):  {sensors['s7']:.2f}")
@@ -123,12 +123,12 @@ def simulate_e2e_cmapss_rag() -> None:
         )
 
         # Print RAG outcomes
-        print(f"  * RAG Retrieval Output:")
+        print("  * RAG Retrieval Output:")
         if "error_code" in result:
             print(f"    [ABSTAIN] RAG ABSTAINED: {result['error_code']} - {result['message']}")
         else:
             print(f"    Latency: {result['retrieval_latency_ms']} ms")
-            print(f"    Matches found (top-1 match displayed):")
+            print("    Matches found (top-1 match displayed):")
             passage = result["retrieved_passages"][0]
             print(f"      - Doc Reference:   {passage['doc_ref']}")
             print(f"      - Relevance Score: {passage['relevance_score']:.4f}")

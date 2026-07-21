@@ -100,8 +100,8 @@ def scheduling_node(state: MechSageState) -> dict:
         print(f"[Scheduling] ERROR: {exc}")
 
     msg = (
-        f"[Scheduling] ✓ Schedule proposed. "
-        f"Awaiting human approval (approval_status='pending')."
+        "[Scheduling] ✓ Schedule proposed. "
+        "Awaiting human approval (approval_status='pending')."
     )
     print(msg)
     print(f"[Scheduling] Proposal:\n{schedule_text}")

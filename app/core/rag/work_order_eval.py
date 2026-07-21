@@ -120,7 +120,7 @@ def run_work_order_evaluation() -> None:
     pass_rate = n_passed / len(results)
     avg_latency = sum(latencies) / len(latencies)
 
-    print(f"\n[WorkOrderEval] Done.")
+    print("\n[WorkOrderEval] Done.")
     print(f"  Average Usefulness Score: {avg_score:.4f}")
     print(f"  Approval Rate (>= {_APPROVAL_THRESHOLD}): {n_passed}/{len(results)} = {pass_rate*100:.1f}%")
     print(f"  Average Latency: {avg_latency:.1f} ms")

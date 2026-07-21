@@ -19,12 +19,11 @@ from __future__ import annotations
 
 import argparse
 import csv
-import json
 import sys
 import time
 import warnings
 import subprocess
-from datetime import datetime, timezone
+from datetime import datetime
 
 # Suppress benign version mismatch and feature-name warnings from joblib/sklearn/LightGBM
 warnings.filterwarnings("ignore", category=UserWarning)
@@ -236,7 +235,7 @@ def run(args: argparse.Namespace) -> None:
                         stdout=subprocess.DEVNULL,
                         stderr=subprocess.DEVNULL
                     )
-                except Exception as e:
+                except Exception:
                     pass
 
     except KeyboardInterrupt:
