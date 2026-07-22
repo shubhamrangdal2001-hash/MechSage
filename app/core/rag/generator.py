@@ -27,8 +27,8 @@ except ImportError:
 
 
 def _require_api_key() -> str:
-    """Return the OPENROUTER_API_KEY or raise a clear error with instructions."""
-    key = os.getenv("OPENROUTER_API_KEY", "").strip()
+    """Return the OPENROUTER_API_KEY (or OPENROUTER_KEY) or raise a clear error with instructions."""
+    key = (os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY") or "").strip()
     if not key:
         raise EnvironmentError(
             "\n\n[MechSage Generator] OPENROUTER_API_KEY is not set.\n"

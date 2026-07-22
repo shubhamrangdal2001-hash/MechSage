@@ -312,7 +312,7 @@ async def serve_work_orders():
 async def health():
     """Health check — confirms API key and model config."""
     config = RAGConfig()
-    key = os.getenv("OPENROUTER_API_KEY", "").strip()
+    key = (os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY") or "").strip()
     return HealthResponse(
         status="ok",
         llm_provider=config.llm_provider,

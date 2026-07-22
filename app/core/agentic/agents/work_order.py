@@ -32,9 +32,10 @@ _config = OrchestratorConfig()
 
 def _call_llm(system_instruction: str, prompt: str, max_tokens: int, temperature: float) -> str:
     """Helper to call OpenRouter."""
+    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY")
     client = OpenAI(
         base_url="https://openrouter.ai/api/v1",
-        api_key=os.getenv("OPENROUTER_API_KEY"),
+        api_key=api_key,
         default_headers={"HTTP-Referer": "https://github.com/MechSage", "X-Title": "MechSage"}
     )
     response = client.chat.completions.create(
