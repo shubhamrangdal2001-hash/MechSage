@@ -707,7 +707,7 @@ linked reports.
 """
 
     # --- Part 5: Sprint 2 — Generation Evaluation (RAGAS Faithfulness + Answer Relevancy + Rubric) ---
-    sprint2_enabled = bool(os.getenv("GOOGLE_API_KEY", "").strip())
+    sprint2_enabled = bool((os.getenv("GOOGLE_API_KEY") or os.getenv("GOOGLE_KEY") or "").strip())
 
     faith_scores: list[float] = []
     relevancy_scores: list[float] = []
