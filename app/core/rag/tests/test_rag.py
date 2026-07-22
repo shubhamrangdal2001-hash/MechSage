@@ -315,7 +315,7 @@ class TestPipelineSingleton:
         from app.core.rag.rag_pipeline import get_pipeline
 
         # Mock to avoid loading real models
-        with patch("dev.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
+        with patch("app.core.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
             instance = MagicMock()
             MockPipeline.return_value = instance
 
@@ -335,7 +335,7 @@ class TestPipelineSingleton:
     def test_rebuild_index_forces_new_instance(self):
         from app.core.rag.rag_pipeline import get_pipeline
 
-        with patch("dev.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
+        with patch("app.core.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
             import app.core.rag.rag_pipeline as rp
             rp._PIPELINE_SINGLETON = None
 
@@ -352,7 +352,7 @@ class TestPipelineSingleton:
 # ---------------------------------------------------------------------------
 
 class TestEmbeddingShape:
-    """Tests for edge cases in dev.rag.embedding.EmbeddingModel."""
+    """Tests for edge cases in app.core.rag.embedding.EmbeddingModel."""
 
     def test_embed_empty_list_returns_correct_shape(self):
         """embed([]) must return shape (0, dim) not (0,) — downstream code expects 2-D arrays."""
@@ -396,7 +396,7 @@ class TestSingletonConcurrency:
         import threading
         from app.core.rag.rag_pipeline import get_pipeline
 
-        with patch("dev.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
+        with patch("app.core.rag.rag_pipeline.MechSageRAGPipeline") as MockPipeline:
             import app.core.rag.rag_pipeline as rp
             rp._PIPELINE_SINGLETON = None
             MockPipeline.return_value = MagicMock()
@@ -441,8 +441,8 @@ class TestManualRetrievalRAG:
         mock_pipeline = MagicMock()
         mock_pipeline.search.return_value = {"retrieved_passages": []}
 
-        with patch("dev.rag.rag_pipeline.get_pipeline", return_value=mock_pipeline):
-            with caplog.at_level(logging.WARNING, logger="dev.rag.rag_pipeline"):
+        with patch("app.core.rag.rag_pipeline.get_pipeline", return_value=mock_pipeline):
+            with caplog.at_level(logging.WARNING, logger="app.core.rag.rag_pipeline"):
                 manual_retrieval_rag(
                     query="HPC temperature rising",
                     asset_id="CFM56-7B"
