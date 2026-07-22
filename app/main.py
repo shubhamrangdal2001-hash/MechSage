@@ -76,12 +76,6 @@ app.mount("/static", StaticFiles(directory=str(static_dir)), name="static")
 # Health & readiness endpoints (required by Cloud Run load balancer)
 # ---------------------------------------------------------------------------
 
-@app.get("/health", tags=["ops"])
-async def health_check():
-    """Liveness probe — returns 200 when the process is alive."""
-    return {"status": "ok", "environment": ENVIRONMENT}
-
-
 @app.get("/readiness", tags=["ops"])
 async def readiness_check():
     """Readiness probe — returns 200 when the app is ready to serve traffic."""
