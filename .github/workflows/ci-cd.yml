@@ -84,11 +84,10 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Authenticate to Google Cloud (keyless)
-        id: auth
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT || 'mechsage-github-actions@mechsage-proj-10231.iam.gserviceaccount.com' }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
@@ -142,7 +141,7 @@ jobs:
         uses: google-github-actions/auth@v2
         with:
           workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY }}
-          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT }}
+          service_account: ${{ secrets.GCP_SERVICE_ACCOUNT || 'mechsage-github-actions@mechsage-proj-10231.iam.gserviceaccount.com' }}
 
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v2
