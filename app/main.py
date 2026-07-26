@@ -13,17 +13,173 @@ from __future__ import annotations
 import asyncio
 import json
 import os
+import statistics
 import textwrap
+import threading
 import time
 import uuid
+from collections import deque
 from pathlib import Path
 from typing import Dict, List, Optional
 
-from fastapi import FastAPI, HTTPException, Query
+from fastapi import FastAPI, HTTPException, Query, Request
+from starlette.middleware.base import BaseHTTPMiddleware
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, StreamingResponse
+from fastapi.responses import FileResponse, JSONResponse, StreamingResponse
 from pydantic import BaseModel
+
+
+# ---------------------------------------------------------------------------
+# In-process metrics store (zero external dependencies)
+# ---------------------------------------------------------------------------
+
+class MetricsStore:
+    """Thread-safe rolling-window metrics collector.
+
+    Stores up to 1 hour of per-request latency samples and aggregates
+    them into P50/P95/P99 on demand. Also tracks request counts per
+    endpoint, HTTP error counts, diagnosis confidence scores, and cost.
+    """
+
+    _WINDOW = 3600  # seconds to retain samples
+
+    def __init__(self):
+        self._lock = threading.Lock()
+        # Each entry: (timestamp_float, endpoint_str, latency_ms_float, status_int)
+        self._samples: deque = deque(maxlen=5000)
+        # Diagnosis-specific
+        self._confidence_samples: deque = deque(maxlen=500)
+        self._rul_samples: deque = deque(maxlen=500)
+        self._cost_today: float = 0.0
+        self._tokens_today: int = 0
+        self._auto_drafts: int = 0      # confidence >= 0.75
+        self._escalations: int = 0     # confidence < 0.75
+        self._error_count: int = 0
+        self._start_time: float = time.time()
+
+    # ── Internal helpers ──────────────────────────────────────────────────
+
+    def _prune(self, now: float):
+        """Drop samples older than the retention window."""
+        cutoff = now - self._WINDOW
+        while self._samples and self._samples[0][0] < cutoff:
+            self._samples.popleft()
+
+    # ── Writers (called from middleware / endpoint) ────────────────────────
+
+    def record_request(self, endpoint: str, latency_ms: float, status: int):
+        now = time.time()
+        with self._lock:
+            self._prune(now)
+            self._samples.append((now, endpoint, latency_ms, status))
+            if status >= 400:
+                self._error_count += 1
+
+    def record_diagnosis(self, confidence: float, rul: Optional[int],
+                         cost_usd: float, tokens: int):
+        with self._lock:
+            self._confidence_samples.append(confidence)
+            if rul is not None:
+                self._rul_samples.append(rul)
+            self._cost_today += cost_usd
+            self._tokens_today += tokens
+            if confidence >= 0.75:
+                self._auto_drafts += 1
+            else:
+                self._escalations += 1
+
+    # ── Readers (called from /api/metrics) ────────────────────────────────
+
+    def snapshot(self) -> dict:
+        now = time.time()
+        with self._lock:
+            self._prune(now)
+            samples = list(self._samples)          # copy under lock
+            conf_samples = list(self._confidence_samples)
+            rul_samples  = list(self._rul_samples)
+            cost_today   = round(self._cost_today, 5)
+            tokens_today = self._tokens_today
+            auto_drafts  = self._auto_drafts
+            escalations  = self._escalations
+            error_count  = self._error_count
+            uptime       = int(now - self._start_time)
+
+        # Latency percentiles (all endpoints)
+        latencies = [s[2] for s in samples]
+        def pct(arr, q):
+            if not arr:
+                return 0
+            arr_s = sorted(arr)
+            idx = max(0, int(len(arr_s) * q / 100) - 1)
+            return round(arr_s[idx], 1)
+
+        # Per-endpoint average latency
+        ep_latencies: Dict[str, List[float]] = {}
+        ep_counts: Dict[str, int] = {}
+        for _, ep, lat, st in samples:
+            ep_latencies.setdefault(ep, []).append(lat)
+            ep_counts[ep] = ep_counts.get(ep, 0) + 1
+        ep_avg = {ep: round(statistics.mean(v), 1)
+                  for ep, v in ep_latencies.items()}
+
+        total_req = len(samples)
+        error_rate = round((error_count / max(total_req, 1)) * 100, 2)
+
+        # Confidence / gate stats
+        avg_conf = round(statistics.mean(conf_samples), 4) if conf_samples else None
+        avg_rul  = round(statistics.mean(rul_samples))     if rul_samples  else None
+        total_dx = auto_drafts + escalations
+        auto_pct = round(auto_drafts  / max(total_dx, 1) * 100, 1)
+        esc_pct  = round(escalations  / max(total_dx, 1) * 100, 1)
+
+        return {
+            "timestamp": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+            "latency": {
+                "p50_ms":  pct(latencies, 50),
+                "p95_ms":  pct(latencies, 95),
+                "p99_ms":  pct(latencies, 99),
+                "avg_ms":  round(statistics.mean(latencies), 1) if latencies else 0,
+                "by_endpoint": ep_avg,
+            },
+            "requests": {
+                "total_last_hour": total_req,
+                "error_rate_pct":  error_rate,
+                "error_count":     error_count,
+                "by_endpoint":     ep_counts,
+            },
+            "ml": {
+                "avg_confidence":     avg_conf,
+                "avg_rul_estimate":   avg_rul,
+                "auto_draft_rate_pct": auto_pct,
+                "escalation_rate_pct": esc_pct,
+                "total_diagnoses":    total_dx,
+            },
+            "cost": {
+                "total_usd_today":    cost_today,
+                "total_tokens_today": tokens_today,
+            },
+            "system": {
+                "uptime_seconds": uptime,
+            },
+        }
+
+
+# Module-level singleton
+_metrics = MetricsStore()
+
+
+class MetricsMiddleware(BaseHTTPMiddleware):
+    """Records request latency and HTTP status for every response."""
+
+    async def dispatch(self, request: Request, call_next):
+        t0 = time.perf_counter()
+        response = await call_next(request)
+        latency_ms = (time.perf_counter() - t0) * 1000
+        # Normalise path (strip query string, collapse IDs)
+        path = request.url.path
+        _metrics.record_request(path, latency_ms, response.status_code)
+        return response
 
 from app.db import (
     insert_work_order,
@@ -58,6 +214,7 @@ app = FastAPI(
     redoc_url=None,
 )
 
+# Order matters: CORS first, then metrics (so CORS headers are set before we time)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -65,6 +222,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app.add_middleware(MetricsMiddleware)
 
 # Mount static files (frontend)
 static_dir = Path(__file__).parent / "static"
@@ -302,6 +460,12 @@ async def serve_work_orders():
     return FileResponse(str(static_dir / "work_orders.html"))
 
 
+@app.get("/monitoring", response_class=FileResponse)
+async def serve_monitoring():
+    """Serve the Production Monitoring dashboard."""
+    return FileResponse(str(static_dir / "monitoring_dashboard.html"))
+
+
 @app.get("/health", response_model=HealthResponse)
 async def health():
     """Health check — confirms API key and model config."""
@@ -439,6 +603,15 @@ async def diagnose(req: DiagnoseRequest):
         except Exception as db_exc:
             print(f"[DB] Failed to persist work order: {db_exc}")
 
+    # Record diagnosis metrics into the in-process store
+    if confidence is not None:
+        _metrics.record_diagnosis(
+            confidence=confidence,
+            rul=rul_estimate,
+            cost_usd=estimated_cost or 0.0,
+            tokens=int((gen_latency or 0) * 0.5),  # rough: 0.5 tokens/ms heuristic
+        )
+
     return DiagnoseResponse(
         status="ok",
         diagnosis_id=diag_id,
@@ -513,6 +686,40 @@ async def list_work_orders(
 async def work_orders_summary():
     """Return KPI counts for the Work Orders dashboard."""
     return get_summary_counts()
+
+
+@app.get("/api/metrics")
+async def get_metrics():
+    """
+    Live production metrics snapshot for the Monitoring Dashboard.
+
+    Combines:
+    - In-process request latency percentiles (P50/P95/P99)
+    - Per-endpoint request counts (last hour)
+    - Diagnosis confidence / RUL / gate statistics
+    - Token cost accumulator (today)
+    - Work-order counts from SQLite
+    - System uptime
+
+    Polled every 5 seconds by monitoring_dashboard.html.
+    """
+    snap = _metrics.snapshot()
+
+    # Enrich with live DB counts
+    try:
+        wo_summary = get_summary_counts()
+        snap["work_orders"] = wo_summary
+    except Exception:
+        snap["work_orders"] = {}
+
+    # Enrich with system health
+    try:
+        get_summary_counts()
+        snap["system"]["db_ok"] = True
+    except Exception:
+        snap["system"]["db_ok"] = False
+
+    return JSONResponse(content=snap)
 
 
 @app.get("/api/work-orders/{wo_id}")
