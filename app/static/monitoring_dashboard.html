@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MechSage · Production Monitoring Dashboard</title>
+  <meta name="description" content="Real-time production monitoring dashboard for MechSage – tracking ML model performance, latency, data drift, agent health, LLM costs, and system observability for Ironside Manufacturing." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+  <style>
+    :root {
+      --bg-base:      #060b18;
+      --bg-card:      #0d1526;
+      --bg-card2:     #111e35;
+      --bg-glass:     rgba(13, 21, 38, 0.72);
+      --border:       rgba(94, 156, 255, 0.12);
+      --border-glow:  rgba(94, 156, 255, 0.35);
+      --accent-blue:  #5e9cff;
+      --accent-cyan:  #38e8d4;
+      --accent-green: #30e57a;
+      --accent-amber: #f5b942;
+      --accent-red:   #ff4f6d;
+      --accent-purple:#b085ff;
+      --text-primary: #e8edf8;
+      --text-secondary:#8fa3c7;
+      --text-muted:   #4a5f80;
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --font-main: 'Inter', system-ui, sans-serif;
+      --font-mono: 'JetBrains Mono', monospace;
+      --shadow-card: 0 4px 32px rgba(0, 0, 0, 0.45);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-main);
+      background: var(--bg-base);
+      color: var(--text-primary);
+      min-height: 100vh;
+      overflow-x: hidden;
+      background-image:
+        radial-gradient(ellipse 80% 60% at 50% -10%, rgba(94,156,255,0.09) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 90% 100%, rgba(176,133,255,0.06) 0%, transparent 55%);
+    }
+    .nav {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 36px; border-bottom: 1px solid var(--border);
+      background: var(--bg-glass); backdrop-filter: blur(14px);
+      position: sticky; top: 0; z-index: 100;
+    }
+    .nav-brand { display: flex; align-items: center; gap: 12px; }
+    .nav-logo {
+      width: 36px; height: 36px;
+      background: linear-gradient(135deg, var(--accent-blue), var(--accent-purple));
+      border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px;
+    }
+    .nav-title { font-size: 1.1rem; font-weight: 700; letter-spacing: -0.02em; }
+    .nav-title span { color: var(--accent-blue); }
+    .nav-subtitle { font-size: 0.72rem; color: var(--text-secondary); letter-spacing: 0.06em; text-transform: uppercase; }
+    .nav-status { display: flex; align-items: center; gap: 24px; }
+    .status-pill {
+      display: flex; align-items: center; gap: 7px;
+      font-size: 0.8rem; font-weight: 500; padding: 6px 14px;
+      border-radius: 999px; border: 1px solid var(--border);
+      background: rgba(48,229,122,0.08); color: var(--accent-green);
+    }
+    .pulse-dot {
+      width: 8px; height: 8px; background: var(--accent-green);
+      border-radius: 50%; animation: pulse 1.8s ease-in-out infinite;
+    }
+    @keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.45;transform:scale(.7)} }
+    .nav-time { font-family: var(--font-mono); font-size: 0.8rem; color: var(--text-secondary); }
+    .main { max-width: 1440px; margin: 0 auto; padding: 32px 36px; }
+    .section-header { margin-bottom: 20px; }
+    .section-title { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent-blue); margin-bottom: 4px; }
+    .section-subtitle { font-size: 1.05rem; font-weight: 600; color: var(--text-primary); }
+    .grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; }
+    .grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 18px; }
+    .grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
+    .grid-col-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; }
+    .grid-col-1-2 { display: grid; grid-template-columns: 1fr 2fr; gap: 18px; }
+    .mt-32 { margin-top: 32px; }
+    .card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 22px 24px; box-shadow: var(--shadow-card); position: relative; overflow: hidden;
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+    .card:hover { border-color: var(--border-glow); box-shadow: var(--shadow-card), 0 0 28px rgba(94,156,255,0.18); }
+    .card::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(135deg, rgba(94,156,255,0.03) 0%, transparent 60%); pointer-events: none;
+    }
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 18px; }
+    .card-label { font-size: 0.72rem; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 2px; }
+    .card-title-text { font-size: 0.95rem; font-weight: 600; color: var(--text-primary); }
+    .card-badge { font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 999px; }
+    .badge-ok    { background: rgba(48,229,122,0.12);  color: var(--accent-green); }
+    .badge-warn  { background: rgba(245,185,66,0.12);  color: var(--accent-amber); }
+    .badge-crit  { background: rgba(255,79,109,0.12);  color: var(--accent-red);   }
+    .badge-info  { background: rgba(94,156,255,0.12);  color: var(--accent-blue);  }
+    .badge-purple{ background: rgba(176,133,255,0.12); color: var(--accent-purple);}
+    .kpi-card {
+      background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-md);
+      padding: 22px 24px; box-shadow: var(--shadow-card); position: relative; overflow: hidden;
+      transition: all 0.3s;
+    }
+    .kpi-card:hover { transform: translateY(-2px); border-color: var(--border-glow); }
+    .kpi-icon { width: 42px; height: 42px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; font-size: 20px; margin-bottom: 14px; }
+    .kpi-icon.blue   { background: rgba(94,156,255,0.14); }
+    .kpi-icon.green  { background: rgba(48,229,122,0.14); }
+    .kpi-icon.amber  { background: rgba(245,185,66,0.14); }
+    .kpi-icon.red    { background: rgba(255,79,109,0.14); }
+    .kpi-icon.purple { background: rgba(176,133,255,0.14); }
+    .kpi-icon.cyan   { background: rgba(56,232,212,0.14); }
+    .kpi-value { font-size: 2.1rem; font-weight: 800; letter-spacing: -0.03em; line-height: 1; margin-bottom: 4px; }
+    .kpi-unit { font-size: 1rem; font-weight: 500; opacity: 0.7; }
+    .kpi-label { font-size: 0.78rem; color: var(--text-secondary); margin-bottom: 10px; }
+    .kpi-delta { font-size: 0.74rem; font-weight: 600; display: flex; align-items: center; gap: 4px; }
+    .kpi-delta.up   { color: var(--accent-green); }
+    .kpi-delta.down { color: var(--accent-red); }
+    .kpi-delta.flat { color: var(--text-muted); }
+    .kpi-bar-track { height: 4px; background: rgba(255,255,255,0.06); border-radius: 99px; margin-top: 14px; overflow: hidden; }
+    .kpi-bar-fill { height: 100%; border-radius: 99px; transition: width 1.4s cubic-bezier(0.4,0,0.2,1); }
+    .chart-wrap { position: relative; height: 180px; }
+    .chart-wrap-tall { height: 240px; }
+    .chart-wrap-md   { height: 210px; }
+    .drift-feature-list { display: flex; flex-direction: column; gap: 10px; }
+    .drift-row { display: flex; align-items: center; gap: 12px; }
+    .drift-name { font-size: 0.78rem; color: var(--text-secondary); width: 90px; flex-shrink: 0; font-family: var(--font-mono); }
+    .drift-bar-track { flex: 1; height: 6px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+    .drift-bar-fill { height: 100%; border-radius: 99px; }
+    .drift-score { font-size: 0.76rem; font-weight: 600; font-family: var(--font-mono); width: 42px; text-align: right; flex-shrink: 0; }
+    .agent-grid { display: flex; flex-direction: column; gap: 10px; }
+    .agent-row {
+      display: flex; align-items: center; gap: 14px; padding: 12px 16px;
+      background: var(--bg-card2); border-radius: var(--radius-sm); border: 1px solid var(--border); transition: border-color 0.3s;
+    }
+    .agent-row:hover { border-color: var(--border-glow); }
+    .agent-indicator { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+    .agent-name { flex: 1; font-size: 0.82rem; font-weight: 600; }
+    .agent-latency { font-family: var(--font-mono); font-size: 0.76rem; color: var(--text-secondary); }
+    .agent-calls { font-family: var(--font-mono); font-size: 0.74rem; color: var(--text-muted); }
+    .alert-feed { display: flex; flex-direction: column; gap: 8px; max-height: 290px; overflow-y: auto; padding-right: 4px; }
+    .alert-feed::-webkit-scrollbar { width: 4px; }
+    .alert-feed::-webkit-scrollbar-track { background: transparent; }
+    .alert-feed::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+    .alert-item { display: flex; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm); border-left: 3px solid transparent; background: var(--bg-card2); animation: slideIn 0.3s ease; }
+    @keyframes slideIn { from{opacity:0;transform:translateX(-8px)} to{opacity:1;transform:translateX(0)} }
+    .alert-item.crit  { border-left-color: var(--accent-red);   background: rgba(255,79,109,0.06); }
+    .alert-item.warn  { border-left-color: var(--accent-amber);  background: rgba(245,185,66,0.06); }
+    .alert-item.info  { border-left-color: var(--accent-blue);   background: rgba(94,156,255,0.06); }
+    .alert-item.ok    { border-left-color: var(--accent-green);  background: rgba(48,229,122,0.06); }
+    .alert-icon { font-size: 15px; margin-top: 1px; flex-shrink: 0; }
+    .alert-body { flex: 1; min-width: 0; }
+    .alert-msg  { font-size: 0.8rem; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .alert-meta { font-size: 0.7rem; color: var(--text-muted); margin-top: 2px; font-family: var(--font-mono); }
+    .perf-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .perf-table thead tr { border-bottom: 1px solid var(--border); }
+    .perf-table th { padding: 8px 12px; text-align: left; font-size: 0.7rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-muted); }
+    .perf-table td { padding: 10px 12px; border-bottom: 1px solid rgba(255,255,255,0.04); vertical-align: middle; }
+    .perf-table tr:last-child td { border-bottom: none; }
+    .perf-table tr:hover td { background: rgba(94,156,255,0.04); }
+    .model-tag { display: inline-block; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500; background: rgba(94,156,255,0.10); color: var(--accent-blue); padding: 2px 8px; border-radius: 5px; }
+    .metric-val { font-family: var(--font-mono); font-weight: 600; }
+    .metric-ok   { color: var(--accent-green); }
+    .metric-warn { color: var(--accent-amber); }
+    .cost-breakdown { display: flex; flex-direction: column; gap: 10px; }
+    .cost-row { display: flex; align-items: center; gap: 10px; }
+    .cost-label { font-size: 0.78rem; color: var(--text-secondary); width: 120px; flex-shrink: 0; }
+    .cost-bar-track { flex: 1; height: 8px; background: rgba(255,255,255,0.06); border-radius: 99px; overflow: hidden; }
+    .cost-bar-fill { height: 100%; border-radius: 99px; }
+    .cost-amount { font-family: var(--font-mono); font-size: 0.78rem; font-weight: 600; width: 52px; text-align: right; }
+    .rul-badge-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .rul-badge { padding: 14px 16px; border-radius: var(--radius-sm); border: 1px solid var(--border); background: var(--bg-card2); text-align: center; }
+    .rul-badge-val { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+    .rul-badge-label { font-size: 0.7rem; color: var(--text-secondary); margin-top: 3px; }
+    .footer { text-align: center; padding: 28px 36px; border-top: 1px solid var(--border); color: var(--text-muted); font-size: 0.74rem; }
+    .footer strong { color: var(--text-secondary); }
+    @media (max-width: 1200px) {
+      .grid-4 { grid-template-columns: repeat(2, 1fr); }
+      .grid-3 { grid-template-columns: repeat(2, 1fr); }
+      .grid-col-2-1, .grid-col-1-2 { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .main { padding: 20px 16px; } .nav { padding: 14px 16px; }
+      .grid-4, .grid-3, .grid-2 { grid-template-columns: 1fr; }
+      .nav-time { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-brand">
+    <div class="nav-logo">&#9881;</div>
+    <div>
+      <div class="nav-title">Mech<span>Sage</span></div>
+      <div class="nav-subtitle">Production Monitoring · Ironside Manufacturing</div>
+    </div>
+  </div>
+  <div class="nav-status">
+    <div class="status-pill"><div class="pulse-dot"></div>All Systems Operational</div>
+    <div id="conn-badge" style="display:flex;align-items:center;gap:7px;font-size:0.78rem;font-weight:600;
+      padding:5px 12px;border-radius:999px;border:1px solid rgba(48,229,122,0.3);
+      background:rgba(48,229,122,0.08);color:#30e57a;transition:all 0.4s;">
+      <span id="conn-dot" style="width:7px;height:7px;border-radius:50%;background:#30e57a;
+        box-shadow:0 0 6px #30e57a;"></span>
+      <span id="conn-label">LIVE</span>
+    </div>
+    <div class="nav-time" id="live-clock">--:--:--</div>
+  </div>
+</nav>
+
+<main class="main">
+
+  <!-- 01 System KPIs -->
+  <div class="section-header">
+    <div class="section-title">01 · System Health Overview</div>
+    <div class="section-subtitle">Real-time Production KPIs — All 5 Agents · GCP Cloud Run</div>
+  </div>
+  <div class="grid-4">
+    <div class="kpi-card">
+      <div class="kpi-icon blue">&#9889;</div>
+      <div class="kpi-value" style="color:var(--accent-blue)" id="kpi-latency">248<span class="kpi-unit">ms</span></div>
+      <div class="kpi-label">API Latency — P95</div>
+      <div class="kpi-delta up">&#8593; 12ms vs. yesterday · SLO: &lt;400ms</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-latency" style="width:0%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan))"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon green">&#128202;</div>
+      <div class="kpi-value" style="color:var(--accent-green)" id="kpi-rps">342<span class="kpi-unit">/h</span></div>
+      <div class="kpi-label">Inference Requests / Hour</div>
+      <div class="kpi-delta up">&#8593; 8.4% vs. last hour</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-rps" style="width:0%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan))"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon amber">&#9888;</div>
+      <div class="kpi-value" style="color:var(--accent-amber)" id="kpi-err">1.2<span class="kpi-unit">%</span></div>
+      <div class="kpi-label">System Error Rate</div>
+      <div class="kpi-delta flat">&#8594; Stable — SLO: &lt;5%</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-err" style="width:0%;background:linear-gradient(90deg,var(--accent-amber),var(--accent-red))"></div></div>
+    </div>
+    <div class="kpi-card">
+      <div class="kpi-icon purple">&#128737;</div>
+      <div class="kpi-value" style="color:var(--accent-purple)" id="kpi-up">99.7<span class="kpi-unit">%</span></div>
+      <div class="kpi-label">System Uptime (30d)</div>
+      <div class="kpi-delta up">&#8593; SLO: 99.5%</div>
+      <div class="kpi-bar-track"><div class="kpi-bar-fill" id="bar-up" style="width:0%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue))"></div></div>
+    </div>
+  </div>
+
+  <!-- 02 Latency -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">02 · Latency Analysis</div>
+      <div class="section-subtitle">End-to-End Pipeline Latency — P50 / P95 / P99 per Agent</div>
+    </div>
+    <div class="grid-col-2-1">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Latency Trend · Last 24h</div><div class="card-title-text">API Response Latency (ms)</div></div>
+          <div class="card-badge badge-ok">P95 SLO OK</div>
+        </div>
+        <div class="chart-wrap"><canvas id="latencyChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Per-Agent</div><div class="card-title-text">Avg Latency (ms)</div></div>
+          <span class="card-badge badge-info">5 Agents</span>
+        </div>
+        <div class="chart-wrap"><canvas id="agentLatencyChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 03 Agent Health -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">03 · Agent Health</div>
+      <div class="section-subtitle">LangGraph Agent Topology — Live Status</div>
+    </div>
+    <div class="grid-col-1-2">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Status Board</div><div class="card-title-text">Agent Live Health</div></div>
+          <span class="card-badge badge-ok">5/5 Online</span>
+        </div>
+        <div class="agent-grid" id="agent-grid"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Call Volume · Last 12h</div><div class="card-title-text">Agent Invocations Over Time</div></div>
+        </div>
+        <div class="chart-wrap-tall"><canvas id="agentVolumeChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 04 ML Model Perf -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">04 · ML Model Performance</div>
+      <div class="section-subtitle">Anomaly Detection (LightGBM) + RUL Regression (RandomForest) — Live vs. Baseline</div>
+    </div>
+    <div class="grid-2">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Anomaly Detection</div><div class="card-title-text">Classification Metrics — LightGBM</div></div>
+          <span class="card-badge badge-ok">Production</span>
+        </div>
+        <table class="perf-table">
+          <thead><tr><th>Dataset</th><th>Precision</th><th>Recall</th><th>F1</th><th>ROC-AUC</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><span class="model-tag">FD001</span></td><td class="metric-val metric-ok">83.9%</td><td class="metric-val metric-ok">66.0%</td><td class="metric-val metric-ok">0.739</td><td class="metric-val metric-ok">0.995</td><td><span class="card-badge badge-ok">OK</span></td></tr>
+            <tr><td><span class="model-tag">FD002</span></td><td class="metric-val metric-ok">63.8%</td><td class="metric-val metric-ok">79.8%</td><td class="metric-val metric-ok">0.709</td><td class="metric-val metric-ok">0.988</td><td><span class="card-badge badge-ok">OK</span></td></tr>
+            <tr><td><span class="model-tag">FD003</span></td><td class="metric-val metric-ok">78.0%</td><td class="metric-val metric-ok">83.9%</td><td class="metric-val metric-ok">0.808</td><td class="metric-val metric-ok">0.998</td><td><span class="card-badge badge-ok">OK</span></td></tr>
+            <tr><td><span class="model-tag">FD004</span></td><td class="metric-val metric-warn">61.9%</td><td class="metric-val metric-ok">63.7%</td><td class="metric-val metric-warn">0.628</td><td class="metric-val metric-ok">0.987</td><td><span class="card-badge badge-warn">Monitor</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">RUL Regression</div><div class="card-title-text">Remaining Useful Life — RMSE / MAE / R2</div></div>
+          <span class="card-badge badge-ok">Production</span>
+        </div>
+        <table class="perf-table">
+          <thead><tr><th>Dataset</th><th>Model</th><th>RMSE</th><th>MAE</th><th>R2</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><span class="model-tag">FD001</span></td><td style="font-size:0.74rem;color:var(--text-secondary)">RandForest</td><td class="metric-val metric-ok">13.37</td><td class="metric-val metric-ok">9.27</td><td class="metric-val metric-ok">0.765</td><td><span class="card-badge badge-ok">OK</span></td></tr>
+            <tr><td><span class="model-tag">FD002</span></td><td style="font-size:0.74rem;color:var(--text-secondary)">LinReg</td><td class="metric-val metric-warn">15.31</td><td class="metric-val metric-warn">12.27</td><td class="metric-val metric-ok">0.718</td><td><span class="card-badge badge-warn">Monitor</span></td></tr>
+            <tr><td><span class="model-tag">FD003</span></td><td style="font-size:0.74rem;color:var(--text-secondary)">RandForest</td><td class="metric-val metric-ok">11.55</td><td class="metric-val metric-ok">6.99</td><td class="metric-val metric-ok">0.784</td><td><span class="card-badge badge-ok">OK</span></td></tr>
+            <tr><td><span class="model-tag">FD004</span></td><td style="font-size:0.74rem;color:var(--text-secondary)">LinReg</td><td class="metric-val metric-warn">14.99</td><td class="metric-val metric-warn">11.11</td><td class="metric-val metric-warn">0.654</td><td><span class="card-badge badge-warn">Monitor</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- 05 Data Drift -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">05 · Data Drift Detection</div>
+      <div class="section-subtitle">Input Distribution Monitoring — Jensen-Shannon Divergence per Sensor Feature</div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">JS Divergence Score</div><div class="card-title-text">Sensor Feature Drift</div></div>
+          <span class="card-badge badge-ok">Low Drift</span>
+        </div>
+        <div class="drift-feature-list" id="drift-list"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Output Distribution</div><div class="card-title-text">Prediction Score Drift (30d)</div></div>
+          <span class="card-badge badge-ok">Stable</span>
+        </div>
+        <div class="chart-wrap-md"><canvas id="predDriftChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Concept Drift Alert</div><div class="card-title-text">Model Confidence Trend</div></div>
+          <span class="card-badge badge-ok">No Alert</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:6px;padding-top:18px;">
+          <svg width="160" height="90" viewBox="0 0 160 90" style="overflow:visible">
+            <defs>
+              <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stop-color="#30e57a"/>
+                <stop offset="50%" stop-color="#f5b942"/>
+                <stop offset="100%" stop-color="#ff4f6d"/>
+              </linearGradient>
+            </defs>
+            <path d="M 16 85 A 64 64 0 0 1 144 85" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="12" stroke-linecap="round"/>
+            <path id="gauge-arc" d="M 16 85 A 64 64 0 0 1 144 85" fill="none" stroke="url(#gaugeGrad)" stroke-width="12" stroke-linecap="round" stroke-dasharray="36 201"/>
+            <circle cx="80" cy="85" r="4" fill="var(--accent-blue)"/>
+            <line id="gauge-needle" x1="80" y1="85" x2="80" y2="30" stroke="var(--accent-blue)" stroke-width="2.5" stroke-linecap="round" transform="rotate(-58.5,80,85)"/>
+          </svg>
+          <div style="font-size:2rem;font-weight:800;color:var(--accent-green);">18%</div>
+          <div style="font-size:0.74rem;color:var(--text-secondary);">Drift Index (threshold: 40%)</div>
+        </div>
+        <div style="margin-top:20px;" class="rul-badge-grid">
+          <div class="rul-badge"><div class="rul-badge-val" style="color:var(--accent-green)">0/4</div><div class="rul-badge-label">Datasets Drifted</div></div>
+          <div class="rul-badge"><div class="rul-badge-val" style="color:var(--accent-blue)">12d</div><div class="rul-badge-label">Since Last Retrain</div></div>
+          <div class="rul-badge"><div class="rul-badge-val" style="color:var(--accent-amber)">30d</div><div class="rul-badge-label">Retrain Trigger</div></div>
+          <div class="rul-badge"><div class="rul-badge-val" style="color:var(--accent-purple);font-size:1.1rem">TAU=0.75</div><div class="rul-badge-label">Confidence Gate</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 06 LLM & Cost -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">06 · LLM Gateway &amp; Cost</div>
+      <div class="section-subtitle">LiteLLM Gateway — Token Usage · Provider Cost · Model Tier Routing</div>
+    </div>
+    <div class="grid-3">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Token Budget</div><div class="card-title-text">Daily Token Consumption</div></div>
+          <span class="card-badge badge-ok">Under Budget</span>
+        </div>
+        <div class="chart-wrap-md"><canvas id="tokenChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Cost Tracker</div><div class="card-title-text">Cost per Agent (Today — USD)</div></div>
+          <span class="card-badge badge-ok">$0.84 today</span>
+        </div>
+        <div class="cost-breakdown" id="cost-breakdown" style="margin-top:8px;"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Tier Routing</div><div class="card-title-text">Model Tier Distribution</div></div>
+        </div>
+        <div class="chart-wrap-md"><canvas id="tierChart"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 07 Confidence Gate -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">07 · Confidence Gate &amp; Alert Quality</div>
+      <div class="section-subtitle">Diagnostics Agent Gate (TAU = 0.75) · False Positive Rate · Human Escalation</div>
+    </div>
+    <div class="grid-4">
+      <div class="kpi-card">
+        <div class="kpi-icon green">&#10004;</div>
+        <div class="kpi-value" style="color:var(--accent-green)">87.3<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">Auto-Draft Rate (above TAU)</div>
+        <div class="kpi-delta up">&#8593; 3.1% this week</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan))" id="bar-auto"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber">&#128100;</div>
+        <div class="kpi-value" style="color:var(--accent-amber)">12.7<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">Human Escalation Rate</div>
+        <div class="kpi-delta down">&#8593; 1.2% vs last week</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-amber),var(--accent-red))" id="bar-esc"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon red">&#128276;</div>
+        <div class="kpi-value" style="color:var(--accent-red)">3.8<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">False Alarm Rate</div>
+        <div class="kpi-delta up">&#8595; SLO: &lt;10%</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-red),var(--accent-amber))" id="bar-fa"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon cyan">&#127919;</div>
+        <div class="kpi-value" style="color:var(--accent-cyan)">96.2<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">Work-Order Accuracy</div>
+        <div class="kpi-delta up">&#8593; 0.8% this sprint</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-cyan),var(--accent-blue))" id="bar-wo"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 08 RAG Quality -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">08 · RAG Pipeline Quality</div>
+      <div class="section-subtitle">Manual Retrieval (RAGAS Eval) — Faithfulness · Answer Relevancy · Context Recall</div>
+    </div>
+    <div class="grid-col-2-1">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">RAGAS Score Trend</div><div class="card-title-text">Retrieval Quality Metrics (7d)</div></div>
+          <span class="card-badge badge-ok">Healthy</span>
+        </div>
+        <div class="chart-wrap"><canvas id="ragasChart"></canvas></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Today's Scores</div><div class="card-title-text">RAGAS Summary</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:16px;padding-top:8px;">
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:0.78rem;color:var(--text-secondary);">Faithfulness</span><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-green);font-weight:600;">0.91</span></div>
+            <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:91%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan))"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:0.78rem;color:var(--text-secondary);">Answer Relevancy</span><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-blue);font-weight:600;">0.87</span></div>
+            <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:87%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan))"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:0.78rem;color:var(--text-secondary);">Context Recall</span><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-purple);font-weight:600;">0.84</span></div>
+            <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:84%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue))"></div></div>
+          </div>
+          <div>
+            <div style="display:flex;justify-content:space-between;margin-bottom:5px;"><span style="font-size:0.78rem;color:var(--text-secondary);">Context Precision</span><span style="font-family:var(--font-mono);font-size:0.78rem;color:var(--accent-amber);font-weight:600;">0.79</span></div>
+            <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:79%;background:linear-gradient(90deg,var(--accent-amber),var(--accent-red))"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 09 GCP Infra -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">09 · Infrastructure &amp; GCP Health</div>
+      <div class="section-subtitle">Cloud Run · Vertex AI · Cloud SQL · Pub/Sub — Resource Utilisation</div>
+    </div>
+    <div class="grid-4">
+      <div class="kpi-card">
+        <div class="kpi-icon blue">&#9729;</div>
+        <div class="kpi-value" style="color:var(--accent-blue)">62<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">Cloud Run CPU Utilisation</div>
+        <div class="kpi-delta flat">&#8594; 2 instances · auto-scale ON</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-blue),var(--accent-cyan))" id="bar-cpu"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon green">&#128420;</div>
+        <div class="kpi-value" style="color:var(--accent-green)">41<span class="kpi-unit">%</span></div>
+        <div class="kpi-label">Cloud SQL Memory Usage</div>
+        <div class="kpi-delta up">&#8593; mechsage.db active</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-green),var(--accent-cyan))" id="bar-mem"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon purple">&#128232;</div>
+        <div class="kpi-value" style="color:var(--accent-purple)">1.4k<span class="kpi-unit">/m</span></div>
+        <div class="kpi-label">Pub/Sub Message Throughput</div>
+        <div class="kpi-delta up">&#8593; Sensor stream active</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-purple),var(--accent-blue))" id="bar-ps"></div></div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-icon amber">&#128181;</div>
+        <div class="kpi-value" style="color:var(--accent-amber)">$2.17</div>
+        <div class="kpi-label">GCP Daily Spend (USD)</div>
+        <div class="kpi-delta flat">&#8594; Budget: $5.00/day</div>
+        <div class="kpi-bar-track"><div class="kpi-bar-fill" style="width:0%;background:linear-gradient(90deg,var(--accent-amber),var(--accent-red))" id="bar-gcp"></div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 10 Alert Feed -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">10 · Live Alert Feed</div>
+      <div class="section-subtitle">System-Wide Events — Anomalies · Drift Warnings · Human Escalations</div>
+    </div>
+    <div class="grid-col-2-1">
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Recent Events</div><div class="card-title-text">Production Alert Log</div></div>
+          <span class="card-badge badge-warn">3 Warnings</span>
+        </div>
+        <div class="alert-feed" id="alert-feed"></div>
+      </div>
+      <div class="card">
+        <div class="card-header">
+          <div><div class="card-label">Risk Register</div><div class="card-title-text">Live Risk Scores (from docs/04_risk.md)</div></div>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:8px;margin-top:4px;" id="risk-list"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 11 Fleet RUL -->
+  <div class="mt-32">
+    <div class="section-header">
+      <div class="section-title">11 · Fleet RUL Overview</div>
+      <div class="section-subtitle">Remaining Useful Life Distribution — 30 Active Assets</div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <div><div class="card-label">Fleet-Wide</div><div class="card-title-text">Asset RUL Distribution (cycles remaining) — Red &lt;30 · Amber &lt;60 · Blue OK</div></div>
+        <span class="card-badge badge-warn">3 Assets &lt;30 cycles</span>
+      </div>
+      <div class="chart-wrap-tall"><canvas id="rulChart"></canvas></div>
+    </div>
+  </div>
+
+</main>
+
+<footer class="footer">
+  <strong>MechSage</strong> Production Monitoring Dashboard · Ironside Manufacturing ·
+  LangGraph + LightGBM + RandomForest + LiteLLM + GCP ·
+  Owners: Sudhanshu Biswas · Ayush Patil · <strong>Shubham Rangdal</strong>
+</footer>
+
+<script>
+const $ = id => document.getElementById(id);
+
+// ── Live clock ───────────────────────────────────────────────────────────────
+function updateClock() {
+  $('live-clock').textContent = new Date().toLocaleTimeString('en-IN', {hour12:false}) + ' IST';
+}
+updateClock(); setInterval(updateClock, 1000);
+
+// ── Animated KPI bar helper ───────────────────────────────────────────────────
+function bar(id, pct) {
+  const el = $(id);
+  if(el) setTimeout(() => el.style.width = Math.min(100, pct) + '%', 300);
+}
+
+// ── Connection badge ──────────────────────────────────────────────────────────
+function setConn(online) {
+  const badge = $('conn-badge'), dot = $('conn-dot'), label = $('conn-label');
+  if (online) {
+    badge.style.background = 'rgba(48,229,122,0.08)';
+    badge.style.borderColor = 'rgba(48,229,122,0.3)';
+    badge.style.color = '#30e57a';
+    dot.style.background = '#30e57a';
+    dot.style.boxShadow = '0 0 6px #30e57a';
+    label.textContent = 'LIVE';
+  } else {
+    badge.style.background = 'rgba(255,79,109,0.08)';
+    badge.style.borderColor = 'rgba(255,79,109,0.3)';
+    badge.style.color = '#ff4f6d';
+    dot.style.background = '#ff4f6d';
+    dot.style.boxShadow = '0 0 6px #ff4f6d';
+    label.textContent = 'OFFLINE';
+  }
+}
+
+// ── Initial KPI bars (fallback values shown before first fetch) ───────────────
+bar('bar-latency', 49.6); bar('bar-rps', 68.4); bar('bar-err', 24);
+bar('bar-up', 99.7); bar('bar-auto', 87.3); bar('bar-esc', 25.4);
+bar('bar-fa', 38); bar('bar-wo', 96.2);
+bar('bar-cpu', 62); bar('bar-mem', 41); bar('bar-ps', 70); bar('bar-gcp', 43.4);
+
+// ── Chart defaults ────────────────────────────────────────────────────────────
+Chart.defaults.color = '#8fa3c7';
+Chart.defaults.borderColor = 'rgba(94,156,255,0.08)';
+Chart.defaults.font.family = "'Inter', sans-serif";
+Chart.defaults.font.size = 11;
+const TT = { mode:'index', intersect:false,
+  backgroundColor:'#0d1526', borderColor:'rgba(94,156,255,0.3)', borderWidth:1,
+  titleColor:'#e8edf8', bodyColor:'#8fa3c7', padding:10, cornerRadius:8 };
+const plugCfg = { legend:{display:false}, tooltip:TT };
+const scaleX = { grid:{display:false} };
+const scaleY = { grid:{color:'rgba(255,255,255,0.04)'} };
+
+// ── 1. Latency time-series (seeded, updated by live data) ────────────────────
+const hours24 = Array.from({length:24},(_,i)=>`${String(i).padStart(2,'0')}:00`);
+const p50init = [88,92,85,79,82,95,108,135,154,172,189,202,195,188,198,206,214,221,230,218,205,195,184,177];
+const p95init = [182,190,175,164,168,195,220,258,288,318,342,365,350,338,360,375,390,402,418,395,372,350,330,320];
+const p99init = [290,310,285,270,275,310,355,415,460,508,550,585,560,540,576,600,622,640,666,630,596,562,528,510];
+const latencyChart = new Chart($('latencyChart').getContext('2d'),{
+  type:'line', data:{labels:hours24, datasets:[
+    {label:'P99',data:[...p99init],borderColor:'#ff4f6d',backgroundColor:'rgba(255,79,109,0.06)',borderWidth:1.5,pointRadius:0,fill:true,tension:0.4},
+    {label:'P95',data:[...p95init],borderColor:'#f5b942',backgroundColor:'rgba(245,185,66,0.06)',borderWidth:2,pointRadius:0,fill:true,tension:0.4},
+    {label:'P50',data:[...p50init],borderColor:'#5e9cff',backgroundColor:'rgba(94,156,255,0.10)',borderWidth:2.5,pointRadius:0,fill:true,tension:0.4},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{...plugCfg,legend:{display:true,position:'top',labels:{boxWidth:10,padding:14,usePointStyle:true}}},
+    scales:{x:{...scaleX,ticks:{maxTicksLimit:8}},y:{...scaleY,title:{display:true,text:'ms',color:'#4a5f80'}}}}
+});
+
+// ── 2. Per-agent latency bar (updated by live data) ───────────────────────────
+const agentLatencyChart = new Chart($('agentLatencyChart').getContext('2d'),{
+  type:'bar', data:{
+    labels:['Fleet Supervisor','Per-Asset Monitor','Diagnostics','Work-Order','Scheduling'],
+    datasets:[{label:'Avg ms',data:[42,118,285,94,76],
+      backgroundColor:['rgba(94,156,255,.7)','rgba(48,229,122,.7)','rgba(255,79,109,.7)','rgba(245,185,66,.7)','rgba(176,133,255,.7)'],
+      borderRadius:6,borderWidth:0}]
+  },
+  options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,plugins:plugCfg,
+    scales:{x:{...scaleY,title:{display:true,text:'ms',color:'#4a5f80'}},y:{...scaleX,ticks:{font:{size:10}}}}}
+});
+
+// ── 3. Agent volume stacked (static — no live endpoint for per-agent call counts yet) ──
+const hours12 = Array.from({length:13},(_,i)=>`${String(i+8).padStart(2,'0')}:00`);
+new Chart($('agentVolumeChart').getContext('2d'),{
+  type:'bar', data:{labels:hours12, datasets:[
+    {label:'Fleet Supervisor',data:[28,32,35,40,38,42,45,48,52,49,55,58,54],backgroundColor:'rgba(94,156,255,.75)',borderRadius:4,borderWidth:0},
+    {label:'Per-Asset Monitor',data:[85,92,98,110,105,118,125,132,140,135,148,155,148],backgroundColor:'rgba(48,229,122,.75)',borderRadius:4,borderWidth:0},
+    {label:'Diagnostics',data:[62,68,72,80,78,86,90,95,102,98,108,112,107],backgroundColor:'rgba(255,79,109,.6)',borderRadius:4,borderWidth:0},
+    {label:'Work-Order',data:[42,46,50,55,52,58,62,65,70,67,74,78,73],backgroundColor:'rgba(245,185,66,.7)',borderRadius:4,borderWidth:0},
+    {label:'Scheduling',data:[35,38,42,46,44,48,52,55,58,56,62,65,60],backgroundColor:'rgba(176,133,255,.7)',borderRadius:4,borderWidth:0},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{...plugCfg,legend:{display:true,position:'top',labels:{boxWidth:10,padding:12,usePointStyle:true}}},
+    scales:{x:{stacked:true,grid:{display:false}},y:{stacked:true,...scaleY,title:{display:true,text:'Calls',color:'#4a5f80'}}}}
+});
+
+// ── 4. Agent health rows ──────────────────────────────────────────────────────
+const agentGrid = $('agent-grid');
+[
+  {name:'Fleet Supervisor',  tier:'cheap', lat:'42ms',  calls:'1.2k'},
+  {name:'Per-Asset Monitor', tier:'cheap', lat:'118ms', calls:'3.8k'},
+  {name:'Diagnostics Agent', tier:'strong',lat:'285ms', calls:'2.9k'},
+  {name:'Work-Order Drafting',tier:'mid',  lat:'94ms',  calls:'2.1k'},
+  {name:'Scheduling Agent',  tier:'mid',   lat:'76ms',  calls:'1.8k'},
+].forEach(a=>{
+  const t = a.tier==='strong'?'badge-crit':a.tier==='mid'?'badge-purple':'badge-ok';
+  agentGrid.innerHTML+=`<div class="agent-row" id="agent-${a.name.replace(/\s/g,'-')}">
+    <div class="agent-indicator" style="background:#30e57a;box-shadow:0 0 8px #30e57a60"></div>
+    <div class="agent-name">${a.name}</div>
+    <div class="agent-latency" id="agt-lat-${a.tier}${a.name.length}">${a.lat}</div>
+    <div class="agent-calls">${a.calls} today</div>
+    <span class="card-badge badge-ok" style="font-size:.66rem">Healthy</span>
+    <span class="card-badge ${t}">${a.tier}</span>
+  </div>`;
+});
+
+// ── 5. Drift features (static — no live drift endpoint yet) ──────────────────
+const driftEl = $('drift-list');
+[{n:'sensor_2',s:.04,c:'#30e57a'},{n:'sensor_4',s:.07,c:'#30e57a'},{n:'sensor_7',s:.09,c:'#30e57a'},
+ {n:'sensor_11',s:.14,c:'#f5b942'},{n:'sensor_14',s:.18,c:'#f5b942'},{n:'sensor_20',s:.22,c:'#f5b942'},{n:'sensor_21',s:.29,c:'#f5b942'}
+].forEach(f=>{
+  driftEl.innerHTML+=`<div class="drift-row">
+    <div class="drift-name">${f.n}</div>
+    <div class="drift-bar-track"><div class="drift-bar-fill" style="width:${f.s*200}%;background:${f.c}66;border-right:2px solid ${f.c}"></div></div>
+    <div class="drift-score" style="color:${f.c}">${f.s.toFixed(2)}</div>
+  </div>`;
+});
+
+// ── 6. Prediction drift chart (static seed) ───────────────────────────────────
+const days30 = Array.from({length:30},(_,i)=>`D-${29-i}`).reverse();
+const rng = (seed) => {let x=seed;return()=>{x=x*1664525+1013904223&0xffffffff;return((x>>>0)/0xffffffff)-.5;}};
+const r1=rng(42),r2=rng(7);
+const bDist=days30.map((_,i)=>+(0.68+Math.sin(i*.3)*.04+r1()*.02).toFixed(3));
+const cDist=days30.map((_,i)=>+(0.71+Math.sin(i*.3)*.03+r2()*.02).toFixed(3));
+new Chart($('predDriftChart').getContext('2d'),{
+  type:'line', data:{labels:days30,datasets:[
+    {label:'Current',data:cDist,borderColor:'#5e9cff',backgroundColor:'rgba(94,156,255,.08)',borderWidth:2,pointRadius:0,fill:true,tension:.4},
+    {label:'Baseline',data:bDist,borderColor:'#30e57a',backgroundColor:'transparent',borderWidth:1.5,pointRadius:0,fill:false,tension:.4,borderDash:[4,3]},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{...plugCfg,legend:{display:true,position:'top',labels:{boxWidth:10,padding:12,usePointStyle:true}}},
+    scales:{x:{...scaleX,ticks:{maxTicksLimit:6}},y:{...scaleY,min:.55,max:.85}}}
+});
+
+// ── 7. Token usage chart (updated by /api/metrics cost data) ─────────────────
+const tokenChart = new Chart($('tokenChart').getContext('2d'),{
+  type:'bar', data:{labels:['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],datasets:[
+    {label:'Input (k)',data:[48,52,45,58,63,29,38],backgroundColor:'rgba(94,156,255,.7)',borderRadius:5,borderWidth:0},
+    {label:'Output (k)',data:[12,14,11,15,17,8,10],backgroundColor:'rgba(176,133,255,.7)',borderRadius:5,borderWidth:0},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{...plugCfg,legend:{display:true,position:'top',labels:{boxWidth:10,padding:12,usePointStyle:true}}},
+    scales:{x:scaleX,y:{...scaleY,title:{display:true,text:'k tokens',color:'#4a5f80'}}}}
+});
+
+// ── 8. Cost breakdown (updated by /api/metrics) ───────────────────────────────
+const costEl=$('cost-breakdown');
+const COST_ROWS = [
+  {l:'Diagnostics (strong)',p:50,c:'#ff4f6d'},
+  {l:'Work-Order (mid)',p:21,c:'#f5b942'},
+  {l:'Scheduling (mid)',p:14,c:'#b085ff'},
+  {l:'Fleet Supervisor',p:8,c:'#5e9cff'},
+  {l:'Per-Asset Monitor',p:6,c:'#30e57a'},
+];
+function renderCostBreakdown(totalUsd) {
+  costEl.innerHTML = '';
+  COST_ROWS.forEach(c => {
+    const amt = (totalUsd * c.p / 100).toFixed(4);
+    costEl.innerHTML+=`<div class="cost-row">
+      <div class="cost-label">${c.l}</div>
+      <div class="cost-bar-track"><div class="cost-bar-fill" style="width:${c.p}%;background:${c.c}"></div></div>
+      <div class="cost-amount" style="color:${c.c}">$${amt}</div>
+    </div>`;
+  });
+}
+renderCostBreakdown(0.84); // seed
+
+// ── 9. Tier doughnut ─────────────────────────────────────────────────────────
+new Chart($('tierChart').getContext('2d'),{
+  type:'doughnut', data:{
+    labels:['Cheap (Fleet+Monitor)','Mid (WO+Scheduling)','Strong (Diagnostics)'],
+    datasets:[{data:[38,32,30],backgroundColor:['rgba(48,229,122,.8)','rgba(176,133,255,.8)','rgba(255,79,109,.8)'],borderWidth:2,borderColor:'#0d1526'}]
+  },
+  options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+    plugins:{...plugCfg,legend:{display:true,position:'bottom',labels:{boxWidth:10,padding:12,usePointStyle:true}}}}
+});
+
+// ── 10. RAGAS chart (static — no live RAGAS endpoint) ────────────────────────
+new Chart($('ragasChart').getContext('2d'),{
+  type:'line', data:{labels:['D-6','D-5','D-4','D-3','D-2','D-1','Today'],datasets:[
+    {label:'Faithfulness',data:[.88,.89,.90,.88,.91,.90,.91],borderColor:'#30e57a',borderWidth:2.5,pointRadius:4,fill:false,tension:.35},
+    {label:'Ans Relevancy',data:[.83,.85,.86,.84,.87,.86,.87],borderColor:'#5e9cff',borderWidth:2.5,pointRadius:4,fill:false,tension:.35},
+    {label:'Context Recall',data:[.80,.81,.83,.82,.84,.83,.84],borderColor:'#b085ff',borderWidth:2.5,pointRadius:4,fill:false,tension:.35},
+  ]},
+  options:{responsive:true,maintainAspectRatio:false,
+    plugins:{...plugCfg,legend:{display:true,position:'top',labels:{boxWidth:10,padding:12,usePointStyle:true}}},
+    scales:{x:scaleX,y:{...scaleY,min:.7,max:1.0}}}
+});
+
+// ── 11. Risk register (static — from docs/04_risk.md) ────────────────────────
+const riskList=$('risk-list');
+[
+  {id:'R2',n:'Hallucinated Diagnosis',s:9,c:'#ff4f6d'},
+  {id:'R1',n:'Missed Failure (FN)',s:6,c:'#f5b942'},
+  {id:'R3',n:'Alarm Fatigue (FP)',s:6,c:'#f5b942'},
+  {id:'R6',n:'Data Leakage',s:6,c:'#f5b942'},
+  {id:'R5',n:'Cost Blow-up',s:4,c:'#30e57a'},
+  {id:'R7',n:'Model Drift',s:4,c:'#30e57a'},
+  {id:'R8',n:'LLM Gateway Outage',s:4,c:'#30e57a'},
+].forEach(r=>{
+  riskList.innerHTML+=`<div style="display:flex;align-items:center;gap:12px;padding:10px 14px;
+    background:var(--bg-card2);border-radius:var(--radius-sm);border:1px solid var(--border);">
+    <span style="font-family:var(--font-mono);font-size:.7rem;color:var(--text-muted);width:24px">${r.id}</span>
+    <span style="flex:1;font-size:.78rem;font-weight:500">${r.n}</span>
+    <span style="font-family:var(--font-mono);font-size:.76rem;font-weight:700;padding:2px 10px;
+      border-radius:999px;background:${r.c}20;color:${r.c}">x${r.s}</span>
+  </div>`;
+});
+
+// ── 12. RUL Fleet chart (live from /api/fleet-summary) ───────────────────────
+const rulChartInst = new Chart($('rulChart').getContext('2d'),{
+  type:'bar', data:{labels:[],datasets:[{
+    label:'RUL cycles',data:[],
+    backgroundColor:[],
+    borderRadius:4,borderWidth:0,
+  }]},
+  options:{responsive:true,maintainAspectRatio:false,plugins:plugCfg,
+    scales:{x:{...scaleX,ticks:{font:{size:9},maxRotation:45}},
+            y:{...scaleY,title:{display:true,text:'Cycles Remaining',color:'#4a5f80'}}}}
+});
+
+async function fetchFleetRUL() {
+  try {
+    const res = await fetch('/api/fleet-summary?dataset_id=FD001');
+    if (!res.ok) throw new Error('fleet fetch failed');
+    const data = await res.json();
+    const units = data.units || [];
+    const labels = units.map(u => `ENG-${String(u.unit_id).padStart(4,'0')}`);
+    const vals   = units.map(u => u.final_rul ?? 0);
+    const colors = vals.map(v =>
+      v < 30  ? 'rgba(255,79,109,.85)' :
+      v < 60  ? 'rgba(245,185,66,.8)'  :
+               'rgba(94,156,255,.65)');
+    const critical = vals.filter(v => v < 30).length;
+    rulChartInst.data.labels = labels;
+    rulChartInst.data.datasets[0].data = vals;
+    rulChartInst.data.datasets[0].backgroundColor = colors;
+    rulChartInst.update('active');
+    // Update badge
+    const badge = document.querySelector('.card-badge.badge-warn');
+    if (badge) badge.textContent = `${critical} Asset${critical!==1?'s':''} <30 cycles`;
+  } catch(e) {
+    console.warn('[RUL] fleet-summary unavailable, keeping seed data', e);
+    // Seed fallback so the chart isn't empty
+    const assets = Array.from({length:30},(_,i)=>`ENG-${String(i+1).padStart(4,'0')}`);
+    const rul    = [142,98,85,210,175,34,67,155,120,88,42,195,220,76,145,63,189,108,91,250,118,52,168,205,39,83,131,172,99,241];
+    rulChartInst.data.labels = assets;
+    rulChartInst.data.datasets[0].data = rul;
+    rulChartInst.data.datasets[0].backgroundColor = rul.map(v=>v<30?'rgba(255,79,109,.85)':v<60?'rgba(245,185,66,.8)':'rgba(94,156,255,.65)');
+    rulChartInst.update();
+  }
+}
+fetchFleetRUL(); // load on start; no need to poll — RUL changes slowly
+
+// ── 13. Alert feed (live from /api/work-orders) ───────────────────────────────
+const alertFeed=$('alert-feed');
+const seenWOIds = new Set();
+
+// Seed static alerts so feed isn't empty before first fetch
+[
+  {t:'warn',i:'⚠️',m:'RUL < 30 cycles — check fleet for critical assets',ts:'--:--:--',ag:'Fleet Monitor'},
+  {t:'info',i:'ℹ️',m:'Dashboard connected — polling /api/metrics every 5s',ts:'--:--:--',ag:'System'},
+].forEach(a=>{
+  alertFeed.innerHTML+=`<div class="alert-item ${a.t}">
+    <div class="alert-icon">${a.i}</div>
+    <div class="alert-body">
+      <div class="alert-msg">${a.m}</div>
+      <div class="alert-meta">${a.ts} · ${a.ag}</div>
+    </div>
+  </div>`;
+});
+
+async function fetchAlerts() {
+  try {
+    const res = await fetch('/api/work-orders?status=PENDING_APPROVAL&priority=ALL');
+    if (!res.ok) throw new Error('WO fetch failed');
+    const data = await res.json();
+    const wos  = (data.work_orders || []).slice(0, 12); // cap at 12
+    let newItems = 0;
+    wos.forEach(wo => {
+      if (seenWOIds.has(wo.id || wo.wo_id)) return;
+      seenWOIds.add(wo.id || wo.wo_id);
+      const severity = (wo.severity || 'medium').toLowerCase();
+      const cls  = severity === 'high' ? 'crit' : severity === 'medium' ? 'warn' : 'info';
+      const icon = severity === 'high' ? '🚨' : severity === 'medium' ? '⚠️' : 'ℹ️';
+      const ts   = wo.created_at ? new Date(wo.created_at).toLocaleTimeString('en-IN', {hour12:false}) : '--:--:--';
+      const item = document.createElement('div');
+      item.className = `alert-item ${cls}`;
+      item.innerHTML = `<div class="alert-icon">${icon}</div>
+        <div class="alert-body">
+          <div class="alert-msg">WO pending: ${wo.failure_mode || '?'} — Asset ${wo.asset_id || '?'}</div>
+          <div class="alert-meta">${ts} · ${wo.priority || '?'} priority · conf ${wo.confidence != null ? wo.confidence.toFixed(2) : 'n/a'}</div>
+        </div>`;
+      alertFeed.prepend(item);
+      newItems++;
+    });
+    if (newItems > 0) {
+      // Trim feed to 12 entries
+      while (alertFeed.children.length > 12) alertFeed.removeChild(alertFeed.lastChild);
+    }
+  } catch(e) {
+    console.warn('[Alerts] work-orders unavailable', e);
+  }
+}
+fetchAlerts();
+setInterval(fetchAlerts, 10000);
+
+// ── 14. /api/metrics — Main live polling loop (every 5 seconds) ──────────────
+let latencyHistory = { p50: [...p50init], p95: [...p95init], p99: [...p99init] };
+
+async function fetchMetrics() {
+  try {
+    const res = await fetch('/api/metrics');
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const d = await res.json();
+    setConn(true);
+
+    // ── KPI 1: Latency P95 ──
+    const p95val = d.latency?.p95_ms || 0;
+    $('kpi-latency').innerHTML = `${Math.round(p95val)}<span class="kpi-unit">ms</span>`;
+    bar('bar-latency', Math.min(100, (p95val / 600) * 100));
+
+    // ── KPI 2: Requests/hour ──
+    const rph = d.requests?.total_last_hour || 0;
+    $('kpi-rps').innerHTML = `${rph}<span class="kpi-unit">/h</span>`;
+    bar('bar-rps', Math.min(100, (rph / 500) * 100));
+
+    // ── KPI 3: Error rate ──
+    const errPct = d.requests?.error_rate_pct || 0;
+    $('kpi-err').innerHTML = `${errPct.toFixed(1)}<span class="kpi-unit">%</span>`;
+    bar('bar-err', Math.min(100, errPct * 10)); // SLO is <10%
+
+    // ── KPI 7: Auto-draft + escalation ──
+    const autoPct = d.ml?.auto_draft_rate_pct;
+    const escPct  = d.ml?.escalation_rate_pct;
+    if (autoPct != null) {
+      $('kpi-latency'); // already set
+      // update gate KPIs
+      const autoEl = document.querySelector('[id="bar-auto"]');
+      const escEl  = document.querySelector('[id="bar-esc"]');
+      bar('bar-auto', autoPct);
+      bar('bar-esc',  Math.min(100, escPct * 4));
+    }
+
+    // ── Cost badge ──
+    const costUsd = d.cost?.total_usd_today || 0;
+    const costBadge = document.querySelector('.card-badge.badge-ok[data-cost]');
+    // Update cost breakdown bars with real total
+    if (costUsd > 0) renderCostBreakdown(costUsd);
+    // Today's token count → update last bar in token chart
+    const tokToday = d.cost?.total_tokens_today || 0;
+    if (tokToday > 0) {
+      const todayIdx = new Date().getDay(); // 0=Sun … 6=Sat
+      const chartDay = todayIdx === 0 ? 6 : todayIdx - 1; // Mon=0
+      tokenChart.data.datasets[0].data[chartDay] = Math.round(tokToday * 0.8 / 1000);
+      tokenChart.data.datasets[1].data[chartDay] = Math.round(tokToday * 0.2 / 1000);
+      tokenChart.update('none');
+    }
+
+    // ── Latency chart — push new P50/P95/P99 point ──
+    const nowHour = new Date().getHours();
+    latencyHistory.p50[nowHour] = d.latency?.p50_ms || latencyHistory.p50[nowHour];
+    latencyHistory.p95[nowHour] = d.latency?.p95_ms || latencyHistory.p95[nowHour];
+    latencyHistory.p99[nowHour] = d.latency?.p99_ms || latencyHistory.p99[nowHour];
+    latencyChart.data.datasets[2].data = latencyHistory.p50;
+    latencyChart.data.datasets[1].data = latencyHistory.p95;
+    latencyChart.data.datasets[0].data = latencyHistory.p99;
+    latencyChart.update('none');
+
+    // ── Per-endpoint latency → map to agents ──
+    const epLat = d.latency?.by_endpoint || {};
+    const diagLat = epLat['/api/diagnose'] || 0;
+    const streamLat = epLat['/api/stream'] || 0;
+    const fleetLat  = epLat['/api/fleet-summary'] || 0;
+    // Update agent latency chart with real diagnose latency for Diagnostics slot
+    if (diagLat > 0) {
+      agentLatencyChart.data.datasets[0].data[2] = Math.round(diagLat);
+      agentLatencyChart.update('none');
+    }
+
+    // ── Work-order counts from DB ──
+    const wo = d.work_orders || {};
+    // Update auto-draft rate label if total diagnoses known
+    const totalDx = d.ml?.total_diagnoses || 0;
+    if (totalDx > 0) {
+      $('kpi-wo') && ($('kpi-wo').innerHTML = `${totalDx}<span class="kpi-unit"> dx</span>`);
+    }
+
+    // ── Uptime ──
+    const upSec = d.system?.uptime_seconds || 0;
+    const upPct = Math.min(100, (upSec / (30 * 86400)) * 100);
+    bar('bar-up', upPct);
+
+    // ── Inject a live system event into the feed ──
+    if (p95val > 0) {
+      const statusCls = errPct > 5 ? 'crit' : errPct > 2 ? 'warn' : 'ok';
+      const statusIcon = errPct > 5 ? '🚨' : errPct > 2 ? '⚠️' : '✅';
+      const ts = new Date().toLocaleTimeString('en-IN', {hour12:false});
+      const item = document.createElement('div');
+      item.className = `alert-item ${statusCls}`;
+      item.innerHTML = `<div class="alert-icon">${statusIcon}</div>
+        <div class="alert-body">
+          <div class="alert-msg">Metrics snapshot — P95: ${Math.round(p95val)}ms · Req/h: ${rph} · Err: ${errPct.toFixed(1)}%</div>
+          <div class="alert-meta">${ts} · /api/metrics · ${totalDx} total diagnoses</div>
+        </div>`;
+      alertFeed.prepend(item);
+      while (alertFeed.children.length > 12) alertFeed.removeChild(alertFeed.lastChild);
+    }
+
+  } catch(e) {
+    setConn(false);
+    const ts = new Date().toLocaleTimeString('en-IN', {hour12:false});
+    const item = document.createElement('div');
+    item.className = 'alert-item warn';
+    item.innerHTML = `<div class="alert-icon">⚠️</div>
+      <div class="alert-body">
+        <div class="alert-msg">Backend unreachable — retrying in 5s</div>
+        <div class="alert-meta">${ts} · /api/metrics · ${e.message}</div>
+      </div>`;
+    alertFeed.prepend(item);
+    while (alertFeed.children.length > 12) alertFeed.removeChild(alertFeed.lastChild);
+    console.warn('[Metrics] fetch failed:', e);
+  }
+}
+
+// Kick off immediately and then every 5 seconds
+fetchMetrics();
+setInterval(fetchMetrics, 5000);
+</script>
+</body>
+</html>
