@@ -22,12 +22,13 @@
 <!-- PROMINENT LIVE DEMO CALLOUT -->
 <br/>
 <p align="center">
-  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank">
-    <img src="https://img.shields.io/badge/🌐_LIVE_APPLICATION-LAUNCH_MECH_SAGE_DASHBOARD-00E676?style=for-the-badge&logo=googlecloud&logoColor=white&labelColor=0F2027" height="45" alt="Launch MechSage Live Dashboard"/>
+  <a href="https://mechsage-api-477243600777.asia-south1.run.app/monitoring" target="_blank">
+    <img src="https://img.shields.io/badge/📊_LIVE_MONITORING-LAUNCH_MONITORING_DASHBOARD-00E676?style=for-the-badge&logo=googlecloud&logoColor=white&labelColor=0F2027" height="45" alt="Launch MechSage Monitoring Dashboard"/>
   </a>
 </p>
 <p align="center">
-  <a href="https://mechsage-api-ffnjatyswa-el.a.run.app/" target="_blank"><b>👉 https://mechsage-api-ffnjatyswa-el.a.run.app 👈</b></a>
+  <a href="https://mechsage-api-477243600777.asia-south1.run.app/monitoring" target="_blank"><b>📊 Monitoring Dashboard: https://mechsage-api-477243600777.asia-south1.run.app/monitoring</b></a><br/>
+  <a href="https://mechsage-api-477243600777.asia-south1.run.app/" target="_blank"><b>🌐 Application API: https://mechsage-api-477243600777.asia-south1.run.app</b></a>
 </p>
 <br/>
 
