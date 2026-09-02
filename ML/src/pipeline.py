@@ -614,8 +614,8 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
             "task": task_label,
             "main_metric": best_row["Main metric"],
             "test_score": best_row["Test score"],
-            "local_model_path": model_path,
-            "mlflow_model_artifact_path": log_info["model_artifact_path"],
+            "local_model_path": os.path.relpath(model_path, dirs["root"]),
+            "mlflow_model_artifact_path": os.path.relpath(log_info["model_artifact_path"], dirs["root"]) if not log_info["model_artifact_path"].startswith(("http", "file://", "./")) else log_info["model_artifact_path"].replace("file:///" + dirs["root"].replace("\\", "/") + "/", "./").replace("file:///" + dirs["root"] + "/", "./"),
         }
     )
     save_model_card(model_card_path, model_card)

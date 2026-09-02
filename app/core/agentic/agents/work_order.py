@@ -5,19 +5,19 @@ structured work order in plain plant language that a technician can execute.
 
 Hard rule: stays grounded in retrieved passages only. Never invents procedures.
 
-Model: gemini-3.1-flash-lite (formatting task, not deep reasoning).
+Model: google/gemini-2.5-flash (formatting task, not deep reasoning).
+All LLM calls are routed through the centralized gateway (litellm + circuit breaker).
 """
 
 from __future__ import annotations
 
-import os
 import textwrap
 from pathlib import Path
 
-from openai import OpenAI
-
 from app.core.agentic.state import MechSageState
 from app.core.agentic.config import OrchestratorConfig
+from app.core.gateway import llm_complete
+from app.core.circuit_breaker import CircuitOpenError
 
 # Load .env from project root
 try:
@@ -29,25 +29,6 @@ except ImportError:
 
 _config = OrchestratorConfig()
 
-
-def _call_llm(system_instruction: str, prompt: str, max_tokens: int, temperature: float) -> str:
-    """Helper to call OpenRouter."""
-    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY")
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,
-        default_headers={"HTTP-Referer": "https://github.com/MechSage", "X-Title": "MechSage"}
-    )
-    response = client.chat.completions.create(
-        model=_config.cheap_model,
-        messages=[
-            {"role": "system", "content": system_instruction},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=max_tokens,
-        temperature=temperature
-    )
-    return response.choices[0].message.content.strip()
 
 def _get_system_instruction() -> str:
     return textwrap.dedent("""\
@@ -102,7 +83,7 @@ def work_order_node(state: MechSageState) -> dict:
     LangGraph node function for Work-Order Drafting.
 
     Takes the diagnosis and retrieved passages from the Diagnostics node
-    and generates a structured work order using the flash-lite model.
+    and generates a structured work order using the flash model via gateway.
     """
     asset_id = state["asset_id"]
     rul = state.get("rul_estimate", 0)
@@ -137,12 +118,16 @@ def work_order_node(state: MechSageState) -> dict:
     )
 
     try:
-        work_order_text = _call_llm(
-            system_instruction=_get_system_instruction(),
-            prompt=prompt,
+        work_order_text = llm_complete(
+            model=_config.cheap_model,
+            system=_get_system_instruction(),
+            user=prompt,
             max_tokens=768,
-            temperature=0.1
+            temperature=0.1,
         )
+    except CircuitOpenError as exc:
+        work_order_text = f"[WorkOrderError] Circuit OPEN: {exc}"
+        print(f"[WorkOrder] ERROR: {exc}")
     except Exception as exc:
         work_order_text = f"[WorkOrderError] Generation failed: {exc}"
         print(f"[WorkOrder] ERROR: {exc}")

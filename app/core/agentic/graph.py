@@ -5,7 +5,7 @@ Graph topology:
         ├─ normal    → update_dashboard
         └─ escalate  → diagnostics → [conditional]
                           ├─ abstain       → human_review → update_dashboard
-                          └─ diagnosed     → work_order   → scheduling → update_dashboard
+                          └─ diagnosed     → scheduling → [INTERRUPT: wait for approval] → work_order → update_dashboard
 
     update_dashboard → END
 """
@@ -13,6 +13,7 @@ Graph topology:
 from __future__ import annotations
 
 from langgraph.graph import StateGraph, END
+from langgraph.checkpoint.memory import MemorySaver
 
 from app.core.agentic.state import MechSageState
 from app.core.agentic.agents.supervisor import supervisor_node
@@ -43,7 +44,7 @@ def update_dashboard_node(state: MechSageState) -> dict:
 
 
 # -----------------------------------------------------------------------
-# Human Review node (terminal node for the abstain path)
+# Human Review node (terminal node for the abstain/failed path)
 # -----------------------------------------------------------------------
 def human_review_node(state: MechSageState) -> dict:
     """
@@ -54,14 +55,16 @@ def human_review_node(state: MechSageState) -> dict:
     asset_id = state.get("asset_id", "unknown")
     fault = state.get("fault_hypothesis", "unknown")
     diagnosis = state.get("diagnosis", "unresolved")
+    error = state.get("error", "None")
 
     msg = (
         f"[HumanReview] 🔴 HUMAN REVIEW REQUIRED\n"
         f"  Asset:      {asset_id}\n"
         f"  Hypothesis:  {fault}\n"
         f"  Diagnosis:   {diagnosis}\n"
+        f"  Error:       {error}\n"
         f"  Reason:      The system could not produce a confident, grounded\n"
-        f"               diagnosis from the available maintenance manuals.\n"
+        f"               diagnosis, or an LLM gateway error occurred.\n"
         f"  Action:      A human maintenance engineer must review this case."
     )
     print(msg)
@@ -84,11 +87,14 @@ def route_after_monitor(state: MechSageState) -> str:
 
 
 def route_after_diagnostics(state: MechSageState) -> str:
-    """After the Diagnostics node, decide whether to draft a work order or
+    """After the Diagnostics node, decide whether to draft a schedule or
     route to human review."""
-    if state.get("status") == "abstain" or state.get("diagnosis") == "unresolved":
+    # Failed or abstain paths go to human_review
+    if state.get("status") in ("abstain", "failed") or state.get("diagnosis") == "unresolved":
         return "human_review"
-    return "work_order"
+    
+    # Healthy diagnosed path goes to scheduling first, which proposes downtime
+    return "scheduling"
 
 
 # -----------------------------------------------------------------------
@@ -103,8 +109,8 @@ def build_graph() -> StateGraph:
     graph.add_node("supervisor", supervisor_node)
     graph.add_node("monitor", monitor_node)
     graph.add_node("diagnostics", diagnostics_node)
-    graph.add_node("work_order", work_order_node)
     graph.add_node("scheduling", scheduling_node)
+    graph.add_node("work_order", work_order_node)
     graph.add_node("human_review", human_review_node)
     graph.add_node("update_dashboard", update_dashboard_node)
 
@@ -129,20 +135,29 @@ def build_graph() -> StateGraph:
         "diagnostics",
         route_after_diagnostics,
         {
-            "work_order": "work_order",
+            "scheduling": "scheduling",
             "human_review": "human_review",
         },
     )
 
-    # Linear edges connecting to the dashboard update
-    graph.add_edge("work_order", "scheduling")
-    graph.add_edge("scheduling", "update_dashboard")
+    # Graph flow logic:
+    # 1. diagnostics -> scheduling
+    # 2. scheduling -> work_order (INTERRUPTED BEFORE)
+    # 3. work_order -> update_dashboard
+    
+    graph.add_edge("scheduling", "work_order")
+    graph.add_edge("work_order", "update_dashboard")
     graph.add_edge("human_review", "update_dashboard")
     
     # Finally, end the graph
     graph.add_edge("update_dashboard", END)
 
-    return graph.compile()
+    # Compile with memory checkpointer and interrupt before work order
+    memory = MemorySaver()
+    return graph.compile(
+        checkpointer=memory,
+        interrupt_before=["work_order"]
+    )
 
 
 # Singleton compiled graph

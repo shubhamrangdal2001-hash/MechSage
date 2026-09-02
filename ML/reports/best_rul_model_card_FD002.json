@@ -8,6 +8,6 @@
   "task": "rul",
   "main_metric": "RMSE",
   "test_score": 29.985369023612677,
-  "local_model_path": "D:\\Capstone\\MechSage\\ML\\models\\best_rul_model_FD002.joblib",
-  "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/203621584362175723/558750e984b24c528309275f27072130/artifacts/final_model"
+  "local_model_path": "models\\best_rul_model_FD002.joblib",
+  "mlflow_model_artifact_path": "./mlruns/203621584362175723/558750e984b24c528309275f27072130/artifacts/final_model"
 }

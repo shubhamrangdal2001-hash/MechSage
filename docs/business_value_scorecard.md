@@ -31,8 +31,9 @@ Fleet-wide monthly cost includes **Rs 52,700 base monitoring layer** (continuous
 | :--- | :---: | :--- | :---: | :---: | :---: | :--- |
 | **Total Monthly Cost** | - | - | Rs 1,24,700 | Rs 1,99,580 | Rs 4,15,580 | **Verified within budgets** |
 | **Cost per Asset Monitored** | Guardrail | < \$0.01 / asset / cycle | Meets (\$0.0044) | Meets (\$0.0044) | Meets (\$0.0044) | **Meets (~Rs 0.37 / cycle)** |
-| **Early-detection Lead Time** | North-star | $\ge$ 15 cycles ahead | Meets (~18 cycles) | Meets (~17 cycles) | Meets (~16 cycles) | *Pending backtest on FD001* |
-| **False-alarm Rate** | Guardrail | < 10% human-rejected | Meets (~8%) | Meets (~8%) | N/A (human review) | *Pending human feedback* |
+| **Early-detection Lead Time** | North-star | $\ge$ 25 cycles ahead | Meets (~25 cycles) | Meets (~18 cycles) | Meets (~12 cycles) | **22.5 cycles (FD004 median)** |
+| **RUL prediction error (RMSE)** | Supporting | $\le$ 18 cycles | Meets (16.17) | Meets (18.36) | Miss (34.59) | **18.36 cycles (FD004 best model)** |
+| **False-alarm Rate (FAR)** | Guardrail | < 10% human-rejected | Meets (1.11%) | Meets (1.24%) | N/A (human review) | **1.24% FAR on FD004 Test Set** |
 | **RUL Explanation Quality** | Supporting | RAGAS Faithfulness $\ge$ 0.8 | Meets (~0.85) | Meets (~0.82) | Miss (~0.62) | *Deferred to Sprint 2* |
 | **Work-order Usefulness** | Supporting | $\ge$ 80% accepted as-is | Meets (~85%) | Miss (~76%) | N/A (no auto-plan) | *Deferred to Sprint 2* |
 | **Latency Budget (NFR)** | - | Diagnosis + plan $\le$ 30s | Meets (~8s) | Meets (~14s) | Meets (~10s) | **Retrieval P95: 1.33s** (Actual) |

@@ -669,6 +669,87 @@ async def approve_diagnosis(diagnosis_id: str, req: ApprovalRequestFull):
     }
 
 
+# ---------------------------------------------------------------------------
+# LangGraph Stateful Endpoints (Human-in-the-Loop)
+# ---------------------------------------------------------------------------
+
+class GraphRunRequest(BaseModel):
+    asset_id: str
+    rul_estimate: float
+    degrading_sensors: List[str]
+    raw_telemetry: dict = {}
+
+@app.post("/api/graph/run")
+async def run_graph_endpoint(req: GraphRunRequest):
+    """Start a stateful graph run. It will pause before work_order creation."""
+    from app.core.agentic.graph import mechsage_graph
+    import uuid
+    
+    thread_id = str(uuid.uuid4())
+    config = {"configurable": {"thread_id": thread_id}}
+    
+    initial_state = {
+        "asset_id": req.asset_id,
+        "rul_estimate": req.rul_estimate,
+        "degrading_sensors": req.degrading_sensors,
+        "raw_telemetry": req.raw_telemetry,
+        "messages": [f"[API] Starting diagnostic run for {req.asset_id}"],
+    }
+    
+    final_state = mechsage_graph.invoke(initial_state, config=config)
+    
+    # After invoke returns, it's either finished, or paused at work_order
+    is_paused = "work_order" in mechsage_graph.get_state(config).next
+    
+    return {
+        "thread_id": thread_id,
+        "status": final_state.get("status"),
+        "approval_status": final_state.get("approval_status"),
+        "is_paused": is_paused,
+        "schedule_proposal": final_state.get("schedule_proposal"),
+    }
+
+@app.post("/api/graph/{thread_id}/approve")
+async def approve_graph(thread_id: str):
+    """Resume a paused graph run to execute the work_order node."""
+    from app.core.agentic.graph import mechsage_graph
+    
+    config = {"configurable": {"thread_id": thread_id}}
+    state = mechsage_graph.get_state(config)
+    
+    if "work_order" not in state.next:
+        raise HTTPException(status_code=400, detail="Graph is not waiting for approval.")
+        
+    # Resume the graph with no new input
+    final_state = mechsage_graph.invoke(None, config=config)
+    
+    return {
+        "thread_id": thread_id,
+        "status": final_state.get("status"),
+        "messages": final_state.get("messages", [])[-1:],
+    }
+
+@app.post("/api/graph/{thread_id}/reject")
+async def reject_graph(thread_id: str):
+    """Reject a paused graph run."""
+    from app.core.agentic.graph import mechsage_graph
+    
+    config = {"configurable": {"thread_id": thread_id}}
+    state = mechsage_graph.get_state(config)
+    
+    if "work_order" not in state.next:
+        raise HTTPException(status_code=400, detail="Graph is not waiting for approval.")
+        
+    # Update state directly to bypass work_order or mark as rejected
+    mechsage_graph.update_state(config, {"approval_status": "rejected", "status": "human_rejected"})
+    
+    return {
+        "thread_id": thread_id,
+        "status": "human_rejected",
+        "message": "Graph run rejected and halted."
+    }
+
+
 @app.get("/api/work-orders")
 async def list_work_orders(
     status: str = Query("ALL"),

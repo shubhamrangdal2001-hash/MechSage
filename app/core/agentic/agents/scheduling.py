@@ -4,19 +4,19 @@ This is the final agent in the happy path. It proposes a maintenance schedule
 based on the RUL urgency and work order priority, then STOPS at a human-approval
 interrupt. Nothing commits without explicit human sign-off.
 
-Model: gemini-3.1-flash-lite (simple scheduling logic).
+Model: google/gemini-2.5-flash (simple scheduling logic).
+All LLM calls are routed through the centralized gateway (litellm + circuit breaker).
 """
 
 from __future__ import annotations
 
-import os
 import textwrap
 from pathlib import Path
 
-from openai import OpenAI
-
 from app.core.agentic.state import MechSageState
 from app.core.agentic.config import OrchestratorConfig
+from app.core.gateway import llm_complete
+from app.core.circuit_breaker import CircuitOpenError
 
 # Load .env from project root
 try:
@@ -28,25 +28,6 @@ except ImportError:
 
 _config = OrchestratorConfig()
 
-
-def _call_llm(system_instruction: str, prompt: str, max_tokens: int, temperature: float) -> str:
-    """Helper to call OpenRouter."""
-    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY")
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,
-        default_headers={"HTTP-Referer": "https://github.com/MechSage", "X-Title": "MechSage"}
-    )
-    response = client.chat.completions.create(
-        model=_config.cheap_model,
-        messages=[
-            {"role": "system", "content": system_instruction},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=max_tokens,
-        temperature=temperature
-    )
-    return response.choices[0].message.content.strip()
 
 def _get_system_instruction() -> str:
     return textwrap.dedent("""\
@@ -72,8 +53,9 @@ def scheduling_node(state: MechSageState) -> dict:
     LangGraph node function for the Scheduling Agent.
 
     1. Reads the work order from state.
-    2. Proposes a maintenance window using flash-lite.
-    3. Sets approval_status = 'pending' to trigger human interrupt.
+    2. Proposes a maintenance window using the flash model via gateway.
+    3. Sets approval_status = 'pending_review' to signal the frontend.
+       (The actual halt is managed by LangGraph's checkpointer + interrupt_before).
     """
     work_order = state.get("work_order", {})
     asset_id = state.get("asset_id", "unknown")
@@ -90,26 +72,31 @@ def scheduling_node(state: MechSageState) -> dict:
     )
 
     try:
-        schedule_text = _call_llm(
-            system_instruction=_get_system_instruction(),
-            prompt=prompt,
+        schedule_text = llm_complete(
+            model=_config.cheap_model,
+            system=_get_system_instruction(),
+            user=prompt,
             max_tokens=256,
-            temperature=0.0
+            temperature=0.0,
         )
+    except CircuitOpenError as exc:
+        schedule_text = f"[SchedulingError] Circuit OPEN: {exc}"
+        print(f"[Scheduling] ERROR: {exc}")
     except Exception as exc:
-        schedule_text = f"[SchedulingError] {exc}"
+        schedule_text = f"[SchedulingError] Generation failed: {exc}"
         print(f"[Scheduling] ERROR: {exc}")
 
     msg = (
         "[Scheduling] ✓ Schedule proposed. "
-        "Awaiting human approval (approval_status='pending')."
+        "Awaiting human approval (approval_status='pending_review')."
     )
     print(msg)
     print(f"[Scheduling] Proposal:\n{schedule_text}")
 
     return {
         "schedule_proposal": schedule_text,
-        "approval_status": "pending",
-        "status": "awaiting_approval",
+        "approval_status": "pending_review",
+        # We removed "status": "awaiting_approval" so the graph handles the 
+        # pause naturally via checkpointer, without custom routing hacks.
         "messages": [msg],
     }

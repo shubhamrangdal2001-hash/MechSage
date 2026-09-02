@@ -69,9 +69,9 @@
       "Main metric": "RMSE",
       "Runtime": 0.019924000022001565,
       "MLflow run ID": "3879ea90308f4fffa447a7b55c1315eb",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/3879ea90308f4fffa447a7b55c1315eb/artifacts/model",
+      "Model artifact path": "./mlruns/478754518221550792/3879ea90308f4fffa447a7b55c1315eb/artifacts/model",
       "Task": "RUL Regression",
-      "Local model path": "D:\\Capstone\\MechSage\\ML\\models\\LinearRegression_FD003.joblib"
+      "Local model path": "models\\LinearRegression_FD003.joblib"
     },
     {
       "Model name": "RandomForest",
@@ -82,9 +82,9 @@
       "Main metric": "RMSE",
       "Runtime": 1.1889624999603257,
       "MLflow run ID": "63af2ce600944855a5ab40d471ff4b56",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/63af2ce600944855a5ab40d471ff4b56/artifacts/model",
+      "Model artifact path": "./mlruns/478754518221550792/63af2ce600944855a5ab40d471ff4b56/artifacts/model",
       "Task": "RUL Regression",
-      "Local model path": "D:\\Capstone\\MechSage\\ML\\models\\RandomForest_FD003.joblib"
+      "Local model path": "models\\RandomForest_FD003.joblib"
     },
     {
       "Model name": "LightGBM_Anomaly",
@@ -95,9 +95,9 @@
       "Main metric": "F1_Score",
       "Runtime": 5.112425299943425,
       "MLflow run ID": "45c3132512554f9d9d28010d1db34340",
-      "Model artifact path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/45c3132512554f9d9d28010d1db34340/artifacts/model",
+      "Model artifact path": "./mlruns/478754518221550792/45c3132512554f9d9d28010d1db34340/artifacts/model",
       "Task": "Anomaly Detection",
-      "Local model path": "D:\\Capstone\\MechSage\\ML\\models\\LightGBM_Anomaly_FD003.joblib"
+      "Local model path": "models\\LightGBM_Anomaly_FD003.joblib"
     }
   ],
   "best_rul_model": {
@@ -105,33 +105,33 @@
     "test_score": 15.559230510723175,
     "main_metric": "RMSE",
     "mlflow_run_id": "63af2ce600944855a5ab40d471ff4b56",
-    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/63af2ce600944855a5ab40d471ff4b56/artifacts/model"
+    "model_artifact_path": "./mlruns/478754518221550792/63af2ce600944855a5ab40d471ff4b56/artifacts/model"
   },
   "best_anomaly_model": {
     "model_name": "LightGBM_Anomaly",
     "test_score": 0.0,
     "main_metric": "F1_Score",
     "mlflow_run_id": "45c3132512554f9d9d28010d1db34340",
-    "model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/45c3132512554f9d9d28010d1db34340/artifacts/model"
+    "model_artifact_path": "./mlruns/478754518221550792/45c3132512554f9d9d28010d1db34340/artifacts/model"
   },
   "saved_outputs": {
     "best_rul": {
-      "params_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_rul_params_FD003.json",
-      "metrics_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_rul_metrics_FD003.json",
-      "model_path": "D:\\Capstone\\MechSage\\ML\\models\\best_rul_model_FD003.joblib",
-      "model_card_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_rul_model_card_FD003.json",
+      "params_path": "reports\\best_rul_params_FD003.json",
+      "metrics_path": "reports\\best_rul_metrics_FD003.json",
+      "model_path": "models\\best_rul_model_FD003.joblib",
+      "model_card_path": "reports\\best_rul_model_card_FD003.json",
       "mlflow_run_id": "de72eac701fa44dcb3e64aa76a9f7a2e",
-      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/de72eac701fa44dcb3e64aa76a9f7a2e/artifacts/final_model",
+      "mlflow_model_artifact_path": "./mlruns/478754518221550792/de72eac701fa44dcb3e64aa76a9f7a2e/artifacts/final_model",
       "top_features": [],
       "shap_plots": {}
     },
     "best_anomaly": {
-      "params_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_anomaly_params_FD003.json",
-      "metrics_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_anomaly_metrics_FD003.json",
-      "model_path": "D:\\Capstone\\MechSage\\ML\\models\\best_anomaly_model_FD003.joblib",
-      "model_card_path": "D:\\Capstone\\MechSage\\ML\\reports\\best_anomaly_model_card_FD003.json",
+      "params_path": "reports\\best_anomaly_params_FD003.json",
+      "metrics_path": "reports\\best_anomaly_metrics_FD003.json",
+      "model_path": "models\\best_anomaly_model_FD003.joblib",
+      "model_card_path": "reports\\best_anomaly_model_card_FD003.json",
       "mlflow_run_id": "1c5c1de438a84879a8e986e8d5021eef",
-      "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/1c5c1de438a84879a8e986e8d5021eef/artifacts/final_model",
+      "mlflow_model_artifact_path": "./mlruns/478754518221550792/1c5c1de438a84879a8e986e8d5021eef/artifacts/final_model",
       "top_features": [],
       "shap_plots": {}
     }
