@@ -3,30 +3,48 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .pytest_tmp/
+.coverage
+coverage.xml
+htmlcov/
+.ruff_cache/
+.mypy_cache/
 
 # Local environments
 .venv/
 venv/
 env/
+.python-version
+
+# Raw/local datasets and packaged binaries
 
 # Raw/local datasets and packaged binaries
 data/
 *.zip
+*.db
+*.sqlite
+*.sqlite3
 
 # ML experiment outputs
+NASA_CMAPSS_RUL_Project/artifacts/
+NASA_CMAPSS_RUL_Project/models/
+NASA_CMAPSS_RUL_Project/mlruns/
+NASA_CMAPSS_RUL_Project/catboost_info/
+NASA_CMAPSS_RUL_Project/data/
+NASA_CMAPSS_RUL_Project/notebooks/
+NASA_CMAPSS_RUL_Project/*.log
 ML/artifacts/
 ML/models/
 ML/mlruns/
 ML/catboost_info/
+ML/data/
 ML/notebooks/
 ML/*.log
-
-# OS/editor noise
-.DS_Store
-Thumbs.db
+ML/logs/
+backend-live*.log
+inference/logs/
 
 # RAG vector store (rebuilt automatically by evaluate_rag.py)
-app/core/rag/chroma_db/
+dev/rag/chroma_db/
 
 # RAG report outputs (generated artifacts)
 # dev/rag/reports/
@@ -34,3 +52,17 @@ app/core/rag/chroma_db/
 # Environment variables / secrets — never commit API keys!
 .env
 *.env
+
+# Frontend build and dependency output
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/coverage/
+frontend/playwright-report/
+frontend/test-results/
+
+# Runtime and local tooling
+tmp/
+var/
+*.pid
+*.tmp

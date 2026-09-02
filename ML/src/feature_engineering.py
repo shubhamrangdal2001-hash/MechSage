@@ -53,15 +53,73 @@ def add_degradation_trends(df: pd.DataFrame) -> pd.DataFrame:
     return df
 
 
+def add_anomaly_features(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Add anomaly-specific degradation features based on SHAP analysis results.
+
+    Top anomaly-contributing sensors (from FD004 SHAP): 14, 13, 11.
+    These features capture non-linear degradation patterns that linear rolling
+    stats miss:
+
+    - trend_slope_N: linear regression slope over last N cycles (degradation rate)
+    - delta_delta (2nd derivative): rate-of-change of the delta feature
+    - expanding_var: cumulative variance (increases as system degrades)
+
+    All computed per engine unit to avoid cross-unit data leakage.
+    """
+    df = df.copy()
+    # Top sensors identified from SHAP analysis
+    key_sensors = [s for s in ["sensor_13", "sensor_11", "sensor_14", "sensor_8"] if s in df.columns]
+
+    for sensor in key_sensors:
+        # --- Expanding variance: grows as sensor becomes noisier near failure ---
+        df[f"{sensor}_expanding_var"] = (
+            df.groupby("unit_number")[sensor]
+            .transform(lambda x: x.expanding(min_periods=1).var().fillna(0))
+        )
+
+        # --- Second derivative (delta of delta): acceleration of degradation ---
+        delta_col = f"{sensor}_delta"
+        if delta_col in df.columns:
+            df[f"{sensor}_delta2"] = (
+                df.groupby("unit_number")[delta_col]
+                .transform(lambda x: x.diff().fillna(0))
+            )
+
+        # --- Trend slope over last 10 cycles: linear rate of change ---
+        def _slope(x: "pd.Series") -> "pd.Series":
+            result = np.zeros(len(x))
+            vals = x.values
+            for i in range(len(vals)):
+                window = vals[max(0, i - 9): i + 1]
+                n = len(window)
+                if n < 2:
+                    result[i] = 0.0
+                else:
+                    t = np.arange(n)
+                    # Least-squares slope: (n*sum(t*y) - sum(t)*sum(y)) / (n*sum(t^2) - sum(t)^2)
+                    num = n * np.dot(t, window) - t.sum() * window.sum()
+                    den = n * np.dot(t, t) - t.sum() ** 2
+                    result[i] = num / den if den != 0 else 0.0
+            return pd.Series(result, index=x.index)
+
+        df[f"{sensor}_trend_slope"] = (
+            df.groupby("unit_number")[sensor].transform(_slope)
+        )
+
+    return df
+
+
 def engineer_features(df: pd.DataFrame, window_sizes=(5, 10, 20)) -> pd.DataFrame:
     """
     Master feature engineering function. Applies rolling stats, degradation deltas,
-    and expanding mean features in a strictly causal manner.
+    expanding mean features, and anomaly-specific degradation features in a
+    strictly causal manner (no future data leakage).
     """
     df = df.copy()
     # Sort first to prevent any rolling window misalignment
     df = df.sort_values(["unit_number", "time_in_cycles"]).reset_index(drop=True)
-    
+
     # Assert monotonic cycles per unit
     cycle_is_monotonic = (
         df.groupby("unit_number")["time_in_cycles"]
@@ -72,7 +130,7 @@ def engineer_features(df: pd.DataFrame, window_sizes=(5, 10, 20)) -> pd.DataFram
 
     df = add_rolling_features(df, window_sizes=window_sizes)
     df = add_degradation_trends(df)
-    
+
     # Add expanding mean for informative sensors (causal aggregates)
     sensor_cols = [c for c in INFORMATIVE_SENSORS if c in df.columns]
     for sensor in sensor_cols:
@@ -80,8 +138,12 @@ def engineer_features(df: pd.DataFrame, window_sizes=(5, 10, 20)) -> pd.DataFram
             df.groupby("unit_number")[sensor]
             .transform(lambda series: series.expanding(min_periods=1).mean())
         )
-        
+
+    # Add anomaly-specific features (expanding variance, 2nd derivative, trend slope)
+    df = add_anomaly_features(df)
+
     return df
+
 
 
 

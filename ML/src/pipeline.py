@@ -10,17 +10,13 @@ from typing import Iterable, Optional
 import joblib
 import numpy as np
 import pandas as pd
-import torch
-import torch.nn as nn
-from torch.utils.data import DataLoader, TensorDataset
 from catboost import CatBoostRegressor
 from lightgbm import LGBMClassifier, LGBMRegressor
-from sklearn.ensemble import IsolationForest, RandomForestRegressor
+from sklearn.ensemble import RandomForestRegressor
 from sklearn.linear_model import LinearRegression
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.svm import OneClassSVM
 from xgboost import XGBRegressor
 
 from src.data_loader import compute_dataset_version, get_dataset_file_paths, load_cmapss_data
@@ -329,45 +325,19 @@ def _build_rul_models(seed: int, profile: str, requested: Optional[Iterable[str]
     return models
 
 
-def _build_dl_rul_models(input_size: int, profile: str, requested: Optional[Iterable[str]] = None) -> dict:
-    from src.train_rul_models import LSTMRegressor, GRURegressor, CNNRegressor, TransformerRegressor
-    dl_models = {
-        "LSTM": LSTMRegressor(input_size=input_size),
-        "GRU": GRURegressor(input_size=input_size),
-    }
-    if profile == "full":
-        dl_models["CNN_1D"] = CNNRegressor(input_size=input_size)
-        dl_models["Transformer"] = TransformerRegressor(input_size=input_size)
-
-    if requested:
-        dl_models = {name: model for name, model in dl_models.items() if name in set(requested)}
-    else:
-        dl_models = {}
-    return dl_models
-
-
 def _build_anomaly_models(profile: str, requested: Optional[Iterable[str]] = None) -> list:
-    names = ["IsolationForest", "LightGBM_Anomaly"]
-    if profile == "full":
-        names.append("OneClassSVM")
+    """Supervised anomaly detectors only — labels are derived from RUL threshold."""
+    names = ["LightGBM_Anomaly", "RandomForest_Anomaly", "XGBoost_Anomaly"]
+    if profile == "quick":
+        names = ["LightGBM_Anomaly"]   # faster profile uses only one model
     if requested:
         names = [name for name in names if name in set(requested)]
     return names
 
 
-def _build_dl_anomaly_models(input_size: int, profile: str, requested: Optional[Iterable[str]] = None) -> dict:
-    from src.train_anomaly_models import Autoencoder, LSTMAutoencoder
-    dl_models = {
-        "Autoencoder": Autoencoder(input_size=input_size),
-        "LSTM_Autoencoder": LSTMAutoencoder(input_size=input_size),
-    }
-
-    if requested:
-        dl_models = {name: model for name, model in dl_models.items() if name in set(requested)}
-    else:
-        dl_models = {}
-    return dl_models
-
+# ─────────────────────────────────────────────────────────────────────────────
+# HELPERS
+# ─────────────────────────────────────────────────────────────────────────────
 
 def _model_params(model) -> dict:
     return model.get_params() if hasattr(model, "get_params") else {}
@@ -379,6 +349,27 @@ def _save_local_model(model, model_name: str, dataset_id: str, models_dir: str) 
     return path
 
 
+def _threshold_predictions(scores, threshold):
+    return (np.asarray(scores) >= threshold).astype(int)
+
+
+def _best_threshold(y_true, scores):
+    """Sweep thresholds and pick the one maximising F1 on the VALIDATION set."""
+    best_threshold = float(np.percentile(scores, 95))
+    best_f1 = -1.0
+    for threshold in np.quantile(scores, np.linspace(0.5, 0.98, 25)):
+        pred = _threshold_predictions(scores, threshold)
+        score = f1_score(y_true, pred, zero_division=0)
+        if score > best_f1:
+            best_f1 = score
+            best_threshold = float(threshold)
+    return best_threshold
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# TRAINING FUNCTIONS
+# ─────────────────────────────────────────────────────────────────────────────
+
 def train_rul_model(model_name: str, model, data: dict, dirs: dict, dataset_context: dict) -> dict:
     LOGGER.info("Training RUL model: %s", model_name)
     started = time.perf_counter()
@@ -387,22 +378,23 @@ def train_rul_model(model_name: str, model, data: dict, dirs: dict, dataset_cont
     n_features = len(data["feature_cols"])
 
     train_pred = model.predict(data["X_train"])
-    val_pred = model.predict(data["X_val"])
-    test_pred = model.predict(data["X_test"])
+    val_pred   = model.predict(data["X_val"])
+    test_pred  = model.predict(data["X_test"])
     metrics_by_split = {
-        "train": compute_regression_metrics(data["y_train_rul"], train_pred, n_features=n_features),
-        "validation": compute_regression_metrics(data["y_val_rul"], val_pred, n_features=n_features),
-        "test": compute_regression_metrics(data["y_test_rul"], test_pred, n_features=n_features),
+        "train":      compute_regression_metrics(data["y_train_rul"], train_pred, n_features=n_features),
+        "validation": compute_regression_metrics(data["y_val_rul"],   val_pred,   n_features=n_features),
+        "test":       compute_regression_metrics(data["y_test_rul"],  test_pred,  n_features=n_features),
     }
 
     safe = f"{_safe_name(model_name)}_{dataset_context['dataset_id']}"
-    prediction_plot = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.png")
-    prediction_csv = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.csv")
+    prediction_plot  = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.png")
+    prediction_csv   = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.csv")
     feature_plot_path = os.path.join(dirs["artifacts"], f"{safe}_feature_importance.png")
-    residual_plot = os.path.join(dirs["artifacts"], f"{safe}_residuals.png")
-    context_json = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
+    residual_plot    = os.path.join(dirs["artifacts"], f"{safe}_residuals.png")
+    context_json     = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
     local_model = _save_local_model(model, model_name, dataset_context["dataset_id"], dirs["models"])
 
+    from src.visualization import plot_residuals
     plot_rul_predictions(data["y_test_rul"], test_pred, title=f"{model_name} RUL Predictions", save_path=prediction_plot)
     plot_residuals(data["y_test_rul"], test_pred, title=f"{model_name} Residuals", save_path=residual_plot)
     save_predictions(prediction_csv, data["y_test_rul"], test_pred)
@@ -417,126 +409,95 @@ def train_rul_model(model_name: str, model, data: dict, dirs: dict, dataset_cont
         dataset_context=dataset_context,
         params=_model_params(model),
         metrics_by_split=metrics_by_split,
-        artifacts=[path for path in artifacts if path],
+        artifacts=[p for p in artifacts if p],
         model_flavor="sklearn",
         tags={"profile": dataset_context.get("profile", "unknown")},
     )
 
     return {
-        "Model name": model_name,
+        "Model name":           model_name,
         "Best hyperparameters": json.dumps(_model_params(model), sort_keys=True, default=str),
-        "Train score": metrics_by_split["train"]["RMSE"],
-        "Validation score": metrics_by_split["validation"]["RMSE"],
-        "Test score": metrics_by_split["test"]["RMSE"],
-        "Main metric": "RMSE",
-        "Runtime": runtime,
-        "MLflow run ID": log_info["run_id"],
-        "Model artifact path": log_info["model_artifact_path"],
-        "Task": "RUL Regression",
-        "Estimator": model,
-        "Best params dict": _model_params(model),
-        "Test metrics dict": metrics_by_split["test"],
-        "Local model path": local_model,
+        "Train score":          metrics_by_split["train"]["RMSE"],
+        "Validation score":     metrics_by_split["validation"]["RMSE"],
+        "Test score":           metrics_by_split["test"]["RMSE"],
+        "Main metric":          "RMSE",
+        "Runtime":              runtime,
+        "MLflow run ID":        log_info["run_id"],
+        "Model artifact path":  log_info["model_artifact_path"],
+        "Task":                 "RUL Regression",
+        "Estimator":            model,
+        "Best params dict":     _model_params(model),
+        "Test metrics dict":    metrics_by_split["test"],
+        "Local model path":     local_model,
     }
-
-
-def _threshold_predictions(scores, threshold):
-    return (np.asarray(scores) >= threshold).astype(int)
-
-
-def _best_threshold(y_true, scores):
-    best_threshold = float(np.percentile(scores, 95))
-    best_f1 = -1.0
-    for threshold in np.quantile(scores, np.linspace(0.5, 0.98, 25)):
-        pred = _threshold_predictions(scores, threshold)
-        score = f1_score(y_true, pred, zero_division=0)
-        if score > best_f1:
-            best_f1 = score
-            best_threshold = float(threshold)
-    return best_threshold
 
 
 def train_anomaly_model(model_name: str, data: dict, dirs: dict, dataset_context: dict, seed: int) -> dict:
+    """Train a SUPERVISED anomaly model. Labels come from RUL <= threshold."""
     LOGGER.info("Training anomaly model: %s", model_name)
     started = time.perf_counter()
     X_train, y_train = data["X_train"], data["y_train_anomaly"]
-    X_val, y_val = data["X_val"], data["y_val_anomaly"]
-    X_test, y_test = data["X_test"], data["y_test_anomaly"]
-    nominal_train = X_train[y_train == 0]
+    X_val,   y_val   = data["X_val"],   data["y_val_anomaly"]
+    X_test,  y_test  = data["X_test"],  data["y_test_anomaly"]
 
-    if model_name == "IsolationForest":
-        model = IsolationForest(n_estimators=100, contamination=0.05, random_state=seed, n_jobs=1)
-        model.fit(nominal_train)
-        train_scores = -model.score_samples(X_train)
-        val_scores = -model.score_samples(X_val)
-        test_scores = -model.score_samples(X_test)
-        threshold = _best_threshold(y_val, val_scores)
-        params = {**_model_params(model), "threshold": threshold, "fit_data": "nominal_train_rows"}
-    elif model_name == "OneClassSVM":
-        model = OneClassSVM(kernel="rbf", gamma="scale", nu=0.05)
-        model.fit(nominal_train[: min(10000, len(nominal_train))])
-        train_scores = -model.decision_function(X_train)
-        val_scores = -model.decision_function(X_val)
-        test_scores = -model.decision_function(X_test)
-        threshold = _best_threshold(y_val, val_scores)
-        params = {**_model_params(model), "threshold": threshold, "fit_data": "nominal_train_rows"}
-    elif model_name == "LightGBM_Anomaly":
-        params = {
-            "n_estimators": 120 if dataset_context.get("profile") == "quick" else 250,
-            "learning_rate": 0.05,
-            "max_depth": 6,
-            "num_leaves": 31,
-            "class_weight": "balanced",
-            "random_state": seed,
-            "n_jobs": 1 if dataset_context.get("profile") == "quick" else -1,
-            "verbose": -1,
-        }
-        model = LGBMClassifier(**params)
-        model.fit(X_train, y_train)
-        train_scores = model.predict_proba(X_train)[:, 1]
-        val_scores = model.predict_proba(X_val)[:, 1]
-        test_scores = model.predict_proba(X_test)[:, 1]
-        threshold = _best_threshold(y_val, val_scores)
-        params = {**params, "threshold": threshold, "threshold_source": "validation_f1"}
+    if model_name == "LightGBM_Anomaly":
+        from src.train_anomaly_models import train_lightgbm_anomaly
+        model, params, test_metrics = train_lightgbm_anomaly(
+            X_train, y_train, X_val, y_val, X_test, y_test, seed=seed
+        )
+    elif model_name == "RandomForest_Anomaly":
+        from src.train_anomaly_models import train_random_forest_anomaly
+        model, params, test_metrics = train_random_forest_anomaly(
+            X_train, y_train, X_val, y_val, X_test, y_test, seed=seed
+        )
+    elif model_name == "XGBoost_Anomaly":
+        from src.train_anomaly_models import train_xgboost_anomaly
+        model, params, test_metrics = train_xgboost_anomaly(
+            X_train, y_train, X_val, y_val, X_test, y_test, seed=seed
+        )
     else:
         raise ValueError(f"Unsupported anomaly model: {model_name}")
 
-    train_pred = _threshold_predictions(train_scores, threshold)
-    val_pred = _threshold_predictions(val_scores, threshold)
-    test_pred = _threshold_predictions(test_scores, threshold)
-    runtime = time.perf_counter() - started
+    # Compute val score for model selection (using the tuned threshold stored in params)
+    threshold = params.get("best_threshold", 0.5)
+    y_prob_val  = model.predict_proba(X_val)[:, 1]
+    y_pred_val  = (y_prob_val >= threshold).astype(int)
+    y_prob_train = model.predict_proba(X_train)[:, 1]
+    y_pred_train = (y_prob_train >= threshold).astype(int)
+
     metrics_by_split = {
-        "train": compute_anomaly_metrics(y_train, train_pred, y_prob=train_scores),
-        "validation": compute_anomaly_metrics(y_val, val_pred, y_prob=val_scores),
-        "test": compute_anomaly_metrics(y_test, test_pred, y_prob=test_scores),
+        "train":      compute_anomaly_metrics(y_train, y_pred_train, y_prob=y_prob_train),
+        "validation": compute_anomaly_metrics(y_val,   y_pred_val,   y_prob=y_prob_val),
+        "test":       test_metrics,
     }
 
+    runtime = time.perf_counter() - started
+
     safe = f"{_safe_name(model_name)}_{dataset_context['dataset_id']}"
-    cm_png = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.png")
-    cm_json = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.json")
-    prediction_csv = os.path.join(dirs["artifacts"], f"{safe}_anomaly_predictions.csv")
+    cm_png          = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.png")
+    cm_json         = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.json")
+    prediction_csv  = os.path.join(dirs["artifacts"], f"{safe}_anomaly_predictions.csv")
     feature_plot_path = os.path.join(dirs["artifacts"], f"{safe}_feature_importance.png")
-    roc_plot = os.path.join(dirs["artifacts"], f"{safe}_roc_curve.png")
-    pr_plot = os.path.join(dirs["artifacts"], f"{safe}_precision_recall_curve.png")
-    context_json = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
+    roc_plot_path   = os.path.join(dirs["artifacts"], f"{safe}_roc_curve.png")
+    pr_plot_path    = os.path.join(dirs["artifacts"], f"{safe}_precision_recall_curve.png")
+    context_json    = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
     local_model = _save_local_model(model, model_name, dataset_context["dataset_id"], dirs["models"])
 
-    plot_confusion_matrix(metrics_by_split["test"]["Confusion_Matrix"], title=f"{model_name} Confusion Matrix", save_path=cm_png)
-    write_json(cm_json, {"confusion_matrix": metrics_by_split["test"]["Confusion_Matrix"]})
-    save_predictions(prediction_csv, y_test, test_pred, y_score=test_scores)
+    y_prob_test = model.predict_proba(X_test)[:, 1]
+    y_pred_test = (y_prob_test >= threshold).astype(int)
+
+    from src.visualization import plot_precision_recall_curve, plot_roc_curve
+    plot_confusion_matrix(test_metrics["Confusion_Matrix"], title=f"{model_name} Confusion Matrix", save_path=cm_png)
+    write_json(cm_json, {"confusion_matrix": test_metrics["Confusion_Matrix"]})
+    save_predictions(prediction_csv, y_test, y_pred_test, y_score=y_prob_test)
     feature_plot = plot_feature_importance(model, data["feature_cols"], feature_plot_path)
-    roc_plot = plot_roc_curve(y_test, test_scores, title=f"{model_name} ROC Curve", save_path=roc_plot)
-    pr_plot = plot_precision_recall_curve(
-        y_test,
-        test_scores,
-        title=f"{model_name} Precision-Recall Curve",
-        save_path=pr_plot,
-    )
+    plot_roc_curve(y_test, y_prob_test, title=f"{model_name} ROC Curve", save_path=roc_plot_path)
+    plot_precision_recall_curve(y_test, y_prob_test, title=f"{model_name} Precision-Recall Curve", save_path=pr_plot_path)
     write_json(context_json, dataset_context)
 
     anomaly_context = dict(dataset_context)
     anomaly_context["main_metric"] = "F1_Score"
-    artifacts = [cm_png, cm_json, prediction_csv, feature_plot, roc_plot, pr_plot, context_json, local_model]
+    artifacts = [cm_png, cm_json, prediction_csv, feature_plot, roc_plot_path, pr_plot_path, context_json, local_model]
     log_info = log_model_run(
         model=model,
         model_name=model_name,
@@ -544,300 +505,26 @@ def train_anomaly_model(model_name: str, data: dict, dirs: dict, dataset_context
         dataset_context=anomaly_context,
         params=params,
         metrics_by_split=metrics_by_split,
-        artifacts=[path for path in artifacts if path],
+        artifacts=[p for p in artifacts if p],
         model_flavor="sklearn",
         tags={"profile": dataset_context.get("profile", "unknown")},
     )
 
     return {
-        "Model name": model_name,
+        "Model name":           model_name,
         "Best hyperparameters": json.dumps(params, sort_keys=True, default=str),
-        "Train score": metrics_by_split["train"]["F1_Score"],
-        "Validation score": metrics_by_split["validation"]["F1_Score"],
-        "Test score": metrics_by_split["test"]["F1_Score"],
-        "Main metric": "F1_Score",
-        "Runtime": runtime,
-        "MLflow run ID": log_info["run_id"],
-        "Model artifact path": log_info["model_artifact_path"],
-        "Task": "Anomaly Detection",
-        "Estimator": model,
-        "Best params dict": params,
-        "Test metrics dict": metrics_by_split["test"],
-        "Local model path": local_model,
-    }
-
-
-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
-
-
-def train_pytorch_rul_model_pipeline(
-    model_name: str, model, data: dict, dirs: dict, dataset_context: dict,
-    epochs: int, batch_size: int = 64, lr: float = 1e-3, seed: int = 42
-) -> dict:
-    set_seed(seed)
-    model = model.to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    criterion = nn.MSELoss()
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(optimizer, patience=5, factor=0.5)
-
-    X_tr = torch.tensor(data["X_train_seq"], dtype=torch.float32)
-    y_tr = torch.tensor(data["y_train_rul_seq"], dtype=torch.float32)
-    train_loader = DataLoader(TensorDataset(X_tr, y_tr), batch_size=batch_size, shuffle=True)
-
-    X_val = torch.tensor(data["X_val_seq"], dtype=torch.float32)
-    y_val = torch.tensor(data["y_val_rul_seq"], dtype=torch.float32)
-    val_loader = DataLoader(TensorDataset(X_val, y_val), batch_size=batch_size, shuffle=False)
-
-    LOGGER.info("Training PyTorch model %s for %d epochs...", model_name, epochs)
-    started = time.perf_counter()
-    for epoch in range(1, epochs + 1):
-        model.train()
-        epoch_loss = 0.0
-        for X_batch, y_batch in train_loader:
-            X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
-            optimizer.zero_grad()
-            preds = model(X_batch)
-            loss = criterion(preds, y_batch)
-            loss.backward()
-            optimizer.step()
-            epoch_loss += loss.item() * len(y_batch)
-        
-        # Validation loss
-        model.eval()
-        val_loss = 0.0
-        with torch.no_grad():
-            for X_batch, y_batch in val_loader:
-                X_batch, y_batch = X_batch.to(DEVICE), y_batch.to(DEVICE)
-                preds = model(X_batch)
-                val_loss += criterion(preds, y_batch).item() * len(y_batch)
-        avg_val_loss = val_loss / len(y_val)
-        scheduler.step(avg_val_loss)
-
-        if epoch % 10 == 0 or epoch == epochs:
-            LOGGER.info("  [%s] Epoch %d/%d | Train Loss: %.4f | Val Loss: %.4f",
-                        model_name, epoch, epochs, epoch_loss / len(y_tr), avg_val_loss)
-
-    runtime = time.perf_counter() - started
-
-    # Evaluate on all splits
-    model.eval()
-    with torch.no_grad():
-        train_pred = model(torch.tensor(data["X_train_seq"], dtype=torch.float32).to(DEVICE)).cpu().numpy()
-        val_pred = model(torch.tensor(data["X_val_seq"], dtype=torch.float32).to(DEVICE)).cpu().numpy()
-        test_pred = model(torch.tensor(data["X_test_seq"], dtype=torch.float32).to(DEVICE)).cpu().numpy()
-
-    n_features = len(data["feature_cols"])
-    metrics_by_split = {
-        "train": compute_regression_metrics(data["y_train_rul_seq"], train_pred, n_features=n_features),
-        "validation": compute_regression_metrics(data["y_val_rul_seq"], val_pred, n_features=n_features),
-        "test": compute_regression_metrics(data["y_test_rul_seq"], test_pred, n_features=n_features),
-    }
-
-    # Save local model
-    safe = f"{_safe_name(model_name)}_{dataset_context['dataset_id']}"
-    prediction_plot = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.png")
-    prediction_csv = os.path.join(dirs["artifacts"], f"{safe}_rul_predictions.csv")
-    context_json = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
-    
-    local_model = os.path.join(dirs["models"], f"{safe}.pt")
-    torch.save(model.state_dict(), local_model)
-
-    plot_rul_predictions(data["y_test_rul_seq"], test_pred, title=f"{model_name} RUL Predictions", save_path=prediction_plot)
-    save_predictions(prediction_csv, data["y_test_rul_seq"], test_pred)
-    write_json(context_json, dataset_context)
-
-    artifacts = [prediction_plot, prediction_csv, context_json, local_model]
-    
-    params = {
-        "epochs": epochs,
-        "batch_size": batch_size,
-        "lr": lr,
-        "optimizer": "Adam",
-        "device": DEVICE
-    }
-    if hasattr(model, "lstm"):
-        params["hidden_size"] = model.lstm.hidden_size
-        params["num_layers"] = model.lstm.num_layers
-    elif hasattr(model, "gru"):
-        params["hidden_size"] = model.gru.hidden_size
-        params["num_layers"] = model.gru.num_layers
-
-    log_info = log_model_run(
-        model=model,
-        model_name=model_name,
-        task_type="rul_regression",
-        dataset_context=dataset_context,
-        params=params,
-        metrics_by_split=metrics_by_split,
-        artifacts=[path for path in artifacts if path],
-        model_flavor="pytorch",
-        tags={"profile": dataset_context.get("profile", "unknown")},
-    )
-
-    return {
-        "Model name": model_name,
-        "Best hyperparameters": json.dumps(params, sort_keys=True, default=str),
-        "Train score": metrics_by_split["train"]["RMSE"],
-        "Validation score": metrics_by_split["validation"]["RMSE"],
-        "Test score": metrics_by_split["test"]["RMSE"],
-        "Main metric": "RMSE",
-        "Runtime": runtime,
-        "MLflow run ID": log_info["run_id"],
-        "Model artifact path": log_info["model_artifact_path"],
-        "Task": "RUL Regression",
-        "Estimator": model,
-        "Best params dict": params,
-        "Test metrics dict": metrics_by_split["test"],
-        "Local model path": local_model,
-    }
-
-
-def train_pytorch_anomaly_model_pipeline(
-    model_name: str, model, data: dict, dirs: dict, dataset_context: dict,
-    epochs: int, batch_size: int = 64, lr: float = 1e-3, seed: int = 42
-) -> dict:
-    set_seed(seed)
-    model = model.to(DEVICE)
-    optimizer = torch.optim.Adam(model.parameters(), lr=lr)
-    criterion = nn.MSELoss()
-
-    is_seq = (model_name == "LSTM_Autoencoder")
-
-    # Get training nominal data
-    if is_seq:
-        y_train_anomaly = data["y_train_anomaly_seq"]
-        X_train_nominal = data["X_train_seq"][y_train_anomaly == 0]
-        X_tr = torch.tensor(X_train_nominal, dtype=torch.float32)
-    else:
-        y_train_anomaly = data["y_train_anomaly"]
-        X_train_nominal = data["X_train"][y_train_anomaly == 0]
-        X_tr = torch.tensor(X_train_nominal, dtype=torch.float32)
-
-    train_loader = DataLoader(TensorDataset(X_tr), batch_size=batch_size, shuffle=True)
-
-    LOGGER.info("Training PyTorch Anomaly model %s for %d epochs...", model_name, epochs)
-    started = time.perf_counter()
-    for epoch in range(1, epochs + 1):
-        model.train()
-        epoch_loss = 0.0
-        for (X_batch,) in train_loader:
-            X_batch = X_batch.to(DEVICE)
-            optimizer.zero_grad()
-            recon = model(X_batch)
-            loss = criterion(recon, X_batch)
-            loss.backward()
-            optimizer.step()
-            epoch_loss += loss.item() * len(X_batch)
-
-        if epoch % 10 == 0 or epoch == epochs:
-            LOGGER.info("  [%s] Epoch %d/%d | Loss: %.6f",
-                        model_name, epoch, epochs, epoch_loss / len(X_tr))
-
-    runtime = time.perf_counter() - started
-
-    # Evaluate reconstruction error
-    model.eval()
-    with torch.no_grad():
-        if is_seq:
-            # Seq eval
-            X_tr_all = torch.tensor(data["X_train_seq"], dtype=torch.float32).to(DEVICE)
-            X_val_all = torch.tensor(data["X_val_seq"], dtype=torch.float32).to(DEVICE)
-            X_te_all = torch.tensor(data["X_test_seq"], dtype=torch.float32).to(DEVICE)
-
-            train_recon = model(X_tr_all)
-            val_recon = model(X_val_all)
-            test_recon = model(X_te_all)
-
-            train_errors = ((train_recon - X_tr_all) ** 2).mean(dim=[1, 2]).cpu().numpy()
-            val_errors = ((val_recon - X_val_all) ** 2).mean(dim=[1, 2]).cpu().numpy()
-            test_errors = ((test_recon - X_te_all) ** 2).mean(dim=[1, 2]).cpu().numpy()
-
-            y_tr_true = data["y_train_anomaly_seq"]
-            y_val_true = data["y_val_anomaly_seq"]
-            y_te_true = data["y_test_anomaly_seq"]
-        else:
-            # Flat eval
-            X_tr_all = torch.tensor(data["X_train"], dtype=torch.float32).to(DEVICE)
-            X_val_all = torch.tensor(data["X_val"], dtype=torch.float32).to(DEVICE)
-            X_te_all = torch.tensor(data["X_test"], dtype=torch.float32).to(DEVICE)
-
-            train_recon = model(X_tr_all)
-            val_recon = model(X_val_all)
-            test_recon = model(X_te_all)
-
-            train_errors = ((train_recon - X_tr_all) ** 2).mean(dim=1).cpu().numpy()
-            val_errors = ((val_recon - X_val_all) ** 2).mean(dim=1).cpu().numpy()
-            test_errors = ((test_recon - X_te_all) ** 2).mean(dim=1).cpu().numpy()
-
-            y_tr_true = data["y_train_anomaly"]
-            y_val_true = data["y_val_anomaly"]
-            y_te_true = data["y_test_anomaly"]
-
-    # Threshold tuning on validation set
-    threshold = _best_threshold(y_val_true, val_errors)
-
-    train_pred = _threshold_predictions(train_errors, threshold)
-    val_pred = _threshold_predictions(val_errors, threshold)
-    test_pred = _threshold_predictions(test_errors, threshold)
-
-    metrics_by_split = {
-        "train": compute_anomaly_metrics(y_tr_true, train_pred, y_prob=train_errors),
-        "validation": compute_anomaly_metrics(y_val_true, val_pred, y_prob=val_errors),
-        "test": compute_anomaly_metrics(y_te_true, test_pred, y_prob=test_errors),
-    }
-
-    # Save local model
-    safe = f"{_safe_name(model_name)}_{dataset_context['dataset_id']}"
-    cm_png = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.png")
-    cm_json = os.path.join(dirs["artifacts"], f"{safe}_confusion_matrix.json")
-    prediction_csv = os.path.join(dirs["artifacts"], f"{safe}_anomaly_predictions.csv")
-    context_json = os.path.join(dirs["artifacts"], f"{safe}_run_context.json")
-    
-    local_model = os.path.join(dirs["models"], f"{safe}.pt")
-    torch.save(model.state_dict(), local_model)
-
-    plot_confusion_matrix(metrics_by_split["test"]["Confusion_Matrix"], title=f"{model_name} Confusion Matrix", save_path=cm_png)
-    write_json(cm_json, {"confusion_matrix": metrics_by_split["test"]["Confusion_Matrix"]})
-    save_predictions(prediction_csv, y_te_true, test_pred, y_score=test_errors)
-    write_json(context_json, dataset_context)
-
-    artifacts = [cm_png, cm_json, prediction_csv, context_json, local_model]
-    
-    params = {
-        "epochs": epochs,
-        "batch_size": batch_size,
-        "lr": lr,
-        "threshold": threshold,
-        "device": DEVICE
-    }
-
-    log_info = log_model_run(
-        model=model,
-        model_name=model_name,
-        task_type="anomaly_detection",
-        dataset_context=dataset_context,
-        params=params,
-        metrics_by_split=metrics_by_split,
-        artifacts=[path for path in artifacts if path],
-        model_flavor="pytorch",
-        tags={"profile": dataset_context.get("profile", "unknown")},
-    )
-
-    return {
-        "Model name": model_name,
-        "Best hyperparameters": json.dumps(params, sort_keys=True, default=str),
-        "Train score": metrics_by_split["train"]["F1_Score"],
-        "Validation score": metrics_by_split["validation"]["F1_Score"],
-        "Test score": metrics_by_split["test"]["F1_Score"],
-        "Main metric": "F1_Score",
-        "Runtime": runtime,
-        "MLflow run ID": log_info["run_id"],
-        "Model artifact path": log_info["model_artifact_path"],
-        "Task": "Anomaly Detection",
-        "Estimator": model,
-        "Best params dict": params,
-        "Test metrics dict": metrics_by_split["test"],
-        "Local model path": local_model,
+        "Train score":          metrics_by_split["train"]["F1_Score"],
+        "Validation score":     metrics_by_split["validation"]["F1_Score"],
+        "Test score":           test_metrics["F1_Score"],
+        "Main metric":          "F1_Score",
+        "Runtime":              runtime,
+        "MLflow run ID":        log_info["run_id"],
+        "Model artifact path":  log_info["model_artifact_path"],
+        "Task":                 "Anomaly Detection",
+        "Estimator":            model,
+        "Best params dict":     params,
+        "Test metrics dict":    test_metrics,
+        "Local model path":     local_model,
     }
 
 
@@ -864,8 +551,7 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
     params_path = os.path.join(dirs["reports"], f"best_{task_label}_params_{dataset_context['dataset_id']}.json")
     metrics_path = os.path.join(dirs["reports"], f"best_{task_label}_metrics_{dataset_context['dataset_id']}.json")
     
-    # Choose file extension dynamically
-    model_ext = ".pt" if (best_row.get("Local model path") and best_row["Local model path"].endswith(".pt")) else ".joblib"
+    model_ext = ".joblib"
     model_path = os.path.join(dirs["models"], f"best_{task_label}_model_{dataset_context['dataset_id']}{model_ext}")
     model_card_path = os.path.join(dirs["reports"], f"best_{task_label}_model_card_{dataset_context['dataset_id']}.json")
     
@@ -875,10 +561,7 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
     if best_row.get("Local model path") and os.path.exists(best_row["Local model path"]):
         shutil.copy2(best_row["Local model path"], model_path)
     else:
-        if model_ext == ".pt":
-            torch.save(best_row["Estimator"].state_dict(), model_path)
-        else:
-            joblib.dump(best_row["Estimator"], model_path)
+        joblib.dump(best_row["Estimator"], model_path)
 
     # Run SHAP Analysis
     shap_artifacts = []
@@ -909,41 +592,7 @@ def _save_best_outputs(best_row: dict, task_label: str, dirs: dict, dataset_cont
     best_context = dict(dataset_context)
     best_context["main_metric"] = best_row["Main metric"]
     
-    # EXPORT RUL TRAJECTORIES FOR DASHBOARD
-    if data is not None and task_label == "rul":
-        try:
-            import pandas as pd
-            LOGGER.info("Exporting RUL trajectories for dashboard...")
-            x_test = data["X_test"]
-            y_test = data["y_test_rul"]
-            test_df = data["test_df"]  # Assuming the original test dataframe is in data
-            preds = best_row["Estimator"].predict(x_test)
-            
-            traj_data = []
-            for unit in test_df["unit_number"].unique():
-                unit_mask = test_df["unit_number"] == unit
-                unit_cycles = test_df.loc[unit_mask, "time_in_cycles"].values
-                unit_true = y_test.loc[unit_mask].values if isinstance(y_test, pd.Series) else y_test[unit_mask]
-                unit_preds = preds[unit_mask]
-                
-                trajectory = [
-                    {"cycle": int(cyc), "true_rul": float(tru), "predicted_rul": float(prd)}
-                    for cyc, tru, prd in zip(unit_cycles, unit_true, unit_preds)
-                ]
-                traj_data.append({
-                    "unit_number": int(unit),
-                    "is_sample": False,
-                    "trajectory": trajectory
-                })
-            
-            traj_path = os.path.join(dirs["reports"], f"rul_trajectories_{dataset_context['dataset_id']}.json")
-            with open(traj_path, "w") as f:
-                json.dump(traj_data, f, indent=2)
-            LOGGER.info("Exported RUL trajectories to %s", traj_path)
-        except Exception as e:
-            LOGGER.error("Failed to export RUL trajectories: %s", e)
-
-    model_flavor = "pytorch" if model_ext == ".pt" else "sklearn"
+    model_flavor = "sklearn"
     
     log_info = log_final_best_model(
         model=best_row["Estimator"],
@@ -1127,10 +776,6 @@ def run_pipeline(args) -> dict:
     for model_name, model in _build_rul_models(args.seed, args.profile, args.models).items():
         rows.append(train_rul_model(model_name, model, data, dirs, context))
 
-    # 2. Train DL RUL Models
-    for model_name, model in _build_dl_rul_models(len(data["feature_cols"]), args.profile, args.models).items():
-        rows.append(train_pytorch_rul_model_pipeline(model_name, model, data, dirs, context, epochs=dl_epochs, seed=args.seed))
-
     if args.tune:
         LOGGER.info("Running hyperparameter tuning methods: %s", ", ".join(args.tuning_methods))
         tuning_rows = run_all_tuning(
@@ -1155,10 +800,6 @@ def run_pipeline(args) -> dict:
         # 3. Train ML Anomaly Models
         for model_name in _build_anomaly_models(args.profile, args.anomaly_models):
             rows.append(train_anomaly_model(model_name, data, dirs, context, args.seed))
-
-        # 4. Train DL Anomaly Models
-        for model_name, model in _build_dl_anomaly_models(len(data["feature_cols"]), args.profile, args.anomaly_models).items():
-            rows.append(train_pytorch_anomaly_model_pipeline(model_name, model, data, dirs, context, epochs=dl_epochs, seed=args.seed))
 
     best_rul = _best_rul_row(rows)
     best_anomaly = _best_anomaly_row(rows)
