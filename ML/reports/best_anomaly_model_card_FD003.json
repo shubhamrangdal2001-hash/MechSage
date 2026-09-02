@@ -8,6 +8,6 @@
   "task": "anomaly",
   "main_metric": "F1_Score",
   "test_score": 0.0,
-  "local_model_path": "D:\\Capstone\\MechSage\\ML\\models\\best_anomaly_model_FD003.joblib",
-  "mlflow_model_artifact_path": "file:///D:/Capstone/MechSage/NASA_CMAPSS_RUL_Project/mlruns/478754518221550792/1c5c1de438a84879a8e986e8d5021eef/artifacts/final_model"
+  "local_model_path": "models\\best_anomaly_model_FD003.joblib",
+  "mlflow_model_artifact_path": "./mlruns/478754518221550792/1c5c1de438a84879a8e986e8d5021eef/artifacts/final_model"
 }

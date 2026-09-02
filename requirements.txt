@@ -14,8 +14,10 @@ openai>1.30.0
 
 # ── Agentic Framework ──
 langgraph>0.0.26
+langgraph-checkpoint>=1.0.0
 langchain-core>0.1.0
 langchain-google-genai>0.0.9
+litellm>=1.40.0
 
 # ── Machine Learning (Inference) ──
 numpy>1.21.0

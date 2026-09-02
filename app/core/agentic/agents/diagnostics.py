@@ -6,21 +6,24 @@ This is the brain of the pipeline. It:
 3. If RAG abstains (no relevant passage / low confidence), routes to human.
 4. If passages are found, synthesises a grounded diagnosis using the PRO model.
 
-Model: gemini-3.1-pro (strong reasoning — this is where accuracy matters most).
+Model: google/gemini-2.5-pro (strong reasoning — this is where accuracy matters most).
+All LLM calls are routed through the centralized gateway (litellm + circuit breaker).
+
+CRITICAL FIX: exceptions during LLM generation are no longer masked as successful
+diagnoses. Any failure routes to human review via status="failed".
 """
 
 from __future__ import annotations
 
-import os
 import textwrap
 from pathlib import Path
-
-from openai import OpenAI
 
 from app.core.agentic.state import MechSageState
 from app.core.agentic.config import OrchestratorConfig
 from app.core.agentic.tools import rag_retrieve
 from app.core.agentic.fault_signatures import lookup_fault_hypothesis
+from app.core.gateway import llm_complete
+from app.core.circuit_breaker import CircuitOpenError
 
 # Load .env from project root
 try:
@@ -32,25 +35,6 @@ except ImportError:
 
 _config = OrchestratorConfig()
 
-
-def _call_llm(system_instruction: str, prompt: str, max_tokens: int, temperature: float) -> str:
-    """Helper to call OpenRouter."""
-    api_key = os.getenv("OPENROUTER_API_KEY") or os.getenv("OPENROUTER_KEY")
-    client = OpenAI(
-        base_url="https://openrouter.ai/api/v1",
-        api_key=api_key,
-        default_headers={"HTTP-Referer": "https://github.com/MechSage", "X-Title": "MechSage"}
-    )
-    response = client.chat.completions.create(
-        model=_config.strong_model,
-        messages=[
-            {"role": "system", "content": system_instruction},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=max_tokens,
-        temperature=temperature
-    )
-    return response.choices[0].message.content.strip()
 
 def _get_system_instruction() -> str:
     return textwrap.dedent("""\
@@ -81,8 +65,10 @@ def diagnostics_node(state: MechSageState) -> dict:
         1. Map degrading_sensors → fault_hypothesis via lookup table.
         2. Call rag_retrieve() with the hypothesis.
         3. If abstention → route to human (set status='abstain').
-        4. If passages found → call Pro model to generate diagnosis.
+        4. If passages found → call Pro model via gateway to generate diagnosis.
         5. If confidence < cutoff → route to human.
+        6. If LLM call fails (CircuitOpenError or any exception) → route to human.
+           NEVER set status='diagnosed' when generation fails.
     """
     asset_id = state["asset_id"]
     degrading_sensors = state.get("degrading_sensors", [])
@@ -144,8 +130,8 @@ def diagnostics_node(state: MechSageState) -> dict:
             "messages": [msg],
         }
 
-    # Step 5: Generate diagnosis using the Pro model
-    print(f"[Diagnostics] Generating diagnosis with {_config.strong_model}...")
+    # Step 5: Generate diagnosis using the Pro model via gateway
+    print(f"[Diagnostics] Generating diagnosis with {_config.strong_model} via gateway...")
 
     context_block = "\n\n".join(
         f"[Doc {i+1} — {p.get('doc_ref', 'unknown')}]\n{p.get('text', '')}"
@@ -163,15 +149,47 @@ def diagnostics_node(state: MechSageState) -> dict:
     )
 
     try:
-        diagnosis = _call_llm(
-            system_instruction=_get_system_instruction(),
-            prompt=prompt,
+        diagnosis = llm_complete(
+            model=_config.strong_model,
+            system=_get_system_instruction(),
+            user=prompt,
             max_tokens=512,
-            temperature=0.1
+            temperature=0.1,
         )
+    except CircuitOpenError as exc:
+        # ── FIXED: circuit open → route to human, NOT mark as diagnosed ──
+        msg = (
+            f"[Diagnostics] ⚡ Circuit breaker OPEN — LLM gateway unavailable. "
+            f"Routing to human review. Details: {exc}"
+        )
+        print(msg)
+        return {
+            "fault_hypothesis": fault_hypothesis,
+            "retrieved_passages": passages,
+            "diagnosis": "unresolved",
+            "confidence": confidence,
+            "citation": citation,
+            "status": "failed",
+            "error": str(exc),
+            "messages": [msg],
+        }
     except Exception as exc:
-        diagnosis = f"[DiagnosticsError] LLM generation failed: {exc}"
-        print(f"[Diagnostics] ERROR: {exc}")
+        # ── FIXED: any LLM generation failure → route to human, NOT diagnose ──
+        msg = (
+            f"[Diagnostics] ❌ LLM generation failed — routing to human review. "
+            f"Error: {type(exc).__name__}: {exc}"
+        )
+        print(msg)
+        return {
+            "fault_hypothesis": fault_hypothesis,
+            "retrieved_passages": passages,
+            "diagnosis": "unresolved",
+            "confidence": confidence,
+            "citation": citation,
+            "status": "failed",
+            "error": str(exc),
+            "messages": [msg],
+        }
 
     msg = (
         f"[Diagnostics] ✓ Diagnosis complete (confidence: {confidence:.4f}, "

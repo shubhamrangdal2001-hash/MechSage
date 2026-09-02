@@ -112,7 +112,8 @@ class MechSageGenerator:
                     or "connect" in err_str.lower()
                 )
                 if is_transient and attempt < self.MAX_RETRIES:
-                    wait = min(self.INITIAL_BACKOFF_SECS * (2 ** attempt), 10)
+                    import random
+                    wait = min(self.INITIAL_BACKOFF_SECS * (2 ** attempt) + random.uniform(0, 1), 60.0)
                     print(
                         f"    [OpenRouter] Transient issue ({type(exc).__name__}: {err_str}) "
                         f"(attempt {attempt+1}/{self.MAX_RETRIES+1}). Waiting {wait}s before retry..."
@@ -323,11 +324,11 @@ class MechSageGenerator:
 
             GENERATED ANSWER: {answer}
 
-            Score the answer on these 4 dimensions (each 1-5):
-            1. Clarity: Is it easy to understand for a technician?
-            2. Actionability: Does it give clear, concrete next steps?
-            3. Technical_Accuracy: Is the technical content correct per the context?
-            4. Conciseness: Is it appropriately brief without losing key details?
+            Score the answer on these 4 dimensions (each 1-5) using these anchors:
+            1. Clarity: (1 = jargon-heavy/incomprehensible; 5 = a junior technician can follow)
+            2. Actionability: (1 = vague; 5 = explicit, step-by-step next steps)
+            3. Technical_Accuracy: (1 = hallucinated/wrong; 5 = perfectly grounded in context)
+            4. Conciseness: (1 = verbose/padded; 5 = ≤5 sentences covering all key points)
 
             Respond in this exact format:
             CLARITY: <1-5>
