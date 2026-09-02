@@ -8,7 +8,6 @@ from pathlib import Path
 from typing import Iterable, Optional
 
 import mlflow
-import mlflow.pytorch
 import mlflow.sklearn
 import numpy as np
 import pandas as pd
@@ -159,10 +158,7 @@ def log_model_run(
 
         log_artifacts(artifacts)
 
-        if model_flavor == "pytorch":
-            mlflow.pytorch.log_model(model, artifact_path="model")
-        else:
-            mlflow.sklearn.log_model(model, artifact_path="model", serialization_format="cloudpickle")
+        mlflow.sklearn.log_model(model, artifact_path="model", serialization_format="cloudpickle")
 
         return {
             "run_id": run.info.run_id,
@@ -230,10 +226,7 @@ def log_final_best_model(
         log_params(params, prefix="best_hp_")
         log_metrics(metrics, prefix="best_")
         log_artifacts(artifacts)
-        if model_flavor == "pytorch":
-            mlflow.pytorch.log_model(model, artifact_path="final_model")
-        else:
-            mlflow.sklearn.log_model(model, artifact_path="final_model", serialization_format="cloudpickle")
+        mlflow.sklearn.log_model(model, artifact_path="final_model", serialization_format="cloudpickle")
         return {
             "run_id": run.info.run_id,
             "model_artifact_path": mlflow.get_artifact_uri("final_model"),

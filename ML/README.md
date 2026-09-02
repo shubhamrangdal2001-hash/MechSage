@@ -5,7 +5,7 @@ Production-oriented machine learning pipeline for NASA C-MAPSS turbofan Remainin
 ## Architecture
 
 ```text
-ML/
+NASA_CMAPSS_RUL_Project/
   configs/default.yaml          # Runtime, path, model, feature, and tuning defaults
   data/                         # Local raw C-MAPSS files
   src/
@@ -41,7 +41,7 @@ ML/
 ## Installation
 
 ```powershell
-cd D:\Capstone\MechSage\ML
+cd D:\Capstone\MechSage\NASA_CMAPSS_RUL_Project
 python -m venv .venv
 .\.venv\Scripts\Activate.ps1
 python -m pip install --upgrade pip
@@ -215,7 +215,7 @@ netstat -ano | Select-String ":5000"
 If the dataset cannot be found, place C-MAPSS files in either:
 
 ```text
-ML/data/
+NASA_CMAPSS_RUL_Project/data/
 ```
 
 or the parent workspace data directory:

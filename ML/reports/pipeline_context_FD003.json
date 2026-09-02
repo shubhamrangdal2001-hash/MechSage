@@ -59,12 +59,12 @@
       10,
       20
     ],
-    "feature_count": 129
+    "feature_count": 141
   },
   "dataset_files": {
-    "train": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\data\\train_FD003.txt",
-    "test": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\data\\test_FD003.txt",
-    "rul": "C:\\Sudhanshu OG\\IIT GN\\Mech Sage\\MechSage\\NASA_CMAPSS_RUL_Project\\data\\RUL_FD003.txt"
+    "train": "D:\\Capstone\\MechSage\\data\\NASA C-MAPSS-1 Turbofan Engine Degradation Dataset\\train_FD003.txt",
+    "test": "D:\\Capstone\\MechSage\\data\\NASA C-MAPSS-1 Turbofan Engine Degradation Dataset\\test_FD003.txt",
+    "rul": "D:\\Capstone\\MechSage\\data\\NASA C-MAPSS-1 Turbofan Engine Degradation Dataset\\RUL_FD003.txt"
   },
   "profile": "quick"
 }

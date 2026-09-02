@@ -9,6 +9,8 @@ import logging
 import os
 import sys
 
+import matplotlib
+matplotlib.use('Agg')
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 
@@ -112,6 +114,23 @@ def main() -> int:
     LOGGER.info("Final report: %s", result["report_paths"]["final_markdown"])
     LOGGER.info("View MLflow with: mlflow ui --backend-store-uri ./mlruns")
     LOGGER.info("MLflow URL: http://127.0.0.1:5000")
+
+    # Create new report folder and save updated metrics
+    if best_anomaly and best_rul:
+        import json
+        metrics_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "metrics_report")
+        os.makedirs(metrics_folder, exist_ok=True)
+        report_data = {
+            "F1_score": best_anomaly["Test metrics dict"]["F1_Score"],
+            "precision": best_anomaly["Test metrics dict"]["Precision"],
+            "recall": best_anomaly["Test metrics dict"]["Recall"],
+            "RMSE": best_rul["Test metrics dict"]["RMSE"]
+        }
+        report_file = os.path.join(metrics_folder, f"updated_metrics_{args.dataset}.json")
+        with open(report_file, "w") as f:
+            json.dump(report_data, f, indent=4)
+        LOGGER.info("Saved updated metrics to: %s", report_file)
+
     return 0
 
 
